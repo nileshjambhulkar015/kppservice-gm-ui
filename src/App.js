@@ -43,7 +43,9 @@ function App() {
             <li><Link to="/employee">Employee</Link></li>
             <li><Link to="/keyparemeter">Key Indicator</Link></li>
             <li><Link to="/employeekpp">HOD KPP</Link></li>
+           
             <li><Link to="/employeekpp">Employee KPP</Link></li>
+            <li><Link to="/employeekpp">View Profile</Link></li>
           </ul>
           <ul className="nav navbar-nav navbar-right">
             <li><a href="#">Welcome: {Cookies.get('empEId')}</a></li>

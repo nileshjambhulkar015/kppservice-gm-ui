@@ -17,7 +17,7 @@ export default function DepartmentComponent() {
     useEffect(() => {
         DepartmentService.getDpartmentDetailsByPaging().then((res) => {
             setDepartments(res.data.responseData.content);
-            console.log(res.data)
+            console.log(res.data.responseData.content)
         });
 
         RoleService.getRoles().then((res) => {
