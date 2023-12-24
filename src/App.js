@@ -11,6 +11,10 @@ import DepartmentComponent from './components/DepartmentComponent/DepartmentComp
 import RoleComponent from "./components/RoloComponent/RoleComponent";
 import Cookies from 'js-cookie';
 import AllEmployeesKppComponent from "./components/AllEmployeesKppComponent/AllEmployeesKppComponent";
+import AllHodKppStatusComponent from './components/AllHodKppStatusComponent/AllHodKppStatusComponent';
+import AddEmployeeKppsRatingComponent from './components/AddEmployeeKppsRatingComponent/AddEmployeeKppsRatingComponent';
+import AddHodKppsRatingComponent from './components/AddHodKppsRatingComponent/AddHodKppsRatingComponent';
+
 
 function App() {
  
@@ -42,9 +46,9 @@ function App() {
             <li><Link to="/designation">Designation</Link></li>
             <li><Link to="/employee">Employee</Link></li>
             <li><Link to="/keyparemeter">Key Indicator</Link></li>
-            <li><Link to="/employeekpp">HOD KPP</Link></li>
+            <li><Link to="/allHodKppStatus">HOD KPP</Link></li>
            
-            <li><Link to="/employeekpp">Employee KPP</Link></li>
+            <li><Link to="/allEmployeeKppStatus">Employee KPP</Link></li>
             <li><Link to="/employeekpp">View Profile</Link></li>
           </ul>
           <ul className="nav navbar-nav navbar-right">
@@ -61,7 +65,10 @@ function App() {
         <Route exact path="/designation" element={<DesignationComponent />}></Route>
         <Route exact path="/employee" element={<EmployeeComponent />}></Route>
         <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
-        <Route exact path="/employeekpp" element={<AllEmployeesKppComponent />}></Route>
+        <Route exact path="/allHodKppStatus" element={<AllHodKppStatusComponent />}></Route>
+        <Route exact path="/addHodKppRating/:empId" element={<AddHodKppsRatingComponent />}></Route>
+        <Route exact path="/allEmployeeKppStatus" element={<AllEmployeesKppComponent />}></Route>
+        <Route exact path="/addEmployeeKppRating/:empId" element={<AddEmployeeKppsRatingComponent />}></Route>
       </Routes>
     </BrowserRouter>
   );

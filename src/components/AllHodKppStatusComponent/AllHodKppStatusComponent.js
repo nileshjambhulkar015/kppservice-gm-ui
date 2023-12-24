@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
-import AllEmployeesKppService from '../../services/AllEmployeesKppService';
+import AllHodKppService from '../../services/AllHodKppService';
 
 
-export default function AllEmployeesKppComponent() {
+export default function AllHodKppStatusComponent() {
 
     const navigate = useNavigate();
     const { empId } = useParams();
@@ -16,7 +16,7 @@ export default function AllEmployeesKppComponent() {
 
 
     useEffect(() => {
-        AllEmployeesKppService.getEmployeeDetailsByPagination().then((res) => {
+        AllHodKppService.getEmployeeDetailsByPagination().then((res) => {
             setEmpResponses(res.data.responseData.content);
 
         });
@@ -29,7 +29,7 @@ export default function AllEmployeesKppComponent() {
 
     const searchByEKpp = (e) => {
         console.log("data=", empKppStatus)
-        AllEmployeesKppService.getEmployeeByStatusByPagination(empKppStatus).then((res) => {
+        AllHodKppService.getEmployeeByStatusByPagination(empKppStatus).then((res) => {
           
             setEmpResponses(res.data.responseData.content);
             console.log(res.data)
@@ -86,7 +86,7 @@ export default function AllEmployeesKppComponent() {
                                             <td className='text-center'>{empResponse.kppOverallAchivement}</td>
                                             <td className='text-center'>{empResponse.empEKppStatus}</td>
                                             <td>
-                                                <button type="submit" className="btn col-sm-offset-1 btn-success" onClick={() => navigate(`/addEmployeeKppRating/${empResponse.empId}`, { replace: true })} >View</button></td>                                        </tr>
+                                                <button type="submit" className="btn col-sm-offset-1 btn-success" onClick={() => navigate(`/addHodKppRating/${empResponse.empId}`, { replace: true })} >View</button></td>                                        </tr>
                                 )
                             }
                         </tbody>

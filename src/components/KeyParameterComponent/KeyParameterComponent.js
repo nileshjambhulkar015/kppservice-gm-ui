@@ -167,8 +167,8 @@ export default function KeyParameterComponent() {
     return (
         <div className="row">
         <h2 className="text-center">Key Parameter List</h2>
-        <div className="col-md-2"></div>
-        <div className="col-md-8">
+        <div className="col-md-1"></div>
+        <div className="col-md-10">
             <div className="row">
                 <div className="col-sm-8"> 
                 <div className="form-group">
@@ -221,7 +221,7 @@ export default function KeyParameterComponent() {
             </div>
 
         </div>
-        <div className="col-md-2"></div>
+        <div className="col-md-1"></div>
 
 {/** Save Kpp details */}
         <div className="modal fade" id="saveKpp" role="dialog">
