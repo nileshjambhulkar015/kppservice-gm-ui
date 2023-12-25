@@ -12,16 +12,18 @@ export default function DepartmentComponent() {
     const [deptNameSearch, setDeptNameSearch] = useState('');
 
     const [departments, setDepartments] = useState([])
+
+    const updatedDept=['Human Resource','General Manager'];
     const [roles, setRoles] = useState([])
 
     useEffect(() => {
         DepartmentService.getDpartmentDetailsByPaging().then((res) => {
-            setDepartments(res.data.responseData.content);
+            setDepartments(res.data.responseData.content?.filter((item)=>item.roleId!=3 && item.roleId!=4));
             console.log(res.data.responseData.content)
         });
 
         RoleService.getRoles().then((res) => {
-            setRoles(res.data);
+            setRoles(res.data?.filter((item)=>item.roleId!=3 && item.roleId!=4));
         });
     }, []);
 
