@@ -31,7 +31,7 @@ class EmployeeKppService {
     updateEmpArroveOrRejectByHod(todos){
      
         if (null != Cookies.get('empId')) {
-            return axios.put("http://localhost:9091/hod-approval",todos)
+            return axios.put("http://localhost:9091/gm-approval",todos)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

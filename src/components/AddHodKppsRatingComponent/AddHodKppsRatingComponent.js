@@ -71,7 +71,7 @@ console.log("psram empId=", empId)
         const payLoad = { "kppUpdateRequests": employeeKpps, totalAchivedWeightage, totalOverAllAchive, totalOverallTaskCompleted, ekppStatus, remark };
         console.log(payLoad)
         EmployeeKppService.updateEmpArroveOrRejectByHod(payLoad).then(res => {
-           alert("Hod Approved")
+           alert("GM Approved")
         }
         );
     }
