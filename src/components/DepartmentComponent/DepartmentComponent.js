@@ -29,7 +29,7 @@ export default function DepartmentComponent() {
 
     const searchDeptName = (e) => {
         DepartmentService.getDpartmentDetailsByDeptNamePaging(e).then((res) => {
-            setDepartments(res.data.responseData.content);
+            setDepartments(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
             console.log(res.data)
         });
     }
@@ -42,7 +42,7 @@ export default function DepartmentComponent() {
         DepartmentService.saveDpartmentDetails(department).then(res => {
             console.log("res=", res.data)
             DepartmentService.getDpartmentDetailsByPaging().then((res) => {
-                setDepartments(res.data.responseData.content);
+                setDepartments(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
                 setDeptName('');
                 setRemark('');
 

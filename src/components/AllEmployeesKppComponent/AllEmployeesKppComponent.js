@@ -11,7 +11,7 @@ export default function AllEmployeesKppComponent() {
     const navigate = useNavigate();
     const { empId } = useParams();
 
-    const [empKppStatus, setEmpKppStatus] = useState('Pending')
+    const [empKppStatus, setEmpKppStatus] = useState('In-Progress')
     const [empResponses, setEmpResponses] = useState([])
 
 
@@ -50,7 +50,8 @@ export default function AllEmployeesKppComponent() {
                             <select className="form-control" name="empKppStatus" id="empKppStatus"  value={empKppStatus} onChange={(e)=>onOptionChangeHandler(e.target.value)} defaultValue={empKppStatus} >
                                 <option value="All">All</option>
                                 <option value="Pending">Pending</option>
-                                <option value="In-Progress">In-Prgress</option>
+                                <option value="In-Progress">In-Progress</option>
+                                <option value="Approved">In-Progress</option>
                                 <option value="Completed">Completed</option>
                             </select>  
                         </div>

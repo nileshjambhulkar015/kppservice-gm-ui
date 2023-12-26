@@ -33,7 +33,7 @@ export default function DesignationComponent() {
 
     const searchDesigName = (e) => {
         DesignationService.getDesignationDetailsByDesigNamePaging(e).then((res) => {
-            setDesignations(res.data.responseData.content);
+            setDesignations(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
             console.log(res.data)
         });
     }
@@ -51,7 +51,7 @@ export default function DesignationComponent() {
 
         DesignationService.saveDesignationDetails(designation).then(res => {
             DesignationService.getDesignationDetailsByPaging().then((res) => {
-                setDesignations(res.data.responseData.content);
+                setDesignations(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
                 console.log(res.data)
             });
             

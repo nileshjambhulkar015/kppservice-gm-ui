@@ -31,8 +31,8 @@ export default function EmployeeComponent() {
     const [emailId, setEmailId] = useState('');
     const [tempAddress, setTempAddress] = useState('');
     const [permAddress, setPermAddress] = useState('');
-    const [empGender, setEmpGender] = useState('');
-    const [empBloodgroup, setEmpBloodgroup] = useState('');
+    const [empGender, setEmpGender] = useState('Male');
+    const [empBloodgroup, setEmpBloodgroup] = useState('A+');
     const [remark, setRemark] = useState('');
     const [employeeId, setEmployeeId] = useState('');
 
@@ -46,6 +46,16 @@ export default function EmployeeComponent() {
     const [reportingEmpName, setReportingEmpName] = useState([])
 
     const [empFirstNameSearch, setEmpFirstNameSearch] = useState('');
+
+        //for gender selection
+        const onGenderChangeHandler = (event) => {
+            setEmpGender(event);
+        };
+    
+        //for blood group selection
+        const onBloodGroupChangeHandler = (event) => {
+            setEmpBloodgroup(event);
+        };
 
     const saveEmployeeDetails = (e) => {
         e.preventDefault()
@@ -86,7 +96,7 @@ export default function EmployeeComponent() {
 
     const searchEmployeeFirstName = (e) => {
         EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
-            setEmployees(res.data.responseData.content);
+            setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
             console.log(res.data)
         });
     }
@@ -441,16 +451,18 @@ export default function EmployeeComponent() {
                                         <div className="row">
                                             <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empGender">Gender:</label>
                                             <div className="col-sm-3">
-                                                <select className="form-control" id="empGender" onChange={(e) => setEmpGender(e.target.value)} >
+                                                <select className="form-control" id="empGender"  onChange={(e)=>onGenderChangeHandler(e.target.value)} defaultValue={empGender} >
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
                                                 </select>
                                             </div>
+                                           
+
 
                                             <label className="control-label col-sm-2" htmlFor="kppObjective" >Blood Group:</label>
 
                                             <div className="col-sm-3">
-                                                <select className="form-control" id="empBloodgroup" onChange={(e) => setEmpBloodgroup(e.target.value)}>
+                                                <select className="form-control" id="empBloodgroup" onChange={(e)=>onBloodGroupChangeHandler(e.target.value)} defaultValue={empBloodgroup}>
                                                     <option value="A+">A+ve</option>
                                                     <option value="B+">B+ve</option>
                                                 </select>

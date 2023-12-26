@@ -16,7 +16,7 @@ export default function KeyParameterComponent() {
     const [kppPerformanceIndi, setKppPerformanceIndi] = useState('');
     const [kppOverallTarget, setKppOverallTarget] = useState('');
     const [kppTargetPeriod, setKppTargetPeriod] = useState('');    
-    const [kppUoM, setKppUoM] = useState('');
+    const [kppUoM, setKppUoM] = useState('KG');
     const [kppOverallWeightage, setKppOverallWeightage] = useState('');
     const [kppRating1, setKppRating1] = useState('');
     const [kppRating2, setKppRating2] = useState('');
@@ -34,9 +34,16 @@ export default function KeyParameterComponent() {
 
     const [kppObjectiveSearch, setKppObjectiveSearch] = useState('');
    
+
+        //for UOM selection
+        const onUoMChangeHandler = (event) => {
+            setKppUoM(event);
+        };
+
+
     const searchKppObjective = (e) => {
         KeyParameterService.getKPPDetailsByKppObjectivePaging(e).then((res) => {
-            setKpps(res.data.responseData.content);
+            setKpps(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
             console.log(res.data)
         });
     }
@@ -316,12 +323,16 @@ export default function KeyParameterComponent() {
                                     </div>
                                 </div>
                             </div>
-
+                            
                             <div className="form-group">
                                 <div className="row">
                                     <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppUoM">Unit of Measurement:</label>
                                     <div className="col-sm-2">
-                                        <input type="text" className="form-control" id="kppUoM" value={kppUoM} onChange={(e) => setKppUoM(e.target.value)} placeholder="Enter KPP Kpp Target Period here"  />
+                                   
+                                                <select className="form-control" id="kppUoM"  onChange={(e)=>onUoMChangeHandler(e.target.value)} defaultValue={kppUoM} >
+                                                    <option value="KG">KG</option>
+                                                    <option value="Ltr">Ltr</option>
+                                                </select>
                                     </div>
                                     <label className="control-label col-sm-3" htmlFor="kppOverallWeightage">Kpp Target Period:</label>
                                     <div className="col-sm-2">
