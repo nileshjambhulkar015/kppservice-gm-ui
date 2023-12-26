@@ -100,17 +100,17 @@ console.log("psram empId=", empId)
             <form className="form-horizontal">
             <div className="form-group">
                         <label className="control-label col-sm-1 text-right" htmlFor="reamrk">Employee Name:</label>
-                       <div>Nilesh Sambhaji Jambhulkar</div>
+                       <div>{kppResponses?.[0]?.empName}</div>
                     </div>
 
                     <div className="form-group">
                         <label className="control-label col-sm-1 text-right" htmlFor="reamrk">Employee Id:</label>
-                       <div>e14533</div>
+                       <div>{kppResponses?.[0]?.empEId}</div>
                     </div>
 
                     <div className="form-group">
                         <label className="control-label col-sm-1 text-right" htmlFor="reamrk">Designantion:</label>
-                       <div>Senior Software Developer</div>
+                       <div>{kppResponses?.[0]?.desigName}</div>
                     </div>        
                     </form>
             </div>
@@ -132,6 +132,10 @@ console.log("psram empId=", empId)
                                 <th>Over All Achive</th>
                                 <th>Overall Task Completed</th>
                                 <th>Overall Weightage</th>
+                                <th>HoD Achived Weightage</th>
+                                <th>HoD Over All Achive</th>
+                                <th>HoD Overall Task Completed</th>
+
                                 <th>Achived Weightage</th>
                                 <th>Over All Achive</th>
                                 <th>Overall Task Completed</th>
@@ -154,6 +158,10 @@ console.log("psram empId=", empId)
                                             <td>{kppResponse.ekppOverallAchieve}</td>
                                             <td>{kppResponse.ekppOverallTaskComp}</td>
                                             <td>{kppResponse.kppOverallWeightage}</td>
+
+                                            <td>{kppResponse.hodAchivedWeight}</td>
+                                            <td>{kppResponse.hodOverallAchieve}</td>
+                                            <td>{kppResponse.hodOverallTaskComp}</td>
 
                                             <td>
                                                 <input type="text" className="form-control" name="ekppAchivedWeight" defaultValue={0} value={employeeKpps[index]?.ekppAchivedWeight} disabled />
@@ -178,6 +186,10 @@ console.log("psram empId=", empId)
                                 <td className='text-center'> <label className="control-label text-right" name="totalOverAllAchive" onChange={(e) => setTotalOverAllAchive(e.target.value)}>100</label></td>
                                 <td className='text-center'> <label className="control-label text-right" name="totalOverallTaskCompleted" onChange={(e) => setTotalOverallTaskCompleted(e.target.value)}>100</label></td>
                                 <td className='text-center'></td>
+                                <td className='text-center'> <label className="control-label text-right" name="totalAchivedWeightage" onChange={(e) => setTotalAchivedWeightage(e.target.value)}>100</label></td>
+                                <td className='text-center'> <label className="control-label text-right" name="totalOverAllAchive" onChange={(e) => setTotalOverAllAchive(e.target.value)}>100</label></td>
+                                <td className='text-center'> <label className="control-label text-right" name="totalOverallTaskCompleted" onChange={(e) => setTotalOverallTaskCompleted(e.target.value)}>100</label></td>
+
                                 <td className='text-center'> <label className="control-label text-right" name="totalAchivedWeightage" onChange={(e) => setTotalAchivedWeightage(e.target.value)}>{totalAchivedWeightage}</label></td>
                                 <td className='text-center'> <label className="control-label text-right" name="totalOverAllAchive" onChange={(e) => setTotalOverAllAchive(e.target.value)}>{totalOverAllAchive}</label></td>
                                 <td className='text-center'> <label className="control-label text-right" name="totalOverallTaskCompleted" onChange={(e) => setTotalOverallTaskCompleted(e.target.value)}>{totalOverallTaskCompleted}</label></td>

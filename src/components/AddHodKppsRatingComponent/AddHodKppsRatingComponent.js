@@ -95,21 +95,21 @@ console.log("psram empId=", empId)
     }
     return (
         <div className='container-fluid'>
-            <div className='row'>
+          <div className='row'>
             <form className="form-horizontal">
             <div className="form-group">
                         <label className="control-label col-sm-1 text-right" htmlFor="reamrk">Employee Name:</label>
-                       <div>Nilesh Sambhaji Jambhulkar</div>
+                       <div>{kppResponses?.[0]?.empName}</div>
                     </div>
 
                     <div className="form-group">
                         <label className="control-label col-sm-1 text-right" htmlFor="reamrk">Employee Id:</label>
-                       <div>e14533</div>
+                       <div>{kppResponses?.[0]?.empEId}</div>
                     </div>
 
                     <div className="form-group">
                         <label className="control-label col-sm-1 text-right" htmlFor="reamrk">Designantion:</label>
-                       <div>Senior Software Developer</div>
+                       <div>{kppResponses?.[0]?.desigName}</div>
                     </div>        
                     </form>
             </div>
