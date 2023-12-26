@@ -18,12 +18,12 @@ export default function DepartmentComponent() {
 
     useEffect(() => {
         DepartmentService.getDpartmentDetailsByPaging().then((res) => {
-            setDepartments(res.data.responseData.content?.filter((item)=>item.roleId!=3 && item.roleId!=4));
+            setDepartments(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
             console.log(res.data.responseData.content)
         });
 
         RoleService.getRoles().then((res) => {
-            setRoles(res.data?.filter((item)=>item.roleId!=3 && item.roleId!=4));
+            setRoles(res.data?.filter((item)=>item.roleId!==3 && item.roleId!==4));
         });
     }, []);
 

@@ -72,11 +72,11 @@ export default function KeyParameterComponent() {
 
     useEffect(() => {
         KeyParameterService.getKPPDetailsByPaging().then((res) => {
-            setKpps(res.data.responseData.content);
+            setKpps(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
         });
 
         RoleService.getRolesInDesignation().then((res) => {
-            setRoles(res.data);
+            setRoles(res.data?.filter((item)=>item.roleId!==3 && item.roleId!==4));
         });
     }, []);
 
@@ -103,7 +103,7 @@ export default function KeyParameterComponent() {
 
         KeyParameterService.saveKPPDetails(kpp).then(res => {
             KeyParameterService.getKPPDetailsByPaging().then((res) => {
-                setKpps(res.data.responseData.content);
+                setKpps(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
             });
             console.log("Kpp added");
         }

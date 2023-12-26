@@ -21,12 +21,13 @@ export default function DesignationComponent() {
 
     useEffect(() => {
         DesignationService.getDesignationDetailsByPaging().then((res) => {
-            setDesignations(res.data.responseData.content);
+            setDesignations(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
             console.log(res.data)
         });
 
         DepartmentService.getRolesInDept().then((res) => {
-            setRoles(res.data);
+           // setRoles(res.data);
+           setRoles(res.data?.filter((item)=>item.roleId!==3 && item.roleId!==4));
         });      
     }, []);
 

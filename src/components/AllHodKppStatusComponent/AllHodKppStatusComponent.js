@@ -86,7 +86,7 @@ export default function AllHodKppStatusComponent() {
                                             <td className='text-center'>{empResponse.kppOverallAchivement}</td>
                                             <td className='text-center'>{empResponse.empEKppStatus}</td>
                                             <td>
-                                                <button type="submit" className="btn col-sm-offset-1 btn-success" onClick={() => navigate(`/addHodKppRating/${empResponse.empId}`, { replace: true })} >View</button></td>                                        </tr>
+                                                <button type="submit" className="btn col-sm-offset-1 btn-success" disabled={empResponse.empEKppStatus=="Pending"} onClick={() => navigate(`/addHodKppRating/${empResponse.empId}`, { replace: true })} >View</button></td>                                        </tr>
                                 )
                             }
                         </tbody>
