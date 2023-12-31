@@ -62,7 +62,7 @@ export default function EmployeeComponent() {
         let statusCd = 'A';
         let regionId = '1';
         let siteId = '1';
-        let employee = { roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
+        let employee = { empEId,roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
         console.log(employee)
 
         EmployeeService.saveEmployeeDetails(employee).then(res => {
@@ -393,10 +393,9 @@ export default function EmployeeComponent() {
 
                                     <div className="form-group">
                                         <div className="row">
-                                            <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empDob">Date Of Birth:</label>
+                                            <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empDob">Employee Id:</label>
                                             <div className="col-sm-3">
-                                                <input type="date" className="form-control" id="empDob" value={empDob} onChange={(e) => setEmpDob(e.target.value)} />
-
+                                                <input type="text" className="form-control" id="empEId" value={empEId} onChange={(e) => setEmpEId(e.target.value)} placeholder="Enter Employee Id here" />
                                             </div>
 
                                             <label className="control-label col-sm-2" htmlFor="empPhoto">Upload Photo:</label>
@@ -458,15 +457,13 @@ export default function EmployeeComponent() {
                                             </div>
                                            
 
-
-                                            <label className="control-label col-sm-2" htmlFor="kppObjective" >Blood Group:</label>
-
+                                            <label className="control-label col-sm-2" htmlFor="empDob">Date Of Birth:</label>
                                             <div className="col-sm-3">
-                                                <select className="form-control" id="empBloodgroup" onChange={(e)=>onBloodGroupChangeHandler(e.target.value)} defaultValue={empBloodgroup}>
-                                                    <option value="A+">A+ve</option>
-                                                    <option value="B+">B+ve</option>
-                                                </select>
+                                                <input type="date" className="form-control" id="empDob" value={empDob} onChange={(e) => setEmpDob(e.target.value)} />
+
                                             </div>
+
+                                            
                                         </div>
                                     </div>
 
