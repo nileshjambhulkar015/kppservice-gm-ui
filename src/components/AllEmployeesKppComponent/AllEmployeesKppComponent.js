@@ -30,31 +30,30 @@ export default function AllEmployeesKppComponent() {
     const searchByEKpp = (e) => {
         console.log("data=", empKppStatus)
         AllEmployeesKppService.getEmployeeByStatusByPagination(empKppStatus).then((res) => {
-          
+
             setEmpResponses(res.data.responseData.content);
             console.log(res.data)
         });
     }
 
-   
+
     return (
-        <div className='container'>
+        <div className='container-fluid'>
             <div className="row">
-          
+
                 <div className="form-group">
-                
+
                     <div className="row">
-                    <form className="form-horizontal">
-                        <label className="control-label col-sm-2" htmlFor="empKppStatus">KPP Status:</label>
-                        <div className="col-sm-3">
-                            <select className="form-control" name="empKppStatus" id="empKppStatus"  value={empKppStatus} onChange={(e)=>onOptionChangeHandler(e.target.value)} defaultValue={empKppStatus} >
-                                <option value="All">All</option>
-                                <option value="Pending">Pending</option>
-                                <option value="In-Progress">In-Progress</option>
-                                <option value="Approved">In-Progress</option>
-                                <option value="Completed">Completed</option>
-                            </select>  
-                        </div>
+                        <form className="form-horizontal">
+                            <label className="control-label col-sm-2" htmlFor="empKppStatus">KPP Status:</label>
+                            <div className="col-sm-1">
+                                <select className="form-control" name="empKppStatus" id="empKppStatus" value={empKppStatus} onChange={(e) => onOptionChangeHandler(e.target.value)} defaultValue={empKppStatus} >
+                                    <option value="All">All</option>
+                                    <option value="In-Progress">In-Progress</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                </select>
+                            </div>
                         </form>
                         <button type="submit" className="btn btn-success" onClick={(e) => searchByEKpp(e)} > Submit</button>
                     </div>
@@ -69,7 +68,9 @@ export default function AllEmployeesKppComponent() {
                                 <th className='text-center'>Employee Id</th>
                                 <th className='text-center'>Department Name</th>
                                 <th className='text-center'>Designation Name</th>
-                                <th className='text-center'>Overall Achivement</th>
+                                <th className='text-center'>Employee Rating</th>
+                                <th className='text-center'>Hod Rating</th>
+                                <th className='text-center'>GM Rating</th>
                                 <th className='text-center'>Status</th>
                                 <th className='text-center'>Action</th>
                             </tr>
@@ -83,11 +84,18 @@ export default function AllEmployeesKppComponent() {
                                             <td>{empResponse.empFirstName + ' ' + empResponse.empMiddleName + ' ' + empResponse.empLastName}</td>
                                             <td className='text-center'>{empResponse.empEId}</td>
                                             <td className='text-center'>{empResponse.deptName}</td>
-                                            <td className='text-center'>{empResponse.desigName}</td>
+                                            <td className='text-center' >{empResponse.desigName}</td>
                                             <td className='text-center'>{empResponse.kppOverallAchivement}</td>
-                                            <td className='text-center'>{empResponse.empEKppStatus}</td>
+                                            <td className='text-center'>{empResponse.hodOverallAchieve}</td>
+                                            <td className='text-center'>{empResponse.gmOverallAchieve}</td>
+                                            <td className='text-center'>{empResponse.gmKppStatus}</td>
+
                                             <td>
-                                                <button type="submit" className="btn col-sm-offset-1 btn-success" disabled={empResponse.empEKppStatus=="Pending"} onClick={() => navigate(`/addEmployeeKppRating/${empResponse.empId}`, { replace: true })} >View</button></td>                                        </tr>
+                                                <button type="submit" className="btn btn-success" disabled={empResponse.empEKppStatus == "Pending"} onClick={() => navigate(`/addEmployeeKppRating/${empResponse.empId}`, { replace: true })} >View</button>
+                                                <button type="submit" className="btn col-sm-offset-1 btn-success" disabled={empResponse.empEKppStatus == "Pending"} onClick={() => navigate(`/addEmployeeKppRating/${empResponse.empId}`, { replace: true })} >Submit</button>
+                                            </td>
+
+                                        </tr>
                                 )
                             }
                         </tbody>
@@ -96,12 +104,7 @@ export default function AllEmployeesKppComponent() {
                 </form>
 
             </div>
-            <div className="row">
-                <div className="col-sm-10"></div>
-                <div className="col-sm-2">
 
-                </div>
-            </div>
         </div>
 
 

@@ -78,7 +78,7 @@ console.log("psram empId=", empId)
   
     const saveEmployeeKpp = (e) => {
         e.preventDefault()
-        let ekppStatus = empKppStatus;
+        let ekppStatus = "Completed";
        
         /*let totalAchivedWeightage="totalAchivedWeightage";
         let totalOverAllAchive="totalOverAllAchive";
@@ -90,7 +90,7 @@ console.log("psram empId=", empId)
         console.log(payLoad)
         EmployeeKppService.updateEmpArroveOrRejectByHod(payLoad).then(res => {
           
-           navigate(`/allHodKppStatus`, { replace: true })
+           navigate(`/allEmployeeKppStatus`, { replace: true })
         }
         );
     }
@@ -210,20 +210,7 @@ console.log("psram empId=", empId)
                         </div>
                     </div>
 
-                    <div className="form-group">
-                        <label className="control-label col-sm-4" htmlFor="reamrk">Kpp Status:</label>
-                        <div className="col-sm-3">
-                        <select className="form-control" name="empKppStatus" id="empKppStatus"  value={empKppStatus} onChange={(e)=>onOptionChangeHandler(e.target.value)} defaultValue={empKppStatus} >
-                            <option value="Approved">Approved</option>
-                            <option value="Reject">Reject</option>
-                        </select>  
-                        </div>
-                    </div>
-                   
-                    <div className="form-group">
-                
-         
-            </div>
+               
           
                 </form>
 
@@ -231,7 +218,7 @@ console.log("psram empId=", empId)
             <div className="row">
                 <div className="col-sm-8"></div>
                 <div className="col-sm-4"><button type="submit" className="btn btn-success col-sm-offset-1" onClick={(e) => saveEmployeeKpp(e)} > Submit</button>
-                    <button type="submit" className="btn btn-info col-sm-offset-1 "  onClick={() => navigate(`/allHodKppStatus`, { replace: true })}> Back</button>
+                    <button type="submit" className="btn btn-info col-sm-offset-1 "  onClick={() => navigate(`/allEmployeeKppStatus`, { replace: true })}> Back</button>
                  
 
                 </div>

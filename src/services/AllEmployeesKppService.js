@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
 
-const BASE_URL = `http://localhost:9091/employee/employee-kpp-status?gmEmployeedId=${Cookies.get('empId')}&roleId=1&empKppStatus=In-Progress&page=0&size=20&sort=desig.desig_name`;
+const BASE_URL = `http://localhost:9091/employee/employee-kpp-status?gmEmployeedId=${Cookies.get('empId')}&roleId=1&gmKppStatus=In-Progress&page=0&size=20&sort=desig.desig_name`;
 
 class AllEmployeesKppService {
 
