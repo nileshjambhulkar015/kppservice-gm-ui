@@ -78,7 +78,7 @@ console.log("psram empId=", empId)
   
     const saveEmployeeKpp = (e) => {
         e.preventDefault()
-        let ekppStatus = "Completed";
+        let ekppStatus = "Approved";
        
         /*let totalAchivedWeightage="totalAchivedWeightage";
         let totalOverAllAchive="totalOverAllAchive";
