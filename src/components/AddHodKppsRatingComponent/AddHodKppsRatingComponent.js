@@ -89,10 +89,18 @@ console.log("psram empId=", empId)
         const payLoad = { "kppUpdateRequests": employeeKpps, totalAchivedWeightage, totalOverAllAchive, totalOverallTaskCompleted, ekppStatus, remark };
         console.log(payLoad)
         EmployeeKppService.updateEmpArroveOrRejectByHod(payLoad).then(res => {
-            navigate(`/allHodKppStatus`, { replace: true })
+           
         }
         );
     }
+
+    const completeEmpKpp = (e) => {
+        EmployeeKppService.completeEmpKppGM(e).then(res => {
+            
+        }
+        );
+    }
+
     return (
         <div className='container-fluid'>
           <div className='row'>
@@ -153,16 +161,17 @@ console.log("psram empId=", empId)
                                             <td>{kppResponse.ekppOverallAchieve}</td>
                                             <td>{kppResponse.ekppOverallTaskComp}</td>
                                             <td>{kppResponse.kppOverallWeightage}</td>
+                                            <td>
+                                                <input type="text" className="form-control" name="ekppAchivedWeight" defaultValue={kppResponse.gmAchivedWeight}  disabled />
+                                            </td>
+                                            <td>
+                                                <input type="number" className="form-control" min="0" name="ekppOverallAchieve" defaultValue={kppResponse.gmOverallAchieve} onChange={event => handleTodoChange(event, index, kppResponse.kppId, kppResponse.kppOverallTarget)} />
+                                            </td>
+                                            <td>
+                                                <input type="text" className="form-control" name="ekppOverallTaskComp" defaultValue={kppResponse.gmOverallTaskComp} disabled />
+                                            </td>
 
-                                            <td>
-                                                <input type="text" className="form-control" name="ekppAchivedWeight" defaultValue={0} value={employeeKpps[index]?.ekppAchivedWeight} disabled />
-                                            </td>
-                                            <td>
-                                                <input type="number" className="form-control" min="0" name="ekppOverallAchieve" defaultValue={0} onChange={event => handleTodoChange(event, index, kppResponse.kppId, kppResponse.kppOverallTarget)} />
-                                            </td>
-                                            <td>
-                                                <input type="text" className="form-control" name="ekppOverallTaskComp" defaultValue={0} value={employeeKpps[index]?.ekppOverallTaskComp} disabled />
-                                            </td>
+                                           
                                         </tr>
                                 )
                             }
@@ -218,6 +227,7 @@ console.log("psram empId=", empId)
             <div className="row">
                 <div className="col-sm-8"></div>
                 <div className="col-sm-4"><button type="submit" className="btn btn-success col-sm-offset-1" onClick={(e) => saveEmployeeKpp(e)} > Submit</button>
+                <button type="submit" className="btn col-sm-offset-1 btn-success"  onClick={() => completeEmpKpp(empId)} >Finish</button>
                     <button type="submit" className="btn btn-info col-sm-offset-1 "  onClick={() => navigate(`/allHodKppStatus`, { replace: true })}> Back</button>
                  
 

@@ -97,14 +97,11 @@ export default function AllEmployeesKppComponent() {
                                             <td className='text-center'>{empResponse.hodOverallAchieve}</td>
                                             <td className='text-center'>{empResponse.gmOverallAchieve}</td>
                                             <td className='text-center'>{empResponse.gmKppStatus}</td>
-
                                             <td>
-                                                <button type="submit" className="btn btn-success" disabled={empResponse.empEKppStatus == "Pending"} onClick={() => navigate(`/addEmployeeKppRating/${empResponse.empId}`, { replace: true })} >View</button>
-                                                <button type="submit" className="btn col-sm-offset-1 btn-success" disabled={empResponse.gmKppStatus === "Pending" || empResponse.gmKppStatus !== "Approved"}  onClick={() => completeEmpKpp(empResponse.empId)} >Finish</button>
-                                               
+                                            <button type="submit" className="btn btn-success" disabled={empResponse.empEKppStatus == "Pending"} onClick={() => navigate(`/addEmployeeKppRating/${empResponse.empId}`, { replace: true })} >View</button> 
+                                            <button type="submit" className="btn col-sm-offset-1 btn-success" disabled={empResponse.gmKppStatus === "Pending" || empResponse.gmKppStatus !== "Approved"}  onClick={() => completeEmpKpp(empResponse.empId)} >Finish</button>
                                             </td>
-
-                                        </tr>
+                                            </tr>
                                 )
                             }
                         </tbody>

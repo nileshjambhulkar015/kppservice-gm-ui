@@ -29,7 +29,6 @@ class AllEmployeesKppService {
     
     completeEmpKppGM(empId) {
         if (null != Cookies.get('empId')) {
-            console.log("empKppStaus=",empId)
             return axios.get(`http://localhost:9091/gm-approval/report?empId=${empId}&statusCd=A`)
         } else {
             alert("You need to login first")

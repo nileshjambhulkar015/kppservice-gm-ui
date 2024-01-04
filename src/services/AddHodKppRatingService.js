@@ -38,6 +38,16 @@ class EmployeeKppService {
         }  
     }
 
+    completeEmpKppGM(empId) {
+        if (null != Cookies.get('empId')) {
+            return axios.get(`http://localhost:9091/gm-approval/report?empId=${empId}&statusCd=A`)
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008");
+        }
+
+    }
+
   
 }
 

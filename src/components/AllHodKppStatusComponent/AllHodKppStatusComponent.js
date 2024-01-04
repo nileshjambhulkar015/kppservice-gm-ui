@@ -36,9 +36,14 @@ export default function AllHodKppStatusComponent() {
         });
     }
 
-   
+    const completeEmpKpp = (e) => {
+        AllHodKppService.completeEmpKppGM(e).then(res => {
+            
+        }
+        );
+    }
     return (
-        <div className='container'>
+        <div className='container-fluid'>
             <div className="row">
           
                 <div className="form-group">
@@ -46,7 +51,7 @@ export default function AllHodKppStatusComponent() {
                     <div className="row">
                     <form className="form-horizontal">
                         <label className="control-label col-sm-2" htmlFor="empKppStatus">KPP Status:</label>
-                        <div className="col-sm-3">
+                        <div className="col-sm-2">
                             <select className="form-control" name="empKppStatus" id="empKppStatus"  value={empKppStatus} onChange={(e)=>onOptionChangeHandler(e.target.value)} defaultValue={empKppStatus} >
                                 <option value="All">All</option>
                                 <option value="Pending">Pending</option>
@@ -68,7 +73,8 @@ export default function AllHodKppStatusComponent() {
                                 <th className='text-center'>Employee Id</th>
                                 <th className='text-center'>Department Name</th>
                                 <th className='text-center'>Designation Name</th>
-                                <th className='text-center'>Overall Achivement</th>
+                                <th className='text-center'>Hod Ratings</th>
+                                <th className='text-center'>GM Ratings</th>
                                 <th className='text-center'>Status</th>
                                 <th className='text-center'>Action</th>
                             </tr>
@@ -84,9 +90,13 @@ export default function AllHodKppStatusComponent() {
                                             <td className='text-center'>{empResponse.deptName}</td>
                                             <td className='text-center'>{empResponse.desigName}</td>
                                             <td className='text-center'>{empResponse.kppOverallAchivement}</td>
-                                            <td className='text-center'>{empResponse.empEKppStatus}</td>
+                                            <td className='text-center'>{empResponse.gmOverallAchieve}</td>
+                                            <td className='text-center'>{empResponse.gmKppStatus}</td>
                                             <td>
-                                                <button type="submit" className="btn col-sm-offset-1 btn-success" disabled={empResponse.empEKppStatus=="Pending"} onClick={() => navigate(`/addHodKppRating/${empResponse.empId}`, { replace: true })} >View</button></td>                                        </tr>
+                                                <button type="submit" className="btn col-sm-offset-1 btn-success" disabled={empResponse.empEKppStatus=="Pending"} onClick={() => navigate(`/addHodKppRating/${empResponse.empId}`, { replace: true })} >View</button>                                  
+                                                <button type="submit" className="btn col-sm-offset-1 btn-success" disabled={empResponse.gmKppStatus === "Pending" || empResponse.gmKppStatus !== "Approved"}  onClick={() => completeEmpKpp(empResponse.empId)} >Finish</button>
+                                                </td>      
+                                                </tr>
                                 )
                             }
                         </tbody>
