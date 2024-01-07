@@ -3,6 +3,7 @@ import EmployeeService from "../../services/EmployeeService";
 import RoleService from "../../services/RoleService";
 import DepartmentService from "../../services/DepartmentService";
 import DesignationService from "../../services/DesignationService";
+import Cookies from 'js-cookie';
 export default function EmployeeComponent() {
 
     const [empId, setEmpId] = useState('');
@@ -34,7 +35,7 @@ export default function EmployeeComponent() {
     const [empGender, setEmpGender] = useState('Male');
     const [empBloodgroup, setEmpBloodgroup] = useState('A+');
     const [remark, setRemark] = useState('');
-    const [employeeId, setEmployeeId] = useState('');
+   
 
     const [employees, setEmployees] = useState([])
     const [roles, setRoles] = useState([])
@@ -62,7 +63,9 @@ export default function EmployeeComponent() {
         let statusCd = 'A';
         let regionId = '1';
         let siteId = '1';
-        let employee = { empEId,roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
+        let createdUserId = Cookies.get('empEId');
+        console.log("login user id : ",createdUserId)
+        let employee = { empEId,roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd,createdUserId };
         console.log(employee)
 
         EmployeeService.saveEmployeeDetails(employee).then(res => {
@@ -78,6 +81,8 @@ export default function EmployeeComponent() {
     }
 
     useEffect(() => {
+
+       
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
         });
@@ -204,7 +209,7 @@ export default function EmployeeComponent() {
             setEmpGender(employee.empGender)
             setEmpBloodgroup(employee.empBloodgroup)
             setRemark(employee.remark)
-
+          
             let statusCd = 'I';
 
             let employeeData = { empId, empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
