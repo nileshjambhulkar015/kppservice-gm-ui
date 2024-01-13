@@ -266,16 +266,16 @@ export default function EmployeeComponent() {
                     <table className="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Sr No</th>
-                                <th>Employee Name</th>
-                                <th>Employee Id</th>
+                                <th  className="text-center">Sr No</th>
+                                <th className="text-center">Employee Name</th>
+                                <th className="text-center">Employee Id</th>
 
-                                <th>Department Name</th>
-                                <th>Designation Name</th>
-                                <th>Role Name</th>
-                                <th>Mobile No</th>
-                                <th>Email Id</th>
-                                <th>Action</th>
+                                <th className="text-center">Department Name</th>
+                                <th className="text-center">Designation Name</th>
+                                <th className="text-center">Role Name</th>
+                                <th className="text-center">Mobile No</th>
+                                
+                                <th className="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -285,14 +285,14 @@ export default function EmployeeComponent() {
                                         <tr key={employee.empId}>
                                             <td>{index + 1}</td>
                                             <td className="text-justify">{employee.empFirstName + ' ' + employee.empMiddleName + ' ' + employee.empLastName}</td>
-                                            <td>{employee.empEId}</td>
+                                            <td className="text-center">{employee.empEId}</td>
 
-                                            <td>{employee.deptName}</td>
-                                            <td>{employee.desigName}</td>
-                                            <td>{employee.roleName}</td>
-                                            <td className="text-justify">{employee.empMobileNo}</td>
-                                            <td className="text-justify">{employee.emailId}</td>
-                                            <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateEmployee" onClick={() => showEmployeeById(employee.empId)}>Update</button>
+                                            <td className="text-center">{employee.deptName}</td>
+                                            <td className="text-center">{employee.desigName}</td>
+                                            <td className="text-center">{employee.roleName}</td>
+                                            <td className="text-center">{employee.empMobileNo}</td>
+                                    
+                                            <td className="col-sm-3 text-center"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateEmployee" onClick={() => showEmployeeById(employee.empId)}>Update</button>
                                                 <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteEmployeeById(employee.empId)}>Delete</button>
                                                 <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showEmployee" onClick={() => showEmployeeById(employee.empId)}>View</button></td>
                                         </tr>
