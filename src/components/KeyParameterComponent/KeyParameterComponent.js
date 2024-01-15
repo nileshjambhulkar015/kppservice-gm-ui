@@ -332,9 +332,10 @@ export default function KeyParameterComponent() {
                                                 <select className="form-control" id="kppUoM"  onChange={(e)=>onUoMChangeHandler(e.target.value)} defaultValue={kppUoM} >
                                                     <option value="KG">KG</option>
                                                     <option value="Ltr">Ltr</option>
+                                                    <option value="%">%</option>
                                                 </select>
                                     </div>
-                                    <label className="control-label col-sm-3" htmlFor="kppOverallWeightage">Kpp Target Period:</label>
+                                    <label className="control-label col-sm-3" htmlFor="kppOverallWeightage">Overall Weightage In % :</label>
                                     <div className="col-sm-2">
                                         <input type="text" className="form-control" id="kppOverallWeightage" value={kppOverallWeightage} onChange={(e) => setKppOverallWeightage(e.target.value)} placeholder="Enter KPP Kpp Target Period here"  />
                                     </div>

@@ -14,6 +14,8 @@ import AllEmployeesKppComponent from "./components/AllEmployeesKppComponent/AllE
 import AllHodKppStatusComponent from './components/AllHodKppStatusComponent/AllHodKppStatusComponent';
 import AddEmployeeKppsRatingComponent from './components/AddEmployeeKppsRatingComponent/AddEmployeeKppsRatingComponent';
 import AddHodKppsRatingComponent from './components/AddHodKppsRatingComponent/AddHodKppsRatingComponent';
+import AddNewEmployeeComponent from './components/AddNewEmployeeComponent/AddNewEmployeeComponent';
+import AssignEmployeeKppComponent from './components/AssignEmployeeKppComponent/AssignEmployeeKppComponent';
 
 
 function App() {
@@ -44,8 +46,9 @@ function App() {
             <li><Link to="/role">Role</Link></li>
             <li><Link to="/department">Department</Link></li>
             <li><Link to="/designation">Designation</Link></li>
-            <li><Link to="/employee">Employee</Link></li>
             <li><Link to="/keyparemeter">Key Indicator</Link></li>
+            <li><Link to="/employee">Employee</Link></li>
+            <li><Link to="/assignEmployeeKpp">Assign Employee Kpp</Link></li>
             <li><Link to="/allHodKppStatus">HOD KPP</Link></li>
            
             <li><Link to="/allEmployeeKppStatus">Employee KPP</Link></li>
@@ -58,13 +61,16 @@ function App() {
         </div>
       </nav>
       <Routes>
-
-        <Route exact path="/" element={<RoleComponent />}></Route>
+      <Route exact path="/" element={<AddNewEmployeeComponent />}></Route>
+   
+        <Route exact path="/newEmployee" element={<AddNewEmployeeComponent />}></Route>
         <Route exact path="/role" element={<RoleComponent />}></Route>
         <Route exact path="/department" element={<DepartmentComponent />}></Route>
         <Route exact path="/designation" element={<DesignationComponent />}></Route>
-        <Route exact path="/employee" element={<EmployeeComponent />}></Route>
         <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
+        <Route exact path="/employee" element={<EmployeeComponent />}></Route>
+        <Route exact path="/assignEmployeeKpp" element={<AssignEmployeeKppComponent / >}></Route>
+      
         <Route exact path="/allHodKppStatus" element={<AllHodKppStatusComponent />}></Route>
         <Route exact path="/addHodKppRating/:empId" element={<AddHodKppsRatingComponent />}></Route>
         <Route exact path="/allEmployeeKppStatus" element={<AllEmployeesKppComponent />}></Route>
