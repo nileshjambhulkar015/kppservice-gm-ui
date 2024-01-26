@@ -141,7 +141,9 @@ export default function DesignationComponent() {
                                 <button type="submit" className="btn btn-primary" onClick={() => searchDesigName(desigNameSearch)}>Search</button>
                             </div>
                     </div>
-                    <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDesignation">Add Designation</button></div>
+                    <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDesignation">Add Designation</button>
+                    <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal">Upload Excel</button>
+                    </div>
                 </div>
                 <div className="row">
 

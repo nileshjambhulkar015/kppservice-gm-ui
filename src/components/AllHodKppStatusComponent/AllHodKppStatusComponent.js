@@ -89,7 +89,7 @@ export default function AllHodKppStatusComponent() {
                                             <td className='text-center'>{empResponse.empEId}</td>
                                             <td className='text-center'>{empResponse.deptName}</td>
                                             <td className='text-center'>{empResponse.desigName}</td>
-                                            <td className='text-center'>{empResponse.kppOverallAchivement}</td>
+                                            <td className='text-center'>{empResponse.hodOverallAchieve}</td>
                                             <td className='text-center'>{empResponse.gmOverallAchieve}</td>
                                             <td className='text-center'>{empResponse.gmKppStatus}</td>
                                             <td>

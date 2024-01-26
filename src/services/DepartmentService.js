@@ -98,6 +98,20 @@ class DepartmentService {
         
     }
 
+     //Upload department
+     uploadExcelDept(formData) {
+        if (null != Cookies.get('empId')) {
+            return axios.post("http://localhost:9091/department/upload-department",formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },});
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }
+        
+    }
+
 }
 
 

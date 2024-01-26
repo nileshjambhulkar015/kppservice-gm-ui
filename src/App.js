@@ -61,7 +61,7 @@ function App() {
         </div>
       </nav>
       <Routes>
-      <Route exact path="/" element={<AddNewEmployeeComponent />}></Route>
+      <Route exact path="/" element={<RoleComponent />}></Route>
    
         <Route exact path="/newEmployee" element={<AddNewEmployeeComponent />}></Route>
         <Route exact path="/role" element={<RoleComponent />}></Route>

@@ -106,6 +106,17 @@ export default function DepartmentComponent() {
         );
 
     }
+
+    const uplaodExcel=(file)=>{
+       // e.preventDefault();
+        let formData = new FormData();
+
+        formData.append("file", file);
+        DepartmentService.uploadExcelDept(file).then(res => {
+            alert("Report generated");
+        });
+    //}
+    }
     return (
 
         <div>
@@ -116,7 +127,7 @@ export default function DepartmentComponent() {
                     <div className="row">
                         <div className="col-sm-8">
                             <div className="form-group">
-                                <form className="form-horizontal">
+                                <form className="form-horizontal" enctype="multipart/form-data">
                                     <label className="control-label col-sm-4" htmlFor="deptNameSearch">Enter Department Name:</label>
                                     <div className="col-sm-4">
                                         <input type="text" className="form-control" id="deptNameSearch" placeholder="Enter Department Name" value={deptNameSearch} onChange={(e) => setDeptNameSearch(e.target.value)} />
@@ -125,7 +136,9 @@ export default function DepartmentComponent() {
                                 <button type="submit" className="btn btn-primary" onClick={() => searchDeptName(deptNameSearch)}>Search</button>
                             </div>
                         </div>
-                        <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDepartment">Add Department</button></div>
+                        <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDepartment">Add Department</button>
+                        <input type="file"  id="fileInput" className="btn btn-primary col-sm-offset-1" onClick={()=>uplaodExcel()} />
+                        </div>
                     </div>
                     <div className="row">
 

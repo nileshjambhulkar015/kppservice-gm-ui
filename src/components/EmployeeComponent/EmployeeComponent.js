@@ -36,6 +36,7 @@ export default function EmployeeComponent() {
     const [empGender, setEmpGender] = useState('Male');
     const [empBloodgroup, setEmpBloodgroup] = useState('A+');
     const [remark, setRemark] = useState('');
+    
    
 
     const [employees, setEmployees] = useState([])
@@ -250,7 +251,7 @@ export default function EmployeeComponent() {
             <div className="col-md-1"></div>
             <div className="col-md-10">
                 <div className="row">
-                    <div className="col-sm-8">      
+                    <div className="col-sm-6">      
                     <div className="form-group">
                                 <form className="form-horizontal">
                                     <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter First Name:</label>
@@ -261,7 +262,9 @@ export default function EmployeeComponent() {
                                 <button type="submit" className="btn btn-primary" onClick={() => searchEmployeeFirstName(empFirstNameSearch)}>Search</button>
                             </div>
                     </div>
-                    <div className="col-sm-4"><button type="button" className="btn btn-primary" onClick={() => navigate(`/newEmployee`, { replace: true })} >Add New Employee</button>
+                    <div className="col-sm-5">
+                    <button type="button" className="btn btn-primary" onClick={() => navigate(`/newEmployee`, { replace: true })} >Add New Employee</button>
+                    <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal">Upload Excel</button>
                     <button type="button" className="btn btn-primary col-sm-offset-1" >Advance Search</button>
                     </div>
                 </div>

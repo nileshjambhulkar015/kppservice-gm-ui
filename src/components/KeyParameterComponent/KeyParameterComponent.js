@@ -186,9 +186,12 @@ export default function KeyParameterComponent() {
                                     </div>
                                 </form>
                                 <button type="submit" className="btn btn-primary" onClick={() => searchKppObjective(kppObjectiveSearch)}>Search</button>
-                            </div>
+                               
+                                </div>
                 </div>
-                <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveKpp">Add Key Parameter</button></div>
+                <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveKpp">Add Key Parameter</button>
+                <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal">Upload Excel</button>
+                </div>
             </div>
             <div className="row">
                 <table className="table table-bordered">

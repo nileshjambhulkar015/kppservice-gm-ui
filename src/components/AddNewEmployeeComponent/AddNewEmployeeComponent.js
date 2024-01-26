@@ -38,7 +38,6 @@ export default function AddNewEmployeeComponent() {
     const [empBloodgroup, setEmpBloodgroup] = useState('A+');
     const [remark, setRemark] = useState('');
 
-
     const [employees, setEmployees] = useState([])
     const [roles, setRoles] = useState([])
     const [reportingRoles, setReportingRoles] = useState([])
@@ -65,9 +64,9 @@ export default function AddNewEmployeeComponent() {
         let statusCd = 'A';
         let regionId = '1';
         let siteId = '1';
-        let createdUserId = Cookies.get('empEId');
-        console.log("login user id : ", createdUserId)
-        let employee = { empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd, createdUserId };
+        let employeeId = Cookies.get('empEId');
+       // console.log("login user id : ", createdUserId)
+        let employee = { empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd, employeeId };
         console.log(employee)
 
         EmployeeService.saveEmployeeDetails(employee).then(res => {
