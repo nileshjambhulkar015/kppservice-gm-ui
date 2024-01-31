@@ -1,10 +1,6 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import Cookies from 'js-cookie';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import EmployeeKppService from '../../services/AddHodKppRatingService';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from "react-router-dom"
 
 export default function AddHodKppsRatingComponent() {
     const navigate = useNavigate();

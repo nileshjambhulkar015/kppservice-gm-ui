@@ -33,6 +33,16 @@ class EmployeeService {
         }       
     }
 
+    //Show Employee For Kpp based on designation
+    getEmployeeDetailsByDesignationByPaging(desigId) {
+        if (null != Cookies.get('empId')) {
+            return axios.get(`http://localhost:9091/employee/search?desigId=${desigId}&statusCd=A&page=0&size=20&sort=emp.emp_fname`);
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }       
+    }
+
     getEmployeeDetailsByEmpFirstNamePaging(empFirstName) {
         if (null != Cookies.get('empId')) {
             return axios.get(`http://localhost:9091/employee/search?empFirstName=${empFirstName}&statusCd=A&page=0&size=20&sort=emp.emp_name`)

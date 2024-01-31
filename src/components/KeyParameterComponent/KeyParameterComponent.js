@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DepartmentService from "../../services/DepartmentService";
-import KeyParameterService from "../../services/KeyParameterService";
 import DesignationService from "../../services/DesignationService";
+import KeyParameterService from "../../services/KeyParameterService";
 import RoleService from "../../services/RoleService";
 
 export default function KeyParameterComponent() {

@@ -1,10 +1,10 @@
+import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
-import EmployeeService from "../../services/EmployeeService";
-import RoleService from "../../services/RoleService";
+import { useNavigate } from 'react-router-dom';
 import DepartmentService from "../../services/DepartmentService";
 import DesignationService from "../../services/DesignationService";
-import { useNavigate, useParams } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import EmployeeService from "../../services/EmployeeService";
+import RoleService from "../../services/RoleService";
 export default function AddNewEmployeeComponent() {
 
     const navigate = useNavigate();
