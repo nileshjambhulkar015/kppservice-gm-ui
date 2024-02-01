@@ -23,6 +23,17 @@ class EmployeeKppsService {
             window.location.replace("http://localhost:3008/");
         }  
     }
+
+    //Assign employee kpp for assign kpp page
+    assignEmployeeKppDetails(emplyeeKpp){
+        if (null != Cookies.get('empId')) {
+            console.log("Service =",emplyeeKpp)
+            return axios.post("http://localhost:9091/employee-kpp/assign-kpp",emplyeeKpp)
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }  
+    }
 }
 
 

@@ -1,9 +1,10 @@
+import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
-import EmployeeService from "../../services/EmployeeService";
-import RoleService from "../../services/RoleService";
+import { useNavigate } from 'react-router-dom';
 import DepartmentService from "../../services/DepartmentService";
 import DesignationService from "../../services/DesignationService";
-import { useNavigate, useParams } from 'react-router-dom';
+import EmployeeService from "../../services/EmployeeService";
+import RoleService from "../../services/RoleService";
 export default function ShowEmployeeForKppComponent() {
 
     const navigate = useNavigate(); 
@@ -55,6 +56,19 @@ export default function ShowEmployeeForKppComponent() {
             });
         }, [reportingEmpDesigId]);
 
+        const navigateToAssignEmployee = (empId,empEId,roleId, deptId,desigId,reportingEmpId) => {
+            console.log("reportingEmpId : ",reportingEmpId)
+            Cookies.set('empIdForKpp', empId);
+             Cookies.set('empEIdForKpp', empEId);            
+        Cookies.set('empKppRoleId', roleId);
+        Cookies.set('empKppDeptId', deptId);
+        Cookies.set('empKppDesigId', desigId);
+        Cookies.set('empReportingIdForKpp', reportingEmpId);
+        navigate(`/assignEmployeeKpp`, { replace: true });
+        }
+
+       
+    
     return (
         <div className="row">
             <h3 className="text-center">Assign KPP to  New Employee</h3>
@@ -137,7 +151,10 @@ export default function ShowEmployeeForKppComponent() {
                                         <td className="text-center">{employee.deptName}</td>
                                         <td className="text-center">{employee.desigName}</td>                                 
                                         <td className="text-center">{employee.empMobileNo}</td>
-                                        <td className="text-center"> <button type="submit" className="btn btn-info" onClick={() => navigate(`/assignEmployeeKpp`, { replace: true })}>Assign</button></td>
+                                        <td className="text-center">{employee.reportingEmpId}</td>
+                                        <td className="text-center"> <button type="submit" className="btn btn-info" onClick={() => 
+                                            navigateToAssignEmployee(employee.empId,employee.empEId, employee.roleId,employee.deptId,employee.desigId,employee.reportingEmpId)
+                                       }>Assign</button></td>
                                        </tr>
                             )
                         }

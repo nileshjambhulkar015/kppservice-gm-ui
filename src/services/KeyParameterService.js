@@ -43,6 +43,17 @@ class KeyParameterService {
         }
     }
 
+    //Assign kpp For Employee page when user click from showEmployeeKppComponent
+
+        getKPPDetailsForAssignKppByPaging() {
+        if (null != Cookies.get('empId')) {
+            return axios.get(`http://localhost:9091/key-perform-parameter/assign-employee-kpp-search?roleId=${Cookies.get('empKppRoleId')}&deptId=${Cookies.get('empKppDeptId')}&desigId=${Cookies.get('empKppDesigId')}&statusCd=A&page=0&size=20&sort=dept.dept_name`);
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }
+    }
+
 
     getKPPDetailsByKppObjectivePaging(kppObjective) {
         if (null != Cookies.get('empId')) {
