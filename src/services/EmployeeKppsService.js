@@ -8,7 +8,8 @@ class EmployeeKppsService {
 
     getKPPDetails() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL)
+           
+            return axios.get(`http://localhost:9091/employee-kpp-status?empId=${Cookies.get('empIdForKppRatings')}`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

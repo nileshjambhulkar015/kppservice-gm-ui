@@ -14,8 +14,8 @@ export default function AllEmployeesKppComponent() {
     useEffect(() => {
         AllEmployeesKppService.getEmployeeDetailsByPagination().then((res) => {
             setEmpResponses(res.data.responseData.content);
-            console.log(" res.data.responseData.content.empId",  res.data.responseData.content.empId) 
-            Cookies.set('empIdForKppRatings', res.data.responseData.content.empId);
+          //  console.log(" res.data.responseData.content.empId",  res.data.responseData.content.empId) 
+           // Cookies.set('empIdForKppRatings', res.data.responseData.content.empId);
 
         });
     }, []);
@@ -34,8 +34,9 @@ export default function AllEmployeesKppComponent() {
         });
     }
 
-    const navigateToUpdateRating=()=>{
-
+    const navigateToUpdateRating=(empId)=>{
+        console.log("New empId =",empId)
+        Cookies.set('empIdForKppRatings', empId);
         navigate(`/addEmployeeKppRating`, { replace: true })       
     }
 
@@ -99,7 +100,7 @@ export default function AllEmployeesKppComponent() {
                                             <td className='text-center'>{empResponse.gmOverallAchieve}</td>
                                             <td className='text-center'>{empResponse.gmKppStatus}</td>
                                             <td>
-                                            <button type="submit" className="btn btn-success" disabled={empResponse.empEKppStatus === "Pending"} onClick={() => navigateToUpdateRating()} >View</button> 
+                                            <button type="submit" className="btn btn-success" disabled={empResponse.empEKppStatus === "Pending"} onClick={() => navigateToUpdateRating(empResponse.empId)} >View</button> 
                                             <button type="submit" className="btn col-sm-offset-1 btn-success" disabled={empResponse.gmKppStatus === "Pending" || empResponse.gmKppStatus !== "Approved"}  onClick={() => completeEmpKpp(empResponse.empId)} >Finish</button>
                                             </td>
                                             </tr>

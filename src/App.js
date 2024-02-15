@@ -12,7 +12,7 @@ import RoleComponent from "./components/RoloComponent/RoleComponent";
 import Cookies from 'js-cookie';
 import AllEmployeesKppComponent from "./components/AllEmployeesKppComponent/AllEmployeesKppComponent";
 import AllHodKppStatusComponent from './components/AllHodKppStatusComponent/AllHodKppStatusComponent';
-import AddEmployeeKppsRatingComponent from './components/AddEmployeeKppsRatingComponent/AddEmployeeKppsRatingComponent';
+import EmplyeeUpdateKppRatingsComponent from './components/EmplyeeUpdateKppRatingsComponent/EmplyeeUpdateKppRatingsComponent';
 import AddHodKppsRatingComponent from './components/AddHodKppsRatingComponent/AddHodKppsRatingComponent';
 import AddNewEmployeeComponent from './components/AddNewEmployeeComponent/AddNewEmployeeComponent';
 import ShowEmployeeForKppComponent from './components/ShowEmployeeForKppComponent/ShowEmployeeForKppComponent';
@@ -75,7 +75,7 @@ function App() {
         <Route exact path="/allHodKppStatus" element={<AllHodKppStatusComponent />}></Route>
         <Route exact path="/addHodKppRating/:empId" element={<AddHodKppsRatingComponent />}></Route>
         <Route exact path="/allEmployeeKppStatus" element={<AllEmployeesKppComponent />}></Route>
-        <Route exact path="/addEmployeeKppRating" element={<AddEmployeeKppsRatingComponent />}></Route>
+        <Route exact path="/addEmployeeKppRating" element={<EmplyeeUpdateKppRatingsComponent />}></Route>
 
 
         <Route exact path="/assignEmployeeKpp" element={<AssignEmployeeKppComponent />}></Route>
