@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { useNavigate, useParams } from 'react-router-dom';
 import AllEmployeesKppService from '../../services/AllEmployeesKppService';
-
-
+import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 export default function AllEmployeesKppComponent() {
 
+  
     const navigate = useNavigate();
-    const { empId } = useParams();
-
     const [empKppStatus, setEmpKppStatus] = useState('In-Progress')
     const [empResponses, setEmpResponses] = useState([])
 
@@ -16,6 +14,8 @@ export default function AllEmployeesKppComponent() {
     useEffect(() => {
         AllEmployeesKppService.getEmployeeDetailsByPagination().then((res) => {
             setEmpResponses(res.data.responseData.content);
+            console.log(" res.data.responseData.content.empId",  res.data.responseData.content.empId) 
+            Cookies.set('empIdForKppRatings', res.data.responseData.content.empId);
 
         });
     }, []);
@@ -34,7 +34,10 @@ export default function AllEmployeesKppComponent() {
         });
     }
 
-    
+    const navigateToUpdateRating=()=>{
+
+        navigate(`/addEmployeeKppRating`, { replace: true })       
+    }
 
     const completeEmpKpp = (e) => {
         AllEmployeesKppService.completeEmpKppGM(e).then(res => {
@@ -96,7 +99,7 @@ export default function AllEmployeesKppComponent() {
                                             <td className='text-center'>{empResponse.gmOverallAchieve}</td>
                                             <td className='text-center'>{empResponse.gmKppStatus}</td>
                                             <td>
-                                            <button type="submit" className="btn btn-success" disabled={empResponse.empEKppStatus == "Pending"} onClick={() => navigate(`/addEmployeeKppRating/${empResponse.empId}`, { replace: true })} >View</button> 
+                                            <button type="submit" className="btn btn-success" disabled={empResponse.empEKppStatus === "Pending"} onClick={() => navigateToUpdateRating()} >View</button> 
                                             <button type="submit" className="btn col-sm-offset-1 btn-success" disabled={empResponse.gmKppStatus === "Pending" || empResponse.gmKppStatus !== "Approved"}  onClick={() => completeEmpKpp(empResponse.empId)} >Finish</button>
                                             </td>
                                             </tr>

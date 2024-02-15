@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import EmployeeKppService from '../../services/AddHodKppRatingService';
-
+import Cookies from 'js-cookie';
 export default function AddEmployeeKppsRatingComponent() {
     const navigate = useNavigate();
     
-   const {empId}=useParams();
-console.log("psram empId=", empId)
+   //const {empId}=useParams();
+   let empId=  Cookies.get('addEmployeeKppRating');
+console.log("Kpp rating  empId=", empId)
 
     const [ekppMonth, setEkppMonth] = useState('');
     const [totalAchivedWeightage, setTotalAchivedWeightage] = useState('0');

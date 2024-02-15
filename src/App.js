@@ -75,7 +75,7 @@ function App() {
         <Route exact path="/allHodKppStatus" element={<AllHodKppStatusComponent />}></Route>
         <Route exact path="/addHodKppRating/:empId" element={<AddHodKppsRatingComponent />}></Route>
         <Route exact path="/allEmployeeKppStatus" element={<AllEmployeesKppComponent />}></Route>
-        <Route exact path="/addEmployeeKppRating/:empId" element={<AddEmployeeKppsRatingComponent />}></Route>
+        <Route exact path="/addEmployeeKppRating" element={<AddEmployeeKppsRatingComponent />}></Route>
 
 
         <Route exact path="/assignEmployeeKpp" element={<AssignEmployeeKppComponent />}></Route>

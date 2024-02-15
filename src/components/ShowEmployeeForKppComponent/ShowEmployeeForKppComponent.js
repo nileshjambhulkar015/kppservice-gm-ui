@@ -151,7 +151,7 @@ export default function ShowEmployeeForKppComponent() {
                                         <td className="text-center">{employee.deptName}</td>
                                         <td className="text-center">{employee.desigName}</td>                                 
                                         <td className="text-center">{employee.empMobileNo}</td>
-                                        <td className="text-center">{employee.reportingEmpId}</td>
+                                      
                                         <td className="text-center"> <button type="submit" className="btn btn-info" onClick={() => 
                                             navigateToAssignEmployee(employee.empId,employee.empEId, employee.roleId,employee.deptId,employee.desigId,employee.reportingEmpId)
                                        }>Assign</button></td>

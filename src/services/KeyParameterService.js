@@ -47,7 +47,7 @@ class KeyParameterService {
 
         getKPPDetailsForAssignKppByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/key-perform-parameter/assign-employee-kpp-search?roleId=${Cookies.get('empKppRoleId')}&deptId=${Cookies.get('empKppDeptId')}&desigId=${Cookies.get('empKppDesigId')}&statusCd=A&page=0&size=20&sort=dept.dept_name`);
+            return axios.get(`http://localhost:9091/key-perform-parameter/assign-employee-kpp-search?empId=${Cookies.get('empIdForKpp')}&roleId=${Cookies.get('empKppRoleId')}&deptId=${Cookies.get('empKppDeptId')}&desigId=${Cookies.get('empKppDesigId')}&statusCd=A&page=0&size=20&sort=dept.dept_name`);
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
