@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 //import { KPP_API_BASE_URL, LOGIN_UI_BASE_URL } from "./HodConstants";
 //const BASE_URL = `http://localhost:9091/hod-approval/employee-kpp?empId=${}&statusCd=A`;
 
-class EmployeeKppService {
+class AddHodKppRatingService {
 
 
     getKPPDetails(empId) {
@@ -28,16 +28,7 @@ class EmployeeKppService {
         }  
     }
 
-    updateEmpArroveOrRejectByHod(todos){
-     
-        if (null != Cookies.get('empId')) {
-            return axios.put("http://localhost:9091/gm-approval",todos)
-        } else {
-            alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
-        }  
-    }
-
+   
     completeEmpKppGM(empId) {
         if (null != Cookies.get('empId')) {
             return axios.get(`http://localhost:9091/gm-approval/report?empId=${empId}&statusCd=A`)
@@ -52,4 +43,4 @@ class EmployeeKppService {
 }
 
 
-export default new EmployeeKppService();
+export default new AddHodKppRatingService();

@@ -6,10 +6,22 @@ const BASE_URL = "http://localhost:9091/employee-key-perform-parameter/kpp?roleI
 
 class EmployeeKppsService {
 
+    //for employee, GM approved the kpp and adding rating
     getKPPDetails() {
         if (null != Cookies.get('empId')) {
            
             return axios.get(`http://localhost:9091/employee-kpp-status?empId=${Cookies.get('empIdForKppRatings')}`)
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }
+    }
+
+     //for employee, GM approved the kpp and adding rating
+     getHodKPPDetailsForGmApproval() {
+        if (null != Cookies.get('empId')) {
+           
+            return axios.get(`http://localhost:9091/employee-kpp-status?empId=${Cookies.get('hodEmpIdForKppRatings')}`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
@@ -24,6 +36,20 @@ class EmployeeKppsService {
             window.location.replace("http://localhost:3008/");
         }  
     }
+
+    
+    //GM approval for employee kpp ratings
+    updateEmpApproveOrRejectByHod(todos){
+     
+        if (null != Cookies.get('empId')) {
+            return axios.put("http://localhost:9091/gm-approval",todos)
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }  
+    }
+    
+
 
     //Assign employee kpp for assign kpp page
     assignEmployeeKppDetails(emplyeeKpp){

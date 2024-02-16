@@ -17,6 +17,7 @@ import AddHodKppsRatingComponent from './components/AddHodKppsRatingComponent/Ad
 import AddNewEmployeeComponent from './components/AddNewEmployeeComponent/AddNewEmployeeComponent';
 import ShowEmployeeForKppComponent from './components/ShowEmployeeForKppComponent/ShowEmployeeForKppComponent';
 import AssignEmployeeKppComponent from './components/AssignEmployeeKppComponent/AssignEmployeeKppComponent';
+import HODUpdateKppRatingsComponent from './components/HODUpdateKppRatingsComponent/HODUpdateKppRatingsComponent';
 
 
 function App() {
@@ -73,7 +74,8 @@ function App() {
         <Route exact path="/showEmployeeForKpp" element={<ShowEmployeeForKppComponent / >}></Route>
       
         <Route exact path="/allHodKppStatus" element={<AllHodKppStatusComponent />}></Route>
-        <Route exact path="/addHodKppRating/:empId" element={<AddHodKppsRatingComponent />}></Route>
+        <Route exact path="/addHodKppRating" element={<HODUpdateKppRatingsComponent />}></Route>
+        
         <Route exact path="/allEmployeeKppStatus" element={<AllEmployeesKppComponent />}></Route>
         <Route exact path="/addEmployeeKppRating" element={<EmplyeeUpdateKppRatingsComponent />}></Route>
 

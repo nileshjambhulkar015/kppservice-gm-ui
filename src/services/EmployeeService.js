@@ -61,8 +61,6 @@ class EmployeeService {
         }        
     }
 
-    
-
     updateEmployeeDetails(employee) {
         if (null != Cookies.get('empId')) {
             return axios.put(BASE_URL, employee)

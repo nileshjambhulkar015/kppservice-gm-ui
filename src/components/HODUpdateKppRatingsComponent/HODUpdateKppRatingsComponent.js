@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Cookies from 'js-cookie';
 //import EmployeeKppsService from '../../services/EmployeeKppsService';
 import EmployeeKppsService from '../../services/EmployeeKppsService'
-const EmplyeeUpdateKppRatingsComponent = () => {
+const HODUpdateKppRatingsComponent = () => {
     const [ekppMonth, setEkppMonth] = useState('');
     const [empName, setEmpName] = useState('');
     const [deptName, setDeptName] = useState('');
@@ -54,7 +54,7 @@ const EmplyeeUpdateKppRatingsComponent = () => {
         return sum;
     }
     useEffect(() => {
-        EmployeeKppsService.getKPPDetails().then((res) => {
+        EmployeeKppsService.getHodKPPDetailsForGmApproval().then((res) => {
             setEkppMonth(YYYY_MM_DD_Formater(res.data.ekppMonth)) 
             setEmpName(res.data.empName);
             setDeptName(res.data.deptName);
@@ -101,7 +101,7 @@ const EmplyeeUpdateKppRatingsComponent = () => {
 
 
                                 "kppId": kppId,
-                                "empId": Cookies.get('empIdForKppRatings'),                               
+                                "empId": Cookies.get('hodEmpIdForKppRatings'),                               
                      
                                 "gmOverallTaskComp": field === "gmOverallAchieve" && !!e.target.value ? (Number(e.target.value) / 5 * 100).toFixed(1) : 0,
                                 "gmAchivedWeight": field === "gmOverallAchieve" && !!e.target.value ? ((kppOverallWeightage * (Number(e.target.value) / 5 * 100).toFixed(1)) / 100).toFixed(1) : 0,
@@ -158,9 +158,7 @@ const EmplyeeUpdateKppRatingsComponent = () => {
                                         <th rowSpan={2} className="text-center">OVERALL ACHIEVEMENT</th>
                                         <th rowSpan={2} className="text-center">% OF TOTAL TASK COMPLETED</th>
 
-                                        <th rowSpan={2} className="text-center">Hod Achived Weightage</th>
-                                        <th rowSpan={2} className="text-center">Hod Ratings</th>
-                                        <th rowSpan={2} className="text-center">Hod Overall Task Completed</th>
+                                        
                                         <th rowSpan={2} className="text-center">GM Achived Weightage</th>
                                         <th rowSpan={2} className="text-center">GM Ratings</th>
                                         <th rowSpan={2} className="text-center">GM Overall Task Completed</th>
@@ -192,11 +190,6 @@ const EmplyeeUpdateKppRatingsComponent = () => {
                                                     <td className='text-center'>{kppResponse.empAchivedWeight}</td>
                                                     <td className='text-center'>{kppResponse.empOverallAchieve}</td>
                                                     <td className='text-center'>{kppResponse.empOverallTaskComp}</td>
-
-                                                    <td className='text-center'>{kppResponse.hodAchivedWeight}</td>
-                                                    <td className='text-center'>{kppResponse.hodOverallAchieve}</td>
-                                                    <td className='text-center'>{kppResponse.hodOverallTaskComp}</td>
-                                                   
                                                     <td>
                                                         <input type="text" className="form-control" name={`${index}.gmAchivedWeight`} value={values?.fields?.[index]?.gmAchivedWeight} disabled />
                                                     </td>
@@ -237,10 +230,6 @@ const EmplyeeUpdateKppRatingsComponent = () => {
                                             <td className='text-center'> <label className="control-label text-right" >{kppMasterResponses?.totalEmpOverallAchieve}</label></td>
                                             <td className='text-center'> <label className="control-label text-right" >{kppMasterResponses?.totalEmpOverallTaskComp}</label></td>
                                            
-                                            <td className='text-center'> <label className="control-label text-right" >{kppMasterResponses?.totalHodAchivedWeight}</label></td>
-                                            <td className='text-center'> <label className="control-label text-right" >{kppMasterResponses?.totalHodOverallAchieve}</label></td>
-                                            <td className='text-center'> <label className="control-label text-right" >{kppMasterResponses?.totalHodOverallTaskComp}</label></td>
-
                                             <td className='text-center'> <label className="control-label text-right">{values?.totalGmAchivedWeight === 0 ? sumOfGmAchivedWeight(values?.fields) : values?.totalGmAchivedWeight}</label></td>
                                             <td className='text-center'> <label className="control-label text-right">{values?.totalGmOverallAchieve === 0 ? sumGmOverallAchieve(values?.fields) : values?.totalGmOverallAchieve}</label></td>
                                             <td className='text-center'> <label className="control-label text-right">{values?.totalGmOverallTaskComp === 0 ? sumGmOverallTaskComp(values?.fields) : values?.totalGmOverallTaskComp}</label></td>
@@ -294,4 +283,4 @@ const EmplyeeUpdateKppRatingsComponent = () => {
         </div>
     );
 }
-export default EmplyeeUpdateKppRatingsComponent;
+export default HODUpdateKppRatingsComponent;
