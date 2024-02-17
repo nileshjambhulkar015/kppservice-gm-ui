@@ -13,23 +13,25 @@ export default function DepartmentComponent() {
 
     const [departments, setDepartments] = useState([])
 
-    const updatedDept=['Human Resource','General Manager'];
+    const updatedDept = ['Human Resource', 'General Manager'];
     const [roles, setRoles] = useState([])
+
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         DepartmentService.getDpartmentDetailsByPaging().then((res) => {
-            setDepartments(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
+            setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
             console.log(res.data.responseData.content)
         });
 
         RoleService.getRoles().then((res) => {
-            setRoles(res.data?.filter((item)=>item.roleId!==3 && item.roleId!==4));
+            setRoles(res.data?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
         });
     }, []);
 
     const searchDeptName = (e) => {
         DepartmentService.getDpartmentDetailsByDeptNamePaging(e).then((res) => {
-            setDepartments(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
+            setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
             console.log(res.data)
         });
     }
@@ -42,7 +44,7 @@ export default function DepartmentComponent() {
         DepartmentService.saveDpartmentDetails(department).then(res => {
             console.log("res=", res.data)
             DepartmentService.getDpartmentDetailsByPaging().then((res) => {
-                setDepartments(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
+                setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
                 setDeptName('');
                 setRemark('');
 
@@ -107,28 +109,36 @@ export default function DepartmentComponent() {
 
     }
 
-    const uplaodExcel=(file)=>{
-       // e.preventDefault();
-        let formData = new FormData();
+    //upload excel data for department
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        fetch('http://localhost:9091/department/upload-department', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                // Handle response
+                alert("Department uploaded successfully")
+            })
+            .catch(error => {
+                // Handle error
+                setMessage('An error occurred while uploading the file.');
+            });
+    };
 
-        formData.append("file", file);
-        DepartmentService.uploadExcelDept(file).then(res => {
-            alert("Report generated");
-        });
-    //}
-    }
     return (
 
         <div>
             <div className="row">
                 <h2 className="text-center">Department List</h2>
-                <div className="col-md-2"></div>
-                <div className="col-md-8">
+                <div className="col-md-1"></div>
+                <div className="col-md-9">
                     <div className="row">
-                        <div className="col-sm-8">
+                        <div className="col-sm-5">
                             <div className="form-group">
                                 <form className="form-horizontal" enctype="multipart/form-data">
-                                    <label className="control-label col-sm-4" htmlFor="deptNameSearch">Enter Department Name:</label>
+                                    <label className="control-label col-sm-4" htmlFor="deptNameSearch"> Department Name:</label>
                                     <div className="col-sm-4">
                                         <input type="text" className="form-control" id="deptNameSearch" placeholder="Enter Department Name" value={deptNameSearch} onChange={(e) => setDeptNameSearch(e.target.value)} />
                                     </div>
@@ -136,8 +146,9 @@ export default function DepartmentComponent() {
                                 <button type="submit" className="btn btn-primary" onClick={() => searchDeptName(deptNameSearch)}>Search</button>
                             </div>
                         </div>
-                        <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDepartment">Add Department</button>
-                        <input type="file"  id="fileInput" className="btn btn-primary col-sm-offset-1" onClick={()=>uplaodExcel()} />
+                        <div className="col-sm-6" align="right">
+                            <button type="button" className="btn btn-primary " data-toggle="modal" data-target="#saveDepartment">Add Department</button>
+                            <button type="button" className="col-sm-offset-1 btn btn-primary" data-toggle="modal" data-target="#uploadExcelDepartment">Upload Excel</button>
                         </div>
                     </div>
                     <div className="row">
@@ -174,6 +185,39 @@ export default function DepartmentComponent() {
                 <div className="col-md-2"></div>
 
             </div>
+
+
+            {/* Modal for upload excel of department details */}
+            <div className="modal fade" id="uploadExcelDepartment" role="dialog">
+                <form className="form-horizontal" onSubmit={handleSubmit} encType="multipart/form-data">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                <h4 className="modal-title">Upload Department</h4>
+                            </div>
+                            <div className="modal-body">
+                                <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
+                                <div className="form-group">
+                                    <label className="control-label col-sm-4" htmlFor="deptName">Select file:</label>
+                                    <div className="col-sm-8">
+                                        <input type="file" id="file" name="file" />
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div className="modal-footer">
+                                <input type="submit" id="file" name="file" value={"Upload"} className="btn btn-primary" />
+                                <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+
 
             {/* Modal for save department details */}
             <div className="modal fade" id="saveDepartment" role="dialog">
