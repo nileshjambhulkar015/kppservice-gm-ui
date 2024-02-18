@@ -6,14 +6,14 @@ const BASE_URL = "http://localhost:9091/department";
 
 class DepartmentService {
 
-    getDpartmentDetails() {
+    /*getDpartmentDetails() {
         if (null != Cookies.get('empId')) {
             return axios.get(BASE_URL)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
         }
-    }
+    }*/
 
     saveDpartmentDetails(department) {
         if (null != Cookies.get('empId')) {
@@ -25,9 +25,10 @@ class DepartmentService {
 
     }
 
+    //when click on view button of UI
     getDepartmentById(deptId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL + '/' + deptId)
+            return axios.get(BASE_URL + `/by-dept-id?deptId=${deptId}`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
@@ -46,7 +47,7 @@ class DepartmentService {
     }
 
 
-    //at page load call all the departments
+    //at page load call all the departments load all departments
     getDpartmentDetailsByPaging() {
         if (null != Cookies.get('empId')) {
             return axios.get("http://localhost:9091/department/search?statusCd=A&page=0&size=1200&sort=role.role_name asc")
@@ -56,6 +57,7 @@ class DepartmentService {
         }
     }
 
+    // search department by its name
     getDpartmentDetailsByDeptNamePaging(deptName) {
         if (null != Cookies.get('empId')) {
             return axios.get(`http://localhost:9091/department/search?deptName=${deptName}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
@@ -91,7 +93,7 @@ class DepartmentService {
     //Get all roles present in department table from designation for KPP
     getDepartmentByRoleIdFromDesign(roleId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL + '/desig/' + roleId)
+            return axios.get(BASE_URL + '/desig/' + roleId)  
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

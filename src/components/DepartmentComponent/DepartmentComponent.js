@@ -18,17 +18,19 @@ export default function DepartmentComponent() {
 
     const [message, setMessage] = useState('');
 
+    //loading all department and roles while page loading at first time
     useEffect(() => {
         DepartmentService.getDpartmentDetailsByPaging().then((res) => {
             setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
             console.log(res.data.responseData.content)
         });
 
-        RoleService.getRoles().then((res) => {
+        RoleService.getRolesForDropdown().then((res) => {
             setRoles(res.data?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
         });
     }, []);
 
+    //search department by it's name
     const searchDeptName = (e) => {
         DepartmentService.getDpartmentDetailsByDeptNamePaging(e).then((res) => {
             setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
@@ -233,7 +235,6 @@ export default function DepartmentComponent() {
                                     <label className="control-label col-sm-4" htmlFor="deptName">Select Role Name:</label>
                                     <div className="col-sm-8">
                                         <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
-                                            <option>--Select Role--</option>
                                             {
                                                 roles.map(
                                                     role =>

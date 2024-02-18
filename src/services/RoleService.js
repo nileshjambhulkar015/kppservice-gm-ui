@@ -5,9 +5,10 @@ const BASE_URL="http://localhost:9091/roles";
 
 class RoleService{
 
-    getRoles(){
+    //load roles dropdown for list
+    getRolesForDropdown(){
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL)
+            return axios.get(BASE_URL+'/all')
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
@@ -60,6 +61,7 @@ class RoleService{
     }
 
      //Get all roles present in designation table 
+     //second used in adding new employee
      getRolesInDesignation(){
         if (null != Cookies.get('empId')) {
             return axios.get("http://localhost:9091/roles/designation/roles")

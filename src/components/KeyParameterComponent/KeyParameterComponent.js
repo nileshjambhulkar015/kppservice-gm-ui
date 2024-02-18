@@ -84,8 +84,27 @@ export default function KeyParameterComponent() {
 
         RoleService.getRolesInDesignation().then((res) => {
             setRoles(res.data?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
-        });
+            
+            setRoleId(res.data?.[0].roleId)
+            DepartmentService.getDepartmentByRoleIdFromDesign(res.data?.[0].roleId).then((res1) => {
+                setDepartments(res1.data);
+                setDeptId(res1.data?.[0].deptId)
+                 DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+                    setDesignations(res2.data);
+                });
+            });
+        });        
     }, []);
+
+
+    const handleRoleIdChange=(value)=>{
+        setRoleId(value)
+        DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
+            setDepartments(res1.data);
+            setDeptId(res1.data?.[0].deptId)
+         } );
+    }
+
 
     //for all department by role id
     useEffect((e) => {
@@ -96,10 +115,10 @@ export default function KeyParameterComponent() {
 
     //for all designation  by dept id
     useEffect((e) => {
-        deptId && DesignationService.getDesignationDetailsForKpp(deptId).then((res) => {
+        deptId && DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res) => {
             setDesignations(res.data);
         });
-    }, [deptId]);
+    }, [roleId, deptId]);
 
     const saveKPPDetails = (e) => {
         e.preventDefault()
@@ -117,6 +136,8 @@ export default function KeyParameterComponent() {
         );
         // window.location.reload(); 
     }
+
+   
 
     const deleteKppById = (e) => {
         KeyParameterService.getKppById(e).then(res => {
@@ -171,9 +192,9 @@ export default function KeyParameterComponent() {
 
     }
 
-     //upload excel data for KPP
-     const handleSubmit = (event) => {
-        
+    //upload excel data for KPP
+    const handleSubmit = (event) => {
+
         event.preventDefault();
         const formData = new FormData(event.target);
         fetch('http://localhost:9091/key-perform-parameter/upload-kpp', {
@@ -210,9 +231,9 @@ export default function KeyParameterComponent() {
                         </div>
                     </div>
                     <div className="col-sm-6" align="right">
-                    <button type="button" className="btn btn-primary " data-toggle="modal" data-target="#saveKpp">Add Key Parameter</button>
-                    <button type="button" className="col-sm-offset-1 btn btn-primary" data-toggle="modal" data-target="#uploadExcelKpp">Upload Excel</button>
-        
+                        <button type="button" className="btn btn-primary " data-toggle="modal" data-target="#saveKpp">Add Key Parameter</button>
+                        <button type="button" className="col-sm-offset-1 btn btn-primary" data-toggle="modal" data-target="#uploadExcelKpp">Upload Excel</button>
+
                     </div>
                 </div>
                 <div className="row">
@@ -256,35 +277,35 @@ export default function KeyParameterComponent() {
             <div className="col-md-1"></div>
 
 
- {/* Modal for upload excel of KPP details */}
- <div className="modal fade" id="uploadExcelKpp" role="dialog">
- <form className="form-horizontal" onSubmit={handleSubmit} encType="multipart/form-data">
-     <div className="modal-dialog">
-         <div className="modal-content">
-             <div className="modal-header">
-                 <button type="button" className="close" data-dismiss="modal">&times;</button>
-                 <h4 className="modal-title">Upload KPP</h4>
-             </div>
-             <div className="modal-body">
-                 <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
-                 <div className="form-group">
-                     <label className="control-label col-sm-4" htmlFor="deptName">Select file:</label>
-                     <div className="col-sm-8">
-                         <input type="file" id="file" name="file" />
-                     </div>
-                 </div>
+            {/* Modal for upload excel of KPP details */}
+            <div className="modal fade" id="uploadExcelKpp" role="dialog">
+                <form className="form-horizontal" onSubmit={handleSubmit} encType="multipart/form-data">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                <h4 className="modal-title">Upload KPP</h4>
+                            </div>
+                            <div className="modal-body">
+                                <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
+                                <div className="form-group">
+                                    <label className="control-label col-sm-4" htmlFor="deptName">Select file:</label>
+                                    <div className="col-sm-8">
+                                        <input type="file" id="file" name="file" />
+                                    </div>
+                                </div>
 
 
-             </div>
-             <div className="modal-footer">
-                 <input type="submit" value={"Upload"} className="btn btn-primary" />
-                 <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
-             </div>
-         </div>
+                            </div>
+                            <div className="modal-footer">
+                                <input type="submit" value={"Upload"} className="btn btn-primary" />
+                                <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
 
-     </div>
- </form>
-</div>
+                    </div>
+                </form>
+            </div>
 
             {/** Save Kpp details */}
             <div className="modal fade" id="saveKpp" role="dialog">
@@ -300,11 +321,11 @@ export default function KeyParameterComponent() {
                             <form className="form-horizontal">
 
                                 <div className="form-group">
-                                    <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
+                                    <label className="control-label col-sm-4" htmlFor="deptId">Select Role Name:</label>
                                     <div className="col-sm-4">
                                         <div className="form-group">
-                                            <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
-                                                <option>--Select Role--</option>
+                                            <select className="form-control" id="roleId" onChange={(e) => handleRoleIdChange(e.target.value)}>
+                                              
                                                 {
                                                     roles.map(
                                                         role =>
@@ -322,7 +343,7 @@ export default function KeyParameterComponent() {
                                     <div className="col-sm-4">
                                         <div className="form-group">
                                             <select className="form-control" id="deptId" onChange={(e) => setDeptId(e.target.value)}>
-                                                <option>--Select Department--</option>
+                                                
                                                 {
                                                     departments.map(
                                                         department =>
@@ -340,7 +361,7 @@ export default function KeyParameterComponent() {
                                     <div className="col-sm-4">
                                         <div className="form-group">
                                             <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
-                                                <option>--Select Designation--</option>
+                                                
                                                 {
                                                     designations.map(
                                                         designation =>

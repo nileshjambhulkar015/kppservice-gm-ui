@@ -16,14 +16,16 @@ class DesignationService {
     }
 
     //get all designation from department id for dropdown list
-    getDesignationDetailsForKpp(deptId) {
+    getDesignationDetailsForKpp(data) {
+        console.log("Data=",data)
         if (null != Cookies.get('empId')) {
-            return axios.get(DESIGNATION_URL + '/by/' + deptId)
+            return axios.get(DESIGNATION_URL + `/by-role-dept?roleId=${data.roleId}&deptId=${data.deptId}`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
         }
     }
+
 
 
 
