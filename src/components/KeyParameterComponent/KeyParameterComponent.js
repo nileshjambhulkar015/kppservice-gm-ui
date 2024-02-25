@@ -105,6 +105,12 @@ export default function KeyParameterComponent() {
          } );
     }
 
+    const handleDesigIdChange=(value)=>{
+        console.log("After change = ", value)
+        setDesigId(value)
+       
+    }
+
 
     //for all department by role id
     useEffect((e) => {
@@ -360,7 +366,7 @@ export default function KeyParameterComponent() {
                                     <label className="control-label col-sm-4" htmlFor="desigId">Select Designation Name:</label>
                                     <div className="col-sm-4">
                                         <div className="form-group">
-                                            <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
+                                            <select className="form-control" id="desigId" onChange={(e) => handleDesigIdChange(e.target.value)}>
                                                 
                                                 {
                                                     designations.map(

@@ -45,16 +45,30 @@ function App() {
           </div>
           <ul className="nav navbar-nav">
 
-            <li><Link to="/role">Role</Link></li>
-            <li><Link to="/department">Department</Link></li>
-            <li><Link to="/designation">Designation</Link></li>
-            <li><Link to="/keyparemeter">Key Indicator</Link></li>
-            <li><Link to="/employee">Employee</Link></li>
+          <li><Link to="/keyparemeter">Key Indicator Master</Link></li>
+          <li><Link to="/employee">Employee Master</Link></li>
+          
+           
             <li><Link to="/showEmployeeForKpp">Assign Employee Kpp</Link></li>
             <li><Link to="/allHodKppStatus">HOD KPP</Link></li>
            
             <li><Link to="/allEmployeeKppStatus">Employee KPP</Link></li>
-            <li><Link to="/employeekpp">View Profile</Link></li>
+            
+
+            <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+            <li><Link to="/role">Role Master</Link></li>
+            <li><Link to="/department">Department Master</Link></li>
+            <li><Link to="/designation">Designation Master</Link></li>
+            <li><Link to="/employeekpp">Region Master</Link></li>
+            <li><Link to="/employeekpp">Sites Master</Link></li>
+            <li><Link to="/employeekpp">UoM Master</Link></li>
+        
+            </ul>
+          </li>
+
           </ul>
           <ul className="nav navbar-nav navbar-right">
             <li><a href="#">Welcome: {Cookies.get('empEId')}</a></li>

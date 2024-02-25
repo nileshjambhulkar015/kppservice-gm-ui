@@ -243,6 +243,24 @@ export default function EmployeeComponent() {
         );
     }
 
+     //upload excel data for department
+     const handleSubmit = (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        fetch('http://localhost:9091/department/upload-department', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                // Handle response
+                alert("Employee uploaded successfully")
+            })
+            .catch(error => {
+                // Handle error
+                alert('An error occurred while uploading the file.');
+            });
+    };
+
     return (
 
 
@@ -264,7 +282,7 @@ export default function EmployeeComponent() {
                     </div>
                     <div className="col-sm-5">
                     <button type="button" className="btn btn-primary" onClick={() => navigate(`/newEmployee`, { replace: true })} >Add New Employee</button>
-                    <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal">Upload Excel</button>
+                    <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#uploadExcelEmployee">Upload Excel</button>
                     <button type="button" className="btn btn-primary col-sm-offset-1" >Advance Search</button>
                     </div>
                 </div>
@@ -311,6 +329,35 @@ export default function EmployeeComponent() {
             </div>
             <div className="col-md-1"></div>
 
+             {/* Modal for upload excel of employee details */}
+             <div className="modal fade" id="uploadExcelEmployee" role="dialog">
+             <form className="form-horizontal" onSubmit={handleSubmit} encType="multipart/form-data">
+                 <div className="modal-dialog">
+                     <div className="modal-content">
+                         <div className="modal-header">
+                             <button type="button" className="close" data-dismiss="modal">&times;</button>
+                             <h4 className="modal-title">Upload Employee</h4>
+                         </div>
+                         <div className="modal-body">
+                             <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
+                             <div className="form-group">
+                                 <label className="control-label col-sm-4" htmlFor="employee">Select file:</label>
+                                 <div className="col-sm-8">
+                                     <input type="file" id="file" name="file" />
+                                 </div>
+                             </div>
+
+
+                         </div>
+                         <div className="modal-footer">
+                             <input type="submit" id="file" name="file" value={"Upload"} className="btn btn-primary" />
+                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                         </div>
+                     </div>
+
+                 </div>
+             </form>
+         </div>
 
             {/* Update Employee Details */}
 

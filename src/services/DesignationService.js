@@ -17,9 +17,21 @@ class DesignationService {
 
     //get all designation from department id for dropdown list
     getDesignationDetailsForKpp(data) {
-        console.log("Data=",data)
+       
         if (null != Cookies.get('empId')) {
             return axios.get(DESIGNATION_URL + `/by-role-dept?roleId=${data.roleId}&deptId=${data.deptId}`)
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }
+    }
+
+
+     //get all designation from department id for dropdown list for reporting employee
+     getDesignationDetailsForReporting(data) {
+      
+        if (null != Cookies.get('empId')) {
+            return axios.get(DESIGNATION_URL + `/by-role-dept?roleId=${data.reportingEmpRoleId}&deptId=${data.reportingEmpDeptId}`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
