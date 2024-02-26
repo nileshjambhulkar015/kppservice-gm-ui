@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import DepartmentService from "../../services/DepartmentService";
-import DesignationService from "../../services/DesignationService";
+import DepartmentService from "../../../services/DepartmentService";
+import DesignationService from "../../../services/DesignationService";
 export default function DesignationComponent() {
     const [roleId, setRoleId] = useState('');
     const [roleName, setRoleName] = useState('');

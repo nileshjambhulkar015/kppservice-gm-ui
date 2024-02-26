@@ -1,23 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
 import React from "react";
-import { Route, BrowserRouter, Link, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import './App.css';
 import KeyParameterComponent from './components/KeyParameterComponent/KeyParameterComponent';
 
 import EmployeeComponent from './components/EmployeeComponent/EmployeeComponent';
-import DesignationComponent from './components/DesignationComponent/DesignationComponent';
+import DesignationComponent from './components/MasterComponent/DesignationComponent/DesignationComponent';
 
-import DepartmentComponent from './components/DepartmentComponent/DepartmentComponent';
-import RoleComponent from "./components/RoloComponent/RoleComponent";
 import Cookies from 'js-cookie';
+import AddNewEmployeeComponent from './components/AddNewEmployeeComponent/AddNewEmployeeComponent';
 import AllEmployeesKppComponent from "./components/AllEmployeesKppComponent/AllEmployeesKppComponent";
 import AllHodKppStatusComponent from './components/AllHodKppStatusComponent/AllHodKppStatusComponent';
-import EmplyeeUpdateKppRatingsComponent from './components/EmplyeeUpdateKppRatingsComponent/EmplyeeUpdateKppRatingsComponent';
-import AddHodKppsRatingComponent from './components/AddHodKppsRatingComponent/AddHodKppsRatingComponent';
-import AddNewEmployeeComponent from './components/AddNewEmployeeComponent/AddNewEmployeeComponent';
-import ShowEmployeeForKppComponent from './components/ShowEmployeeForKppComponent/ShowEmployeeForKppComponent';
 import AssignEmployeeKppComponent from './components/AssignEmployeeKppComponent/AssignEmployeeKppComponent';
+import EmplyeeUpdateKppRatingsComponent from './components/EmplyeeUpdateKppRatingsComponent/EmplyeeUpdateKppRatingsComponent';
 import HODUpdateKppRatingsComponent from './components/HODUpdateKppRatingsComponent/HODUpdateKppRatingsComponent';
+import DepartmentComponent from './components/MasterComponent/DepartmentComponent/DepartmentComponent';
+import RoleComponent from "./components/MasterComponent/RoloComponent/RoleComponent";
+import ShowEmployeeForKppComponent from './components/ShowEmployeeForKppComponent/ShowEmployeeForKppComponent';
+import RegionComponent from "./components/MasterComponent/RegionComponent/RegionComponent";
+import UoMComponent from "./components/MasterComponent/UoMComponent/UoMComponent";
 
 
 function App() {
@@ -62,9 +62,9 @@ function App() {
             <li><Link to="/role">Role Master</Link></li>
             <li><Link to="/department">Department Master</Link></li>
             <li><Link to="/designation">Designation Master</Link></li>
-            <li><Link to="/employeekpp">Region Master</Link></li>
+            <li><Link to="/regionMaster">Region Master</Link></li>
             <li><Link to="/employeekpp">Sites Master</Link></li>
-            <li><Link to="/employeekpp">UoM Master</Link></li>
+            <li><Link to="/uomMaster">UoM Master</Link></li>
         
             </ul>
           </li>
@@ -83,6 +83,9 @@ function App() {
         <Route exact path="/role" element={<RoleComponent />}></Route>
         <Route exact path="/department" element={<DepartmentComponent />}></Route>
         <Route exact path="/designation" element={<DesignationComponent />}></Route>
+        <Route exact path="/regionMaster" element={<RegionComponent />}></Route>
+
+        <Route exact path="/uomMaster" element={<UoMComponent />}></Route>
         <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
         <Route exact path="/employee" element={<EmployeeComponent />}></Route>
         <Route exact path="/showEmployeeForKpp" element={<ShowEmployeeForKppComponent / >}></Route>
