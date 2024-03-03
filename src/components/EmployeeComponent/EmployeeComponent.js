@@ -86,24 +86,24 @@ export default function EmployeeComponent() {
 
        
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
-            setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
+            setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==1));
         });
 
         RoleService.getRolesInDesignation().then((res) => {
-            setRoles(res.data?.filter((item)=>item.roleId!==3 && item.roleId!==4));
+            setRoles(res.data?.filter((item)=>item.roleId!==1));
         });
 
         //reprting to employee role
         RoleService.getRolesInDesignation().then((res) => {
 
-            setReportingRoles(res.data?.filter((item)=>item.roleId!==1 && item.roleId!==4));
+            setReportingRoles(res.data?.filter((item)=>item.roleId!==1));
         });
 
     }, []);
 
     const searchEmployeeFirstName = (e) => {
         EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
-            setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
+            setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==1));
             console.log(res.data)
         });
     }

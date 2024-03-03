@@ -14,9 +14,6 @@ export default function AllEmployeesKppComponent() {
     useEffect(() => {
         AllEmployeesKppService.getEmployeeDetailsByPagination().then((res) => {
             setEmpResponses(res.data.responseData.content);
-          //  console.log(" res.data.responseData.content.empId",  res.data.responseData.content.empId) 
-           // Cookies.set('empIdForKppRatings', res.data.responseData.content.empId);
-
         });
     }, []);
 
@@ -28,9 +25,7 @@ export default function AllEmployeesKppComponent() {
     const searchByEKpp = (e) => {
         console.log("data=", empKppStatus)
         AllEmployeesKppService.getEmployeeByStatusByPagination(empKppStatus).then((res) => {
-
-            setEmpResponses(res.data.responseData.content);
-            console.log(res.data)
+            setEmpResponses(res.data.responseData.content);          
         });
     }
 
@@ -41,8 +36,7 @@ export default function AllEmployeesKppComponent() {
     }
 
     const completeEmpKpp = (e) => {
-        AllEmployeesKppService.completeEmpKppGM(e).then(res => {
-            
+        AllEmployeesKppService.completeEmpKppGM(e).then(res => {            
         }
         );
     }

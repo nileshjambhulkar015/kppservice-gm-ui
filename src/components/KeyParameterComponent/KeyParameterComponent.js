@@ -41,13 +41,15 @@ export default function KeyParameterComponent() {
     };
 
 
+    // search kpp by objective name on click of search button
     const searchKppObjective = (e) => {
         KeyParameterService.getKPPDetailsByKppObjectivePaging(e).then((res) => {
-            setKpps(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+            setKpps(res.data.responseData.content);
             console.log(res.data)
         });
     }
 
+    //show kpp details when click on view button
     const showKppById = (e) => {
 
         KeyParameterService.getKppById(e).then(res => {
@@ -77,54 +79,75 @@ export default function KeyParameterComponent() {
         // window.location.reload(); 
     }
 
+    
+    //for all department by role id
+   /* useEffect((e) => {
+        roleId && DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res) => {
+            setDepartments(res.data);
+        });
+    }, [roleId]);*/
+
+    //for all designation  by dept id
+    /*useEffect((e) => {
+        deptId && DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res) => {
+            setDesignations(res.data);
+        });
+    }, [roleId,deptId]);*/
+
     useEffect(() => {
         KeyParameterService.getKPPDetailsByPaging().then((res) => {
-            setKpps(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+            setKpps(res.data.responseData.content);
         });
 
         RoleService.getRolesInDesignation().then((res) => {
-            setRoles(res.data?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
-            
+            setRoles(res.data);
+            console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
             setRoleId(res.data?.[0].roleId)
-            DepartmentService.getDepartmentByRoleIdFromDesign(res.data?.[0].roleId).then((res1) => {
+           let roleId = res.data?.[0].roleId;
+            DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res1) => {
                 setDepartments(res1.data);
                 setDeptId(res1.data?.[0].deptId)
+                let deptId = res1.data?.[0].deptId;
                  DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
                     setDesignations(res2.data);
+                    setDesigId(res2.data?.[0]?.desigId)
+                   
                 });
             });
         });        
     }, []);
 
-
     const handleRoleIdChange=(value)=>{
         setRoleId(value)
-        DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
+        let roleId = value;
+         DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
             setDepartments(res1.data);
             setDeptId(res1.data?.[0].deptId)
-         } );
-    }
+            let deptId = res1.data?.[0].deptId;
+             DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+                setDesignations(res2.data);
+                setDesigId(res2.data?.[0]?.desigId)
+            });
+    });}
 
     const handleDesigIdChange=(value)=>{
-        console.log("After change = ", value)
-        setDesigId(value)
+        setDesigId(value)       
+    }
+
+    const handleDeptIdChange=(value)=>{
+        console.log("Dept id =", value)
+        setDeptId(value)
+        let deptId = value;
+        DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+            setDesignations(res2.data);
+            setDesigId(res2.data?.[0]?.desigId)
+        });
        
     }
 
+    
 
-    //for all department by role id
-    useEffect((e) => {
-        roleId && DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res) => {
-            setDepartments(res.data);
-        });
-    }, [roleId]);
-
-    //for all designation  by dept id
-    useEffect((e) => {
-        deptId && DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res) => {
-            setDesignations(res.data);
-        });
-    }, [roleId, deptId]);
+    
 
     const saveKPPDetails = (e) => {
         e.preventDefault()
@@ -135,9 +158,8 @@ export default function KeyParameterComponent() {
 
         KeyParameterService.saveKPPDetails(kpp).then(res => {
             KeyParameterService.getKPPDetailsByPaging().then((res) => {
-                setKpps(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+                setKpps(res.data.responseData.content);
             });
-            console.log("Kpp added");
         }
         );
         // window.location.reload(); 
@@ -348,7 +370,7 @@ export default function KeyParameterComponent() {
                                     <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
                                     <div className="col-sm-4">
                                         <div className="form-group">
-                                            <select className="form-control" id="deptId" onChange={(e) => setDeptId(e.target.value)}>
+                                            <select className="form-control" id="deptId" onChange={(e) => handleDeptIdChange(e.target.value)}>
                                                 
                                                 {
                                                     departments.map(

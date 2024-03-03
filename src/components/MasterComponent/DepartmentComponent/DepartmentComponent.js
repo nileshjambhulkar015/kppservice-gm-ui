@@ -21,19 +21,27 @@ export default function DepartmentComponent() {
     //loading all department and roles while page loading at first time
     useEffect(() => {
         DepartmentService.getDpartmentDetailsByPaging().then((res) => {
-            setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+            setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 1));
             console.log(res.data.responseData.content)
         });
 
         RoleService.getRolesForDropdown().then((res) => {
-            setRoles(res.data?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+            setRoles(res.data);            
+            setRoleId(res.data?.[0].roleId)          
         });
     }, []);
+
+     //for role change
+     const onRoleChangeHandler = (value) => {
+        let roleId =value
+      
+        setRoleId(roleId);
+    };
 
     //search department by it's name
     const searchDeptName = (e) => {
         DepartmentService.getDpartmentDetailsByDeptNamePaging(e).then((res) => {
-            setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+            setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 1));
             console.log(res.data)
         });
     }
@@ -46,7 +54,7 @@ export default function DepartmentComponent() {
         DepartmentService.saveDpartmentDetails(department).then(res => {
             console.log("res=", res.data)
             DepartmentService.getDpartmentDetailsByPaging().then((res) => {
-                setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+                setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 1));
                 setDeptName('');
                 setRemark('');
 
@@ -234,7 +242,7 @@ export default function DepartmentComponent() {
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="deptName">Select Role Name:</label>
                                     <div className="col-sm-8">
-                                        <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
+                                        <select className="form-control" id="roleId" onChange={(e) => onRoleChangeHandler(e.target.value)}>
                                             {
                                                 roles.map(
                                                     role =>

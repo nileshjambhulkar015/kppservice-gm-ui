@@ -55,11 +55,7 @@ console.log("psram empId=", empId)
             ...empKpps[i],
             "kppId": kppId,
             "empId": empId,
-           /* "empEId": Cookies.get('empEId'),
-            "roleId": Cookies.get('roleId'),
-            "deptId": Cookies.get('deptId'),
-            "desigId": Cookies.get('desigId'),*/
-           // "ekppStatus": "Pending",  // NEED TO MAKE IT DYNAMIC
+          
             "ekppOverallTaskComp": field === "ekppOverallAchieve" && !!e.target.value ? Number(e.target.value) + Number(kppOverallTarget) : 0,
             "ekppAchivedWeight": field === "ekppOverallAchieve" && !!e.target.value ? Number(e.target.value) + Number(kppOverallTarget) : 0,
             "ekkpMonth":ekppMonth,
@@ -75,13 +71,7 @@ console.log("psram empId=", empId)
     const saveEmployeeKpp = (e) => {
         e.preventDefault()
         let ekppStatus = empKppStatus;
-       
-        /*let totalAchivedWeightage="totalAchivedWeightage";
-        let totalOverAllAchive="totalOverAllAchive";
-        let totalOverallTaskCompleted="totalOverallTaskCompleted";
-         
-         let remark="remark";
-         let evidence="evidence";*/
+      
         const payLoad = { "kppUpdateRequests": employeeKpps, totalAchivedWeightage, totalOverAllAchive, totalOverallTaskCompleted, ekppStatus, remark };
         console.log(payLoad)
         EmployeeKppService.updateEmpArroveOrRejectByHod(payLoad).then(res => {

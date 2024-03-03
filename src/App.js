@@ -55,10 +55,10 @@ function App() {
             <li><Link to="/allEmployeeKppStatus">Employee KPP</Link></li>
             
 
-            <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
-            <span class="caret"></span></a>
-            <ul class="dropdown-menu">
+            <li className="dropdown">
+            <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
+            <span className="caret"></span></a>
+            <ul className="dropdown-menu">
             <li><Link to="/role">Role Master</Link></li>
             <li><Link to="/department">Department Master</Link></li>
             <li><Link to="/designation">Designation Master</Link></li>

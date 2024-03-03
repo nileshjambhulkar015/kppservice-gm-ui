@@ -18,19 +18,20 @@ export default function DesignationComponent() {
 
     useEffect(() => {
         DesignationService.getDesignationDetailsByPaging().then((res) => {
-            setDesignations(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+            setDesignations(res.data.responseData.content?.filter((item) => item.roleId !== 1));
             console.log(res.data)
         });
 
         DepartmentService.getRolesInDept().then((res) => {
+            console.log()
             // setRoles(res.data);
-            setRoles(res.data?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+            setRoles(res.data?.filter((item) => item.roleId !== 1));
         });
     }, []);
 
     const searchDesigName = (e) => {
         DesignationService.getDesignationDetailsByDesigNamePaging(e).then((res) => {
-            setDesignations(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+            setDesignations(res.data.responseData.content?.filter((item) => item.roleId !== 1));
             console.log(res.data)
         });
     }
@@ -48,7 +49,7 @@ export default function DesignationComponent() {
 
         DesignationService.saveDesignationDetails(designation).then(res => {
             DesignationService.getDesignationDetailsByPaging().then((res) => {
-                setDesignations(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+                setDesignations(res.data.responseData.content?.filter((item) => item.roleId !== 1));
                 console.log(res.data)
             });
 

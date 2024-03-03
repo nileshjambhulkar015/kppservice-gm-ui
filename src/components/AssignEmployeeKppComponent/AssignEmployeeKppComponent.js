@@ -11,7 +11,7 @@ export default function AssignEmployeeKppComponent() {
    
     useEffect(() => {
         KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
-            setKpps(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
+            setKpps(res.data.responseData.content);
         });
     }, []);
    
@@ -44,7 +44,7 @@ export default function AssignEmployeeKppComponent() {
 
         EmployeeKppsService.assignEmployeeKppDetails(kpp).then(res => {
             KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
-                setKpps(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
+                setKpps(res.data.responseData.content);
             });
             console.log("res=", res.data)
           

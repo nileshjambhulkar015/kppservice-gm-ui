@@ -64,6 +64,8 @@ export default function AddNewEmployeeComponent() {
         setEmpBloodgroup(event);
     };
 
+    
+
     const saveEmployeeDetails = (e) => {
         e.preventDefault()
         let statusCd = 'A';
@@ -93,112 +95,138 @@ export default function AddNewEmployeeComponent() {
         });
     }
 
-
-
     useEffect(() => {
 
 
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
-            setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+            setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
         });
 
+
         RoleService.getRolesInDesignation().then((res) => {
-            setRoles(res.data?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
-            
+            setRoles(res.data);
+            console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
             setRoleId(res.data?.[0].roleId)
-            DepartmentService.getDepartmentByRoleIdFromDesign(res.data?.[0].roleId).then((res1) => {
+           let roleId = res.data?.[0].roleId;
+            DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res1) => {
                 setDepartments(res1.data);
                 setDeptId(res1.data?.[0].deptId)
+                let deptId = res1.data?.[0].deptId;
                  DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
                     setDesignations(res2.data);
+                    setDesigId(res2.data?.[0]?.desigId)
+                   
                 });
             });
-        });   
+        }); 
 
         RoleService.getRolesInDesignation().then((res) => {
-
-            //  setReportingRoles(res.data?.filter((item) => item.roleId !== 1 && item.roleId !== 4));
-            setReportingRoles(res.data?.filter((item) => item.roleId !== 1 && item.roleId !== 4));
-              
+            setReportingRoles(res.data);
+            console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
             setReportingEmpRoleId(res.data?.[0].roleId)
-            DepartmentService.getDepartmentByRoleIdFromDesign(res.data?.[0].roleId).then((res1) => {
+           let roleId = res.data?.[0].roleId;
+            DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res1) => {
                 setReportingDepartments(res1.data);
                 setReportingEmpDeptId(res1.data?.[0].deptId)
-    
-                 DesignationService.getDesignationDetailsForReporting({ reportingEmpRoleId, reportingEmpDeptId }).then((res2) => {
-                  
+                let deptId = res1.data?.[0].deptId;
+                 DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
                     setReportingDesignations(res2.data);
+                    setReportingEmpDesigId(res2.data?.[0]?.desigId)
+                    let reportingEmpDesigId = res2.data?.[0]?.desigId
+                     EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
+                        setReportingEmpId(res3.data?.[0]?.empId)
+                        setReportingEmpName(res3.data);
+                        console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
+                    });
+                   
                 });
             });
-          });
-    }, []);
+        }); 
 
+
+    }, []);
+   
+    //for role , department and designation
     const handleRoleIdChange=(value)=>{
-        console.log("value =", value)
         setRoleId(value)
-        DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
+        let roleId = value;
+         DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
             setDepartments(res1.data);
-            setDeptId(res1.data?.[0]?.deptId)
-         } );
+            setDeptId(res1.data?.[0].deptId)
+            let deptId = res1.data?.[0].deptId;
+             DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+                setDesignations(res2.data);
+                setDesigId(res2.data?.[0]?.desigId)
+                
+            });
+    });}
+
+    const handleDesigIdChange=(value)=>{
+        setDesigId(value)       
     }
+
+
+
+    const handleDeptIdChange=(value)=>{
+        console.log("Dept id =", value)
+        setDeptId(value)
+        let deptId = value;
+        DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+            setDesignations(res2.data);
+            setDesigId(res2.data?.[0]?.desigId)
+        });
+       
+    }
+
+    //for reporting role, department and designation
 
     const handleReportingRoleIdChange=(value)=>{
         setReportingEmpRoleId(value)
-        DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
-           
+        let roleId = value;
+         DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
             setReportingDepartments(res1.data);
-            setReportingEmpDeptId(res1.data?.[0]?.deptId)
+            setReportingEmpDeptId(res1.data?.[0].deptId)
+            let deptId = res1.data?.[0].deptId;
+             DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+                setReportingDesignations(res2.data);
+                setReportingEmpDesigId(res2.data?.[0]?.desigId)
 
-         } );
+                let reportingEmpDesigId = res2.data?.[0]?.desigId
+                EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
+                   setReportingEmpId(res3.data?.[0]?.empId)
+                   setReportingEmpName(res3.data);
+                   console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
+               });
+            });
+    });}
+
+    const handleReportingDesigIdChange=(value)=>{
+        setReportingEmpDesigId(value) 
+        
+        let reportingEmpDesigId = value
+        EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
+           setReportingEmpId(res3.data?.[0]?.empId)
+           setReportingEmpName(res3.data);
+           console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
+       });
     }
 
-
-
-    //for all department by role id
-    useEffect((e) => {
-        roleId && DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res) => {
-            setDepartments(res.data);
+    const handleReportingDeptIdChange=(value)=>{
+        console.log("Dept id =", value)
+        setReportingEmpDeptId(value)
+        let deptId = value;
+        DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+            setReportingDesignations(res2.data);
+            setReportingEmpDesigId(res2.data?.[0]?.desigId)
         });
-    }, [roleId]);
+       
+    }
 
-    //for all department by role id for reporting to tab
-    useEffect((e) => {
-        reportingEmpRoleId && DepartmentService.getDepartmentByRoleIdFromDesign(reportingEmpRoleId).then((res) => {
-            setReportingDepartments(res.data);
-        });
-    }, [reportingEmpRoleId]);
-
-
-     //for all designation  by dept id
-     useEffect((e) => {
-        deptId && DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res) => {
-            setDesignations(res.data);
-        });
-    }, [roleId, deptId]);
-
-
-
-    useEffect((e) => {
-        reportingEmpDeptId && DesignationService.getDesignationDetailsForReporting({ reportingEmpRoleId, reportingEmpDeptId }).then((res) => {
-            setReportingDesignations(res.data);
-            setReportingEmpDesigId(res.data?.[0]?.desigId)
-
-            reportingEmpDesigId && EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res) => {
-                console.log("reportingEmpDesigId : ", reportingEmpDesigId)
-                setReportingEmpName(res.data);
-            });
-        });
-    }, [reportingEmpRoleId, reportingEmpDeptId]);
-
-    //for all reportingEmpId  by desig id
-    useEffect((e) => {
-      
-        reportingEmpDesigId && EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res) => {
-            console.log("reportingEmpDesigId : ", reportingEmpDesigId)
-            setReportingEmpName(res.data);
-        });
-    }, [reportingEmpDesigId]);
-
+     const handleReportingEmpIdChange=(value)=>{
+        setReportingEmpId(value)
+        setDesigId(value)       
+    }
+    
     return (
         <div className="row">
             <h3 className="text-center">Add New Employee</h3>
@@ -225,7 +253,7 @@ export default function AddNewEmployeeComponent() {
                     <label className="control-label col-sm-2" htmlFor="deptId">Select Department:</label>
                     <div className="col-sm-2">
                         <div className="form-group">
-                            <select className="form-control" id="deptId" onChange={(e) => setDeptId(e.target.value)}>
+                            <select className="form-control" id="deptId" onChange={(e) => handleDeptIdChange(e.target.value)}>
                                
                                 {
                                     departments.map(
@@ -243,7 +271,7 @@ export default function AddNewEmployeeComponent() {
                     <label className="control-label col-sm-2" htmlFor="desigId">Select Designation:</label>
                     <div className="col-sm-2">
                         <div className="form-group">
-                            <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
+                            <select className="form-control" id="desigId" onChange={(e) => handleDesigIdChange(e.target.value)}>
                                
                                 {
                                     designations.map(
@@ -382,7 +410,7 @@ export default function AddNewEmployeeComponent() {
                     <label className="control-label col-sm-2" htmlFor="deptId">Select Department Name:</label>
                     <div className="col-sm-2">
                         <div className="form-group">
-                            <select className="form-control" id="reportingEmpDeptId" onChange={(e) => setReportingEmpDeptId(e.target.value)}>
+                            <select className="form-control" id="reportingEmpDeptId" onChange={(e) => handleReportingDeptIdChange(e.target.value)}>
                                
                                 {
                                     reportingDepartments.map(
@@ -395,12 +423,12 @@ export default function AddNewEmployeeComponent() {
                         </div>
                     </div>
                 </div>
-
+                 
                 <div className="form-group">
                     <label className="control-label col-sm-2" htmlFor="desigId">Select Designation Name:</label>
                     <div className="col-sm-2">
                         <div className="form-group">
-                            <select className="form-control" id="reportingEmpDesigId" onChange={(e) => setReportingEmpDesigId(e.target.value)}>
+                            <select className="form-control" id="reportingEmpDesigId" onChange={(e) => handleReportingDesigIdChange(e.target.value)}>
                                
                                 {
                                     reportingDesignations.map(
@@ -418,8 +446,7 @@ export default function AddNewEmployeeComponent() {
                     <label className="control-label col-sm-2" htmlFor="deptId">Enter Reporting Employee Name:</label>
                     <div className="col-sm-2">
                         <div className="form-group">
-                            <select className="form-control" id="reportingEmpId" onChange={(e) => setReportingEmpId(e.target.value)}>
-                                <option>--Select Reporting Name--</option>
+                            <select className="form-control" id="reportingEmpId" onChange={(e) => handleReportingEmpIdChange(e.target.value)}>
                                 {
                                     reportingEmpName.map(
                                         reporting =>

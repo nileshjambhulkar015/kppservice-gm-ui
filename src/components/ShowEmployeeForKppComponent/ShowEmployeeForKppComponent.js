@@ -9,32 +9,99 @@ export default function ShowEmployeeForKppComponent() {
 
     const navigate = useNavigate(); 
 
-    const [reportingRoles, setReportingRoles] = useState([])
+    //const [reportingRoles, setReportingRoles] = useState([])
+    const [roleId, setRoleId] = useState('');
+    const [roleName, setRoleName] = useState('');
+    const [deptId, setDeptId] = useState('');
+    const [deptName, setDeptName] = useState('');
+    const [desigId, setDesigId] = useState('');
+    const [desigName, setDesigName] = useState('');
 
-    const [reportingEmpRoleId, setReportingEmpRoleId] = useState('');
-    const [reportingEmpDeptId, setReportingEmpDeptId] = useState('');
-    const [reportingEmpDesigId, setReportingEmpDesigId] = useState('');
+    const [departments, setDepartments] = useState([])
+    const [designations, setDesignations] = useState([])
+    const [roles, setRoles] = useState([])
     
-    const [reportingDepartments, setReportingDepartments] = useState([])
+  //  const [reportingDepartments, setReportingDepartments] = useState([])
 
-    const [reportingDesignations, setReportingDesignations] = useState([])
+ //   const [reportingDesignations, setReportingDesignations] = useState([])
     const [employees, setEmployees] = useState([])
 
     useEffect(() => {
         //reprting to employee role
-        RoleService.getRolesInDesignation().then((res) => {
+       /* RoleService.getRolesInDesignation().then((res) => {
 
             setReportingRoles(res.data?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
-        });
+        });*/
 
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
-            setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
+            setEmployees(res.data.responseData.content);
+        });
+
+        RoleService.getRolesInDesignation().then((res) => {
+            setRoles(res.data);
+            console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
+            setRoleId(res.data?.[0].roleId)
+           let roleId = res.data?.[0].roleId;
+            DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res1) => {
+                setDepartments(res1.data);
+                setDeptId(res1.data?.[0].deptId)
+                let deptId = res1.data?.[0].deptId;
+                 DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+                    setDesignations(res2.data);
+                    setDesigId(res2.data?.[0]?.desigId)
+                   
+                });
+            });
         });
 
     }, []);
 
+    const handleRoleIdChange=(value)=>{
+        setRoleId(value)
+        let roleId = value;
+         DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
+            setDepartments(res1.data);
+            setDeptId(res1.data?.[0].deptId)
+            let deptId = res1.data?.[0].deptId;
+             DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+                setDesignations(res2.data);
+                setDesigId(res2.data?.[0]?.desigId)
+
+                let reportingEmpDesigId = res2.data?.[0]?.desigId
+                EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
+                    setEmployees(res.data.responseData.content);           
+                });
+            });
+    });}
+
+    const handleDesigIdChange=(value)=>{
+        setDesigId(value)
+        
+        let reportingEmpDesigId =value
+            EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
+                setEmployees(res.data.responseData.content);           
+            });
+    }
+
+    const handleDeptIdChange=(value)=>{
+        console.log("Dept id =", value)
+        setDeptId(value)
+        let deptId = value;
+        DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+            setDesignations(res2.data);
+            setDesigId(res2.data?.[0]?.desigId)
+
+            let reportingEmpDesigId = res2.data?.[0]?.desigId
+            EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
+                setEmployees(res.data.responseData.content);           
+            });
+        });
+       
+    }
+
+
     //for all department by role id for reporting to tab
-    useEffect((e) => {
+  /* useEffect((e) => {
         reportingEmpRoleId && DepartmentService.getDepartmentByRoleIdFromDesign(reportingEmpRoleId).then((res) => {
             setReportingDepartments(res.data);
         });
@@ -54,7 +121,7 @@ export default function ShowEmployeeForKppComponent() {
             reportingEmpDesigId && EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
                 setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));           
             });
-        }, [reportingEmpDesigId]);
+        }, [reportingEmpDesigId]);*/
 
         const navigateToAssignEmployee = (empId,empEId,roleId, deptId,desigId,reportingEmpId) => {
             console.log("reportingEmpId : ",reportingEmpId)
@@ -77,10 +144,10 @@ export default function ShowEmployeeForKppComponent() {
                     <label className="control-label col-sm-2" htmlFor="deptId">Select Role Name:</label>
                     <div className="col-sm-2">
                         <div className="form-group">
-                            <select className="form-control" id="reportingEmpRoleId" onChange={(e) => setReportingEmpRoleId(e.target.value)}>
-                                <option>--Select Role--</option>
+                            <select className="form-control" id="roleId" onChange={(e) => handleRoleIdChange(e.target.value)}>
+                             
                                 {
-                                    reportingRoles.map(
+                                    roles.map(
                                         role =>
                                             <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
                                     )
@@ -95,10 +162,10 @@ export default function ShowEmployeeForKppComponent() {
                     <label className="control-label col-sm-2" htmlFor="deptId">Select Department Name:</label>
                     <div className="col-sm-2">
                         <div className="form-group">
-                            <select className="form-control" id="reportingEmpDeptId" onChange={(e) => setReportingEmpDeptId(e.target.value)}>
-                                <option>--Select Department--</option>
+                            <select className="form-control" id="deptId" onChange={(e) => handleDeptIdChange(e.target.value)}>
+                              
                                 {
-                                    reportingDepartments.map(
+                                    departments.map(
                                         department =>
                                             <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
                                     )
@@ -113,10 +180,10 @@ export default function ShowEmployeeForKppComponent() {
                     <label className="control-label col-sm-2" htmlFor="desigId">Select Designation Name:</label>
                     <div className="col-sm-2">
                         <div className="form-group">
-                            <select className="form-control" id="reportingEmpDesigId" onChange={(e) => setReportingEmpDesigId(e.target.value)}>
-                                <option>--Select Designation--</option>
+                            <select className="form-control" id="desigId" onChange={(e) => handleDesigIdChange(e.target.value)}>
+                             
                                 {
-                                    reportingDesignations.map(
+                                    designations.map(
                                         designation =>
                                             <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
                                     )

@@ -7,7 +7,7 @@ export default function RoleComponent() {
 
     useEffect(() => {
         RoleService.getRolesDetailsByPaging().then((res) => {
-            setRoles(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
+            setRoles(res.data.responseData.content?.filter((item) => item.roleId !== 1));
         });
     }, []);
 
