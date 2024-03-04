@@ -247,7 +247,7 @@ export default function EmployeeComponent() {
      const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        fetch('http://localhost:9091/department/upload-department', {
+        fetch('http://localhost:9091/employee/upload-employee', {
             method: 'POST',
             body: formData
         })
