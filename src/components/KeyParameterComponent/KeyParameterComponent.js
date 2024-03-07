@@ -3,6 +3,7 @@ import DepartmentService from "../../services/DepartmentService";
 import DesignationService from "../../services/DesignationService";
 import KeyParameterService from "../../services/KeyParameterService";
 import RoleService from "../../services/RoleService";
+import UoMService from "../../services/UoMService";
 
 export default function KeyParameterComponent() {
     const [kppId, setKppId] = useState('');
@@ -16,7 +17,8 @@ export default function KeyParameterComponent() {
     const [kppPerformanceIndi, setKppPerformanceIndi] = useState('');
     const [kppOverallTarget, setKppOverallTarget] = useState('');
     const [kppTargetPeriod, setKppTargetPeriod] = useState('');
-    const [kppUoM, setKppUoM] = useState('KG');
+    const [uomId, setUomId] = useState();
+    const [uomName, setUomName] = useState();
     const [kppOverallWeightage, setKppOverallWeightage] = useState('');
     const [kppRating1, setKppRating1] = useState('');
     const [kppRating2, setKppRating2] = useState('');
@@ -31,13 +33,15 @@ export default function KeyParameterComponent() {
     const [departments, setDepartments] = useState([])
     const [designations, setDesignations] = useState([])
     const [roles, setRoles] = useState([])
+    const [uoms, setUoms] = useState([])
 
     const [kppObjectiveSearch, setKppObjectiveSearch] = useState('');
 
 
     //for UOM selection
-    const onUoMChangeHandler = (event) => {
-        setKppUoM(event);
+    const onUoMChangeHandler = (value) => {
+        console.log("value =", value)
+        setUomId(value);
     };
 
 
@@ -66,7 +70,8 @@ export default function KeyParameterComponent() {
             setKppPerformanceIndi(kpp.kppPerformanceIndi)
             setKppOverallTarget(kpp.kppOverallTarget)
             setKppTargetPeriod(kpp.kppTargetPeriod)
-            setKppUoM(kpp.kppUoM)
+            setUomId(kpp.uomId)
+            setUomName(kpp.uomName)
             setKppOverallWeightage(kpp.kppOverallWeightage)
             setKppRating1(kpp.kppRating1)
             setKppRating2(kpp.kppRating2)
@@ -97,6 +102,12 @@ export default function KeyParameterComponent() {
     useEffect(() => {
         KeyParameterService.getKPPDetailsByPaging().then((res) => {
             setKpps(res.data.responseData.content);
+        });
+
+        UoMService.getAllUoM().then((res) => {
+            setUoms(res.data);
+            setUomId(res.data?.[0]?.uomId)
+           
         });
 
         RoleService.getRolesInDesignation().then((res) => {
@@ -153,7 +164,7 @@ export default function KeyParameterComponent() {
         e.preventDefault()
 
         let statusCd = 'A';
-        let kpp = { roleId, deptId, desigId, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, kppUoM, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
+        let kpp = { roleId, deptId, desigId, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, uomId, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
         console.log(kpp)
 
         KeyParameterService.saveKPPDetails(kpp).then(res => {
@@ -179,7 +190,7 @@ export default function KeyParameterComponent() {
             let kppPerformanceIndi = kpp.kppPerformanceIndi;
             let kppOverallTarget = kpp.kppOverallTarget;
             let kppTargetPeriod = kpp.kppTargetPeriod;
-            let kppUoM = kpp.kppUoM;
+            let setKppUoMId = kpp.setKppUoMId;
             let kppOverallWeightage = kpp.kppOverallWeightage;
             let kppRating1 = kpp.kppRating1;
             let kppRating2 = kpp.kppRating2;
@@ -191,7 +202,7 @@ export default function KeyParameterComponent() {
             console.log("deptId", deptId)
             console.log("KppId=", kppId)
             let statusCd = 'I';
-            let updateKpp = { roleId, kppId, deptId, desigId, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, kppUoM, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
+            let updateKpp = { roleId, kppId, deptId, desigId, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, setKppUoMId, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
 
             KeyParameterService.updateKppDetails(updateKpp).then(res => {
                 KeyParameterService.getKPPDetailsByPaging().then((res) => {
@@ -208,7 +219,7 @@ export default function KeyParameterComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let updateKpp = { kppId, roleId, deptId, desigId, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, kppUoM, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
+        let updateKpp = { kppId, roleId, deptId, desigId, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, uomId, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
 
         KeyParameterService.updateKppDetails(updateKpp).then(res => {
             KeyParameterService.getKPPDetailsByPaging().then((res) => {
@@ -433,13 +444,21 @@ export default function KeyParameterComponent() {
                                     <div className="row">
                                         <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppUoM">Unit of Measurement:</label>
                                         <div className="col-sm-2">
+                                        <div className="form-group">
+                                        <select className="form-control" id="uomId" onChange={(e) => onUoMChangeHandler(e.target.value)}>
+                                            
+                                            {
+                                                uoms.map(
+                                                    uom =>
+                                                        <option key={uom.uomId} value={uom.uomId}>{uom.uomName}</option>
+                                                )
 
-                                            <select className="form-control" id="kppUoM" onChange={(e) => onUoMChangeHandler(e.target.value)} defaultValue={kppUoM} >
-                                                <option value="KG">KG</option>
-                                                <option value="Ltr">Ltr</option>
-                                                <option value="%">%</option>
-                                            </select>
-                                        </div>
+                                                
+                                            };
+
+                                        </select>
+                                    </div>
+                                    </div>
                                         <label className="control-label col-sm-3" htmlFor="kppOverallWeightage">Overall Weightage In % :</label>
                                         <div className="col-sm-2">
                                             <input type="text" className="form-control" id="kppOverallWeightage" value={kppOverallWeightage} onChange={(e) => setKppOverallWeightage(e.target.value)} placeholder="Enter KPP Kpp Target Period here" />
@@ -571,7 +590,7 @@ export default function KeyParameterComponent() {
                                     <div className="row">
                                         <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppUoM">Unit of Measurement:</label>
                                         <div className="col-sm-2">
-                                            <input type="text" className="form-control" id="kppUoM" value={kppUoM} onChange={(e) => setKppUoM(e.target.value)} placeholder="Enter KPP Kpp Target Period here" />
+                                            <input type="text" className="form-control" id="uomId" value={uomId} onChange={(e) => setUomId(e.target.value)} placeholder="Enter KPP Kpp Target Period here" />
                                         </div>
                                         <label className="control-label col-sm-3" htmlFor="kppOverallWeightage">Kpp Target Period:</label>
                                         <div className="col-sm-2">
@@ -698,9 +717,9 @@ export default function KeyParameterComponent() {
 
                                 <div className="form-group">
                                     <div className="row">
-                                        <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppUoM">Unit of Measurement:</label>
+                                        <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="uomId">Unit of Measurement:</label>
                                         <div className="col-sm-2">
-                                            {kppUoM}
+                                            {uomName}
                                         </div>
                                         <label className="control-label col-sm-3" htmlFor="kppOverallWeightage">Kpp Target Period:</label>
                                         <div className="col-sm-2">

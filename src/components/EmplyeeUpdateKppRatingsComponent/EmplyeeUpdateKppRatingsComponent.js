@@ -2,11 +2,15 @@ import React from 'react';
 import { Form, Formik } from 'formik'
 import { useEffect } from 'react';
 import { useState } from 'react';
-
+import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 //import EmployeeKppsService from '../../services/EmployeeKppsService';
 import EmployeeKppsService from '../../services/EmployeeKppsService'
+import AllHodKppService from '../../services/AllHodKppService';
 const EmplyeeUpdateKppRatingsComponent = () => {
+
+    const navigate = useNavigate();
+    const [empId, setEmpId] = useState('');
     const [ekppMonth, setEkppMonth] = useState('');
     const [empName, setEmpName] = useState('');
     const [deptName, setDeptName] = useState('');
@@ -56,6 +60,7 @@ const EmplyeeUpdateKppRatingsComponent = () => {
     useEffect(() => {
         EmployeeKppsService.getKPPDetails().then((res) => {
             setEkppMonth(YYYY_MM_DD_Formater(res.data.ekppMonth)) 
+            setEmpId(res.data.empId);
             setEmpName(res.data.empName);
             setDeptName(res.data.deptName);
             setDesigName(res.data.desigName);
@@ -70,6 +75,18 @@ const EmplyeeUpdateKppRatingsComponent = () => {
         EmployeeKppsService.getEmployeeKPPReport(Cookies.get('empId')).then(res => {
             alert("Report generated");
         });
+    }
+
+    const navigateBack = () => {
+        navigate(`/allEmployeeKppStatus`, { replace: true })
+      }
+
+      //when GM click on finish button
+      const completeEmpKpp = (e) => {
+        AllHodKppService.completeEmpKppGM(e).then(res => {
+            navigate(`/allEmployeeKppStatus`, { replace: true })
+        }
+        );
     }
     return (
         <div className='container-fluid'>
@@ -186,7 +203,7 @@ const EmplyeeUpdateKppRatingsComponent = () => {
                                                     <td>{kppResponse.kppPerformanceIndi}</td>
                                                     <td className='text-center'>{kppResponse.kppOverallTarget}</td>
                                                     <td className='text-center'>{kppResponse.kppTargetPeriod}</td>
-                                                    <td>{kppResponse.kppUoM}</td>
+                                                    <td>{kppResponse.uomName}</td>
                                                     <td className='text-center'>{kppResponse.kppOverallWeightage}</td>
                                                    
                                                     <td className='text-center'>{kppResponse.empAchivedWeight}</td>
@@ -277,13 +294,17 @@ const EmplyeeUpdateKppRatingsComponent = () => {
 
                                
                                 <div className="row">
-                                    <div className="col-sm-10"></div>
-                                    <div className="col-sm-2"><button type="submit" className="btn btn-success"> Submit</button>
-                                        
+                                    <div className="col-sm-8"></div>
+                                    <div className="col-sm-4">
+                                    <button type="submit" className="btn btn-success"> Submit</button>    
+
                                     <button type="button" className="btn btn-success col-sm-offset-1 " disabled={kppMasterResponses?.empKppStatus === "Pending"}   
-                                    onClick={() => { handleExcel()
-                                          
-                                        }}> Download</button>
+                                    onClick={() => { handleExcel()}}> Download</button>
+
+                                    <button type="submit" className="btn col-sm-offset-1 btn-success"   onClick={() => completeEmpKpp(empId)} >Finish</button>
+
+                                    <button type="button" className="btn btn-success col-sm-offset-1 " disabled={kppMasterResponses?.empKppStatus === "Pending"}   
+                                    onClick={() => { navigateBack()}}> Back</button>
                                     </div>
                                 </div>
                             </Form>

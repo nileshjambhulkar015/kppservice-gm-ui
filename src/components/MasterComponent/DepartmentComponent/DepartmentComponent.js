@@ -20,8 +20,8 @@ export default function DepartmentComponent() {
 
     //loading all department and roles while page loading at first time
     useEffect(() => {
-        DepartmentService.getDpartmentDetailsByPaging().then((res) => {
-            setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 1));
+        DepartmentService.getDepartmentDetailsByPaging().then((res) => {
+            setDepartments(res.data.responseData.content);
             console.log(res.data.responseData.content)
         });
 
@@ -40,7 +40,7 @@ export default function DepartmentComponent() {
 
     //search department by it's name
     const searchDeptName = (e) => {
-        DepartmentService.getDpartmentDetailsByDeptNamePaging(e).then((res) => {
+        DepartmentService.getDepartmentDetailsByDeptNamePaging(e).then((res) => {
             setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 1));
             console.log(res.data)
         });
@@ -51,9 +51,9 @@ export default function DepartmentComponent() {
         let statusCd = 'A';
         let department = { roleId, deptName, remark, statusCd };
 
-        DepartmentService.saveDpartmentDetails(department).then(res => {
+        DepartmentService.saveDepartmentDetails(department).then(res => {
             console.log("res=", res.data)
-            DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+            DepartmentService.getDepartmentDetailsByPaging().then((res) => {
                 setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 1));
                 setDeptName('');
                 setRemark('');
@@ -91,7 +91,7 @@ export default function DepartmentComponent() {
             let updateDepartment = { roleId, deptId, deptName, remark, statusCd };
 
             DepartmentService.updateDepartmentDetails(updateDepartment).then(res => {
-                DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+                DepartmentService.getDepartmentDetailsByPaging().then((res) => {
                     setDepartments(res.data.responseData.content);
                     console.log(res.data.responseData.content)
                 });
@@ -109,7 +109,7 @@ export default function DepartmentComponent() {
         let department = { roleId, deptId, deptName, remark, statusCd };
 
         DepartmentService.updateDepartmentDetails(department).then(res => {
-            DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+            DepartmentService.getDepartmentDetailsByPaging().then((res) => {
                 setDepartments(res.data.responseData.content);
                 console.log(res.data)
             });

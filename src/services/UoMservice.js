@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 const BASE_URL = "http://localhost:9091/uom";
 
 
-class UoMservice {
+class UoMService {
 
 
     saveUoMDetails(uom) {
@@ -49,6 +49,16 @@ class UoMservice {
         }
     }
 
+      //to show uom for adding kpp
+      getAllUoM() {
+        if (null != Cookies.get('empId')) {
+            return axios.get("http://localhost:9091/uom/all-uom")
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }
+    }
+
 
     getUoMById(uomId) {
         if (null != Cookies.get('empId')) {
@@ -62,4 +72,4 @@ class UoMservice {
 }
 
 
-export default new UoMservice();
+export default new UoMService();

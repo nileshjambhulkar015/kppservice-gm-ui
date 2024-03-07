@@ -15,7 +15,7 @@ class DepartmentService {
         }
     }*/
 
-    saveDpartmentDetails(department) {
+    saveDepartmentDetails(department) {
         if (null != Cookies.get('empId')) {
             return axios.post(BASE_URL, department)
         } else {
@@ -48,7 +48,7 @@ class DepartmentService {
 
 
     //at page load call all the departments load all departments
-    getDpartmentDetailsByPaging() {
+    getDepartmentDetailsByPaging() {
         if (null != Cookies.get('empId')) {
             return axios.get("http://localhost:9091/department/search?statusCd=A&page=0&size=1200&sort=role.role_name asc")
         } else {
@@ -58,7 +58,7 @@ class DepartmentService {
     }
 
     // search department by its name
-    getDpartmentDetailsByDeptNamePaging(deptName) {
+    getDepartmentDetailsByDeptNamePaging(deptName) {
         if (null != Cookies.get('empId')) {
             return axios.get(`http://localhost:9091/department/search?deptName=${deptName}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
         } else {

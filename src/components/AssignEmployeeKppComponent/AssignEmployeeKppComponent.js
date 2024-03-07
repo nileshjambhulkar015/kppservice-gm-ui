@@ -53,18 +53,7 @@ export default function AssignEmployeeKppComponent() {
         );
         // window.location.reload(); 
     }
-
-
-
-        /*KeyParameterService.saveKPPDetails(kpp).then(res => {
-            KeyParameterService.getKPPDetailsByPaging().then((res) => {
-                setKpps(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
-            });
-            console.log("Kpp added");
-        }
-        );*/
-        // window.location.reload(); 
-    
+   
 
     return (
         <div className="row">

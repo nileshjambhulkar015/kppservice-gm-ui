@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
-import RegionService from "../../../services/RegionService";
-import UoMservice from '../../../services/UoMservice';
+import UoMService from '../../../services/UoMService'
+
 
 export default function UoMComponent() {
     const [uomId, setUomId] = useState('');
@@ -14,7 +14,7 @@ export default function UoMComponent() {
 
     //loading all department and roles while page loading at first time
     useEffect(() => {
-        UoMservice.getUoMByPaging().then((res) => {
+        UoMService.getUoMByPaging().then((res) => {
             setUoms(res.data.responseData.content);
         });
     }, []);
@@ -26,9 +26,9 @@ export default function UoMComponent() {
         let employeeId = Cookies.get('empId');
         let uom = { uomName, remark, statusCd, employeeId };
 
-        UoMservice.saveUoMDetails(uom).then(res => {
+        UoMService.saveUoMDetails(uom).then(res => {
 
-            UoMservice.getUoMByPaging().then((res) => {
+            UoMService.getUoMByPaging().then((res) => {
                 setUoms(res.data.responseData.content); 
             });
             console.log("UoM added");
@@ -39,7 +39,7 @@ export default function UoMComponent() {
 
     const showUoMById = (e) => {
 
-        UoMservice.getUoMById(e).then(res => {
+        UoMService.getUoMById(e).then(res => {
 
             setUomId(res.data.responseData.uomId)
             setUomName(res.data.responseData.uomName)
@@ -52,7 +52,7 @@ export default function UoMComponent() {
 
 
     const deleteRegionById = (e) => {
-        UoMservice.getUoMById(e).then(res => {
+        UoMService.getUoMById(e).then(res => {
 
             let uomId = res.data.responseData.uomId;
             let uomName = res.data.responseData.uomName;
@@ -61,8 +61,8 @@ export default function UoMComponent() {
             let statusCd = 'I';
             let updateRegion = { uomId, uomName, remark, statusCd };
 
-            UoMservice.updateUoM(updateRegion).then(res => {
-                UoMservice.getUoMByPaging().then((res) => {
+            UoMService.updateUoM(updateRegion).then(res => {
+                UoMService.getUoMByPaging().then((res) => {
                     setUoms(res.data.responseData.content);
                 });
                 console.log("UoM deleted");
@@ -79,12 +79,12 @@ export default function UoMComponent() {
         let employeeId = Cookies.get('empId');
         let region = { uomId, uomName, remark, statusCd, employeeId };
 
-        UoMservice.updateUoM(region).then(res => {
-            UoMservice.getUoMByPaging().then((res) => {
+        UoMService.updateUoM(region).then(res => {
+            UoMService.getUoMByPaging().then((res) => {
                 setUoms(res.data.responseData.content);
 
             });
-            console.log("Department added");
+            console.log("UOM added");
         }
         );
 
@@ -114,7 +114,7 @@ export default function UoMComponent() {
                             <thead>
                                 <tr>
                                     <th className="text-center">Sr No</th>
-                                    <th className="text-center">Region Name</th>
+                                    <th className="text-center">UoM Name</th>
 
                                     <th className="text-center">Action</th>
                                 </tr>

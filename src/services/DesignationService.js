@@ -70,7 +70,7 @@ class DesignationService {
 
     getDesignationById(desigId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(DESIGNATION_URL + '/' + desigId)
+            return axios.get(DESIGNATION_URL + `/by-desig-id?desigId=${desigId}`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
