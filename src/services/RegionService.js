@@ -59,6 +59,15 @@ class RegionService {
         }
     }
 
+    ddRegions(regionId) {
+        if (null != Cookies.get('empId')) {
+            return axios.get(`http://localhost:9091/region/dd-regions-regions`)
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }
+    }
+
 }
 
 

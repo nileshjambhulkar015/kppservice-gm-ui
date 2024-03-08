@@ -269,7 +269,7 @@ const HODUpdateKppRatingsComponent = () => {
                                 </div>
                     
                                 <div className="form-group">
-                                <label className="control-label col-sm-4" htmlFor="hodKppStatus">Hod Status:</label>
+                                <label className="control-label col-sm-4" htmlFor="hodKppStatus">GM Status:</label>
                                 <div className="col-sm-2">
                                     <select className="form-control" id="gmKppStatus" onChange={(e) => onHodStatusChangeHandler(e.target.value)} defaultValue={gmKppStatus} >
                                         <option value="Approved">Approved</option>

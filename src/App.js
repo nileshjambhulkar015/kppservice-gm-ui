@@ -18,6 +18,8 @@ import RoleComponent from "./components/MasterComponent/RoloComponent/RoleCompon
 import ShowEmployeeForKppComponent from './components/ShowEmployeeForKppComponent/ShowEmployeeForKppComponent';
 import RegionComponent from "./components/MasterComponent/RegionComponent/RegionComponent";
 import UoMComponent from "./components/MasterComponent/UoMComponent/UoMComponent";
+import SiteComponent from "./components/MasterComponent/SiteComponent/SiteComponent";
+import CompanyMasterComponent from './components/MasterComponent/CompanyMasterComponent/CompanyMasterComponent'
 
 
 function App() {
@@ -46,15 +48,10 @@ function App() {
           <ul className="nav navbar-nav">
 
           <li><Link to="/keyparemeter">Key Indicator Master</Link></li>
-          <li><Link to="/employee">Employee Master</Link></li>
-          
-           
+          <li><Link to="/employee">Employee Master</Link></li>        
             <li><Link to="/showEmployeeForKpp">Assign Employee Kpp</Link></li>
             <li><Link to="/allHodKppStatus">HOD KPP</Link></li>
-           
             <li><Link to="/allEmployeeKppStatus">Employee KPP</Link></li>
-            
-
             <li className="dropdown">
             <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
             <span className="caret"></span></a>
@@ -62,9 +59,11 @@ function App() {
             <li><Link to="/role">Role Master</Link></li>
             <li><Link to="/department">Department Master</Link></li>
             <li><Link to="/designation">Designation Master</Link></li>
-            <li><Link to="/regionMaster">Region Master</Link></li>
-            <li><Link to="/employeekpp">Sites Master</Link></li>
             <li><Link to="/uomMaster">UoM Master</Link></li>
+            <li><Link to="/regionMaster">Region Master</Link></li>
+            <li><Link to="/siteMaster">Sites Master</Link></li>
+            <li><Link to="/companyMaster">Company Master</Link></li>
+   
         
             </ul>
           </li>
@@ -84,7 +83,8 @@ function App() {
         <Route exact path="/department" element={<DepartmentComponent />}></Route>
         <Route exact path="/designation" element={<DesignationComponent />}></Route>
         <Route exact path="/regionMaster" element={<RegionComponent />}></Route>
-
+        <Route exact path="/siteMaster" element={<SiteComponent />}></Route>
+        <Route exact path="/companyMaster" element={<CompanyMasterComponent />}></Route>
         <Route exact path="/uomMaster" element={<UoMComponent />}></Route>
         <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
         <Route exact path="/employee" element={<EmployeeComponent />}></Route>
