@@ -9,6 +9,13 @@ export default function AddNewEmployeeComponent() {
 
     const navigate = useNavigate();
 
+    const [regionId, setRegionId] = useState('');
+    const [regionName, setRegionName] = useState('');
+    const [siteId, setSiteId] = useState('');
+    const [siteName, setSiteName] = useState('');
+    const [companyId, setCompanyId] = useState('');
+    const [companyName, setComapnyName] = useState('');
+
     const [empEId, setEmpEId] = useState('');
     const [roleId, setRoleId] = useState('');
 
@@ -22,10 +29,7 @@ export default function AddNewEmployeeComponent() {
 
 
     const [reportingEmpId, setReportingEmpId] = useState('');
-    const [regionId, setRegionId] = useState('');
-    const [regionName, setRegionName] = useState('');
-    const [siteId, setSiteId] = useState('');
-    const [siteName, setSiteName] = useState('');
+   
     const [empFirstName, setEmpFirstName] = useState('');
     const [empMiddleName, setEmpMiddleName] = useState('');
     const [empLastName, setEmpLastName] = useState('');
@@ -39,6 +43,11 @@ export default function AddNewEmployeeComponent() {
     const [empGender, setEmpGender] = useState('Male');
     const [empBloodgroup, setEmpBloodgroup] = useState('A+');
     const [remark, setRemark] = useState('');
+
+    
+    const [regions, setRegions] = useState([])
+    const [sites, setSites] = useState([])
+    const [companys, setCompanys] = useState([])
 
     const [employees, setEmployees] = useState([])
     
@@ -69,11 +78,11 @@ export default function AddNewEmployeeComponent() {
     const saveEmployeeDetails = (e) => {
         e.preventDefault()
         let statusCd = 'A';
-        let regionId = '1';
-        let siteId = '1';
+      //  let regionId = '1';
+        //let siteId = '1';
         let employeeId = Cookies.get('empEId');
        // console.log("login user id : ", createdUserId)
-        let employee = { empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd, employeeId };
+        let employee = { empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId,companyId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd, employeeId };
         console.log(employee)
 
         EmployeeService.saveEmployeeDetails(employee).then(res => {
@@ -101,8 +110,24 @@ export default function AddNewEmployeeComponent() {
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
         });
-
-
+///
+EmployeeService.getRegionsFromCompany().then((res) => {
+    setRegions(res.data);
+    console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
+    setRegionId(res.data?.[0].regionId)
+   let regionId = res.data?.[0].regionId;
+    EmployeeService.getSitesByRegionIdFromCompany(regionId).then((res1) => {
+        setSites(res1.data);
+        setSiteId(res1.data?.[0].siteId)
+        let siteId = res1.data?.[0].siteId;
+        EmployeeService.getCompanyFromComany({ regionId, siteId }).then((res2) => {
+            setCompanys(res2.data);
+            setCompanyId(res2.data?.[0]?.companyId)
+           
+        });
+    });
+}); 
+////
         RoleService.getRolesInDesignation().then((res) => {
             setRoles(res.data);
             console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
@@ -145,7 +170,41 @@ export default function AddNewEmployeeComponent() {
 
 
     }, []);
+
+    // handle region id change
+    //for role , department and designation
+    const handleRegionIdChange=(value)=>{
+        setRegionId(value)
+        let regionId = value;
+        EmployeeService.getSitesByRegionIdFromCompany(regionId).then((res1) => {
+            setSites(res1.data);
+            setSiteId(res1.data?.[0].siteId)
+            let siteId = res1.data?.[0].siteId;
+            EmployeeService.getCompanyFromComany({ regionId, siteId }).then((res2) => {
+                setCompanys(res2.data);
+                setCompanyId(res2.data?.[0]?.companyId)
+               
+            });
+        });
+}
+
+
+const handleCompanyIdChange=(value)=>{
+    setCompanyId(value)       
+}
+
+const handleSiteIdChange=(value)=>{
+    console.log("Site id =", value)
+    setSiteId(value)
+    let siteId = value;
+    EmployeeService.getCompanyFromComany({ regionId, siteId }).then((res2) => {
+        setCompanys(res2.data);
+        setCompanyId(res2.data?.[0]?.companyId)
+       
+    });
    
+}
+
     //for role , department and designation
     const handleRoleIdChange=(value)=>{
         setRoleId(value)
@@ -231,6 +290,59 @@ export default function AddNewEmployeeComponent() {
         <div className="row">
             <h3 className="text-center">Add New Employee</h3>
             <form className="form-horizontal">
+
+            <div className="form-group">
+            <div className="row">
+                <label className="control-label col-sm-2" htmlFor="regionName">Region Name:</label>
+                <div className="col-sm-2">
+                <div className="form-group">
+                <select className="form-control" id="regionId" onChange={(e) => handleRegionIdChange(e.target.value)}>
+                   
+                    {
+                        regions.map(
+                            region =>
+                                <option key={region.regionId} value={region.regionId}>{region.regionName}</option>
+                        )
+                    };
+
+                </select>
+            </div>
+                </div>
+
+                <label className="control-label col-sm-1" htmlFor="siteName">Site Name:</label>
+                <div className="col-sm-2">
+                <div className="form-group">
+                <select className="form-control" id="siteId" onChange={(e) => handleSiteIdChange(e.target.value)}>
+                   
+                    {
+                        sites.map(
+                            site =>
+                                <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
+                        )
+                    };
+
+                </select>
+            </div> 
+                </div>
+
+                <label className="control-label col-sm-1" htmlFor="companyName">Company Name:</label>
+                <div className="col-sm-2">
+                <div className="form-group">
+                <select className="form-control" id="roleId" onChange={(e) => handleCompanyIdChange(e.target.value)}>
+                   
+                    {
+                        companys.map(
+                            company =>
+                                <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
+                        )
+                    };
+
+                </select>
+            </div>
+                </div>
+            </div>
+        </div>
+
                 <div className="form-group">
                     <label className="control-label col-sm-2" htmlFor="roleId">Select Role Name:</label>
                     <div className="col-sm-2">

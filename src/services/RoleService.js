@@ -69,7 +69,9 @@ class RoleService{
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
         }        
-    }   
+    }  
+    
+    
 }
 
 export default new RoleService();
