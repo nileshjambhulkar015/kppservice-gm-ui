@@ -5,11 +5,19 @@ import DepartmentService from "../../services/DepartmentService";
 import DesignationService from "../../services/DesignationService";
 import EmployeeService from "../../services/EmployeeService";
 import RoleService from "../../services/RoleService";
+import EmployeeDDService from '../../services/DropDownService/EmployeeDDService';
 export default function ShowEmployeeForKppComponent() {
 
     const navigate = useNavigate(); 
 
-    //const [reportingRoles, setReportingRoles] = useState([])
+    const [regionId, setRegionId] = useState('');
+    const [regionName, setRegionName] = useState('');
+    const [siteId, setSiteId] = useState('');
+    const [siteName, setSiteName] = useState('');
+    const [companyId, setCompanyId] = useState('');
+    const [companyName, setComapnyName] = useState('');
+
+
     const [roleId, setRoleId] = useState('');
     const [roleName, setRoleName] = useState('');
     const [deptId, setDeptId] = useState('');
@@ -26,16 +34,35 @@ export default function ShowEmployeeForKppComponent() {
  //   const [reportingDesignations, setReportingDesignations] = useState([])
     const [employees, setEmployees] = useState([])
 
+     
+    const [regions, setRegions] = useState([])
+    const [sites, setSites] = useState([])
+    const [companys, setCompanys] = useState([])
+
     useEffect(() => {
-        //reprting to employee role
-       /* RoleService.getRolesInDesignation().then((res) => {
-
-            setReportingRoles(res.data?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
-        });*/
-
+      
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content);
         });
+
+        ///
+/*EmployeeDDService.getRegionsFromEmployee().then((res) => {
+    setRegions(res.data);
+    console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
+    setRegionId(res.data?.[0].regionId)
+   let regionId = res.data?.[0].regionId;
+   EmployeeDDService.getSitesByRegionIdFromEmployee(regionId).then((res1) => {
+        setSites(res1.data);
+        setSiteId(res1.data?.[0].siteId)
+        let siteId = res1.data?.[0].siteId;
+        EmployeeDDService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
+            setCompanys(res2.data);
+            setCompanyId(res2.data?.[0]?.companyId)
+           
+        });
+    });
+}); */
+////
 
         RoleService.getRolesInDesignation().then((res) => {
             setRoles(res.data);
@@ -56,6 +83,42 @@ export default function ShowEmployeeForKppComponent() {
 
     }, []);
 
+
+    // for region id, site id and company id
+    const handleRegionIdChange=(value)=>{
+        setRegionId(value)
+        let regionId = value;
+        EmployeeService.getSitesByRegionIdFromEmployee(regionId).then((res1) => {
+            setSites(res1.data);
+            setSiteId(res1.data?.[0].siteId)
+            let siteId = res1.data?.[0].siteId;
+            EmployeeService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
+                setCompanys(res2.data);
+                setCompanyId(res2.data?.[0]?.companyId)
+               
+            });
+        });
+}
+
+
+const handleCompanyIdChange=(value)=>{
+    setCompanyId(value)       
+}
+
+const handleSiteIdChange=(value)=>{
+    console.log("Site id =", value)
+    setSiteId(value)
+    let siteId = value;
+    EmployeeService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
+        setCompanys(res2.data);
+        setCompanyId(res2.data?.[0]?.companyId)
+       
+    });
+   
+}
+
+
+// for role , dept and desig
     const handleRoleIdChange=(value)=>{
         setRoleId(value)
         let roleId = value;
@@ -99,29 +162,6 @@ export default function ShowEmployeeForKppComponent() {
        
     }
 
-
-    //for all department by role id for reporting to tab
-  /* useEffect((e) => {
-        reportingEmpRoleId && DepartmentService.getDepartmentByRoleIdFromDesign(reportingEmpRoleId).then((res) => {
-            setReportingDepartments(res.data);
-        });
-    }, [reportingEmpRoleId]);
-
-
-
-    //for all designation  by dept id for reporting to tab
-    useEffect((e) => {
-        reportingEmpDeptId && DesignationService.getDesignationDetailsForKpp(reportingEmpDeptId).then((res) => {
-            setReportingDesignations(res.data);            
-        });
-    }, [reportingEmpDeptId]);
-
-        //for employee details base on designation
-        useEffect((e) => {
-            reportingEmpDesigId && EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
-                setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));           
-            });
-        }, [reportingEmpDesigId]);*/
 
         const navigateToAssignEmployee = (empId,empEId,roleId, deptId,desigId,reportingEmpId) => {
             console.log("reportingEmpId : ",reportingEmpId)
