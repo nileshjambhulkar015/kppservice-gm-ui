@@ -28,7 +28,7 @@ export default function SiteComponent() {
 
         RegionService.ddRegions().then((res) => {
             setRegions(res.data);            
-            setRegionId(res.data?.[0].roleId)          
+            setRegionId(res.data?.[0].regionId)          
         });
     }, []);
 
