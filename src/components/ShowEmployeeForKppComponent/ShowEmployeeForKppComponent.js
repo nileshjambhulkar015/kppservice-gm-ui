@@ -46,7 +46,7 @@ export default function ShowEmployeeForKppComponent() {
         });
 
         ///
-/*EmployeeDDService.getRegionsFromEmployee().then((res) => {
+EmployeeDDService.getRegionsFromEmployee().then((res) => {
     setRegions(res.data);
     console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
     setRegionId(res.data?.[0].regionId)
@@ -58,13 +58,29 @@ export default function ShowEmployeeForKppComponent() {
         EmployeeDDService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
             setCompanys(res2.data);
             setCompanyId(res2.data?.[0]?.companyId)
-           
+            let companyId = res2.data?.[0].companyId;
+            EmployeeDDService.getRolesFromEmployee({ regionId, siteId,companyId }).then((res3) => {
+                setRoles(res3.data);
+                setRoleId(res3.data?.[0]?.roleId)
+                let roleId = res3.data?.[0].roleId;
+                EmployeeDDService.getDeptFromEmployee({ regionId, siteId,companyId,roleId }).then((res4) => {
+                    setDepartments(res4.data);
+                    setDeptId(res4.data?.[0]?.deptId)
+                   
+                    let deptId = res4.data?.[0].deptId;
+                    EmployeeDDService.getDesigFromEmployee({ regionId, siteId,companyId,roleId,deptId }).then((res5) => {
+                        setDesignations(res5.data);
+                        setDesigId(res5.data?.[0]?.desigId)
+                       
+                    });
+                });
+            });
         });
     });
-}); */
+}); 
 ////
 
-        RoleService.getRolesInDesignation().then((res) => {
+      /*  RoleService.getRolesInDesignation().then((res) => {
             setRoles(res.data);
             console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
             setRoleId(res.data?.[0].roleId)
@@ -79,7 +95,7 @@ export default function ShowEmployeeForKppComponent() {
                    
                 });
             });
-        });
+        });*/
 
     }, []);
 
@@ -87,32 +103,84 @@ export default function ShowEmployeeForKppComponent() {
     // for region id, site id and company id
     const handleRegionIdChange=(value)=>{
         setRegionId(value)
-        let regionId = value;
-        EmployeeService.getSitesByRegionIdFromEmployee(regionId).then((res1) => {
-            setSites(res1.data);
-            setSiteId(res1.data?.[0].siteId)
-            let siteId = res1.data?.[0].siteId;
-            EmployeeService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
-                setCompanys(res2.data);
-                setCompanyId(res2.data?.[0]?.companyId)
-               
+   let regionId = value;
+   EmployeeDDService.getSitesByRegionIdFromEmployee(regionId).then((res1) => {
+        setSites(res1.data);
+        setSiteId(res1.data?.[0].siteId)
+        let siteId = res1.data?.[0].siteId;
+        EmployeeDDService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
+            setCompanys(res2.data);
+            setCompanyId(res2.data?.[0]?.companyId)
+            let companyId = res2.data?.[0].companyId;
+            EmployeeDDService.getRolesFromEmployee({ regionId, siteId,companyId }).then((res3) => {
+                setRoles(res3.data);
+                setRoleId(res3.data?.[0]?.roleId)
+                let roleId = res3.data?.[0].roleId;
+                EmployeeDDService.getDeptFromEmployee({ regionId, siteId,companyId,roleId }).then((res4) => {
+                    setDepartments(res4.data);
+                    setDeptId(res4.data?.[0]?.deptId)
+                   
+                    let deptId = res4.data?.[0].deptId;
+                    EmployeeDDService.getDesigFromEmployee({ regionId, siteId,companyId,roleId,deptId }).then((res5) => {
+                        setDesignations(res5.data);
+                        setDesigId(res5.data?.[0]?.desigId)
+                        let reportingEmpDesigId =res5.data?.[0]?.desigId
+                        EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
+                            setEmployees(res.data.responseData.content);           
+                        });
+                       
+                    });
+                });
             });
         });
+    });
 }
 
 
 const handleCompanyIdChange=(value)=>{
-    setCompanyId(value)       
+    setCompanyId(value)
+        let companyId = value;
+        EmployeeDDService.getRolesFromEmployee({ regionId, siteId,companyId }).then((res3) => {
+            setRoles(res3.data);
+            setRoleId(res3.data?.[0]?.roleId)
+            let roleId = res3.data?.[0].roleId;
+            EmployeeDDService.getDeptFromEmployee({ regionId, siteId,companyId,roleId }).then((res4) => {
+                setDepartments(res4.data);
+                setDeptId(res4.data?.[0]?.deptId)
+               
+                let deptId = res4.data?.[0].deptId;
+                EmployeeDDService.getDesigFromEmployee({ regionId, siteId,companyId,roleId,deptId }).then((res5) => {
+                    setDesignations(res5.data);
+                    setDesigId(res5.data?.[0]?.desigId)
+                   
+                });
+            });
+        });  
 }
 
 const handleSiteIdChange=(value)=>{
-    console.log("Site id =", value)
     setSiteId(value)
     let siteId = value;
-    EmployeeService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
+    EmployeeDDService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
         setCompanys(res2.data);
         setCompanyId(res2.data?.[0]?.companyId)
-       
+        let companyId = res2.data?.[0].companyId;
+        EmployeeDDService.getRolesFromEmployee({ regionId, siteId,companyId }).then((res3) => {
+            setRoles(res3.data);
+            setRoleId(res3.data?.[0]?.roleId)
+            let roleId = res3.data?.[0].roleId;
+            EmployeeDDService.getDeptFromEmployee({ regionId, siteId,companyId,roleId }).then((res4) => {
+                setDepartments(res4.data);
+                setDeptId(res4.data?.[0]?.deptId)
+               
+                let deptId = res4.data?.[0].deptId;
+                EmployeeDDService.getDesigFromEmployee({ regionId, siteId,companyId,roleId,deptId }).then((res5) => {
+                    setDesignations(res5.data);
+                    setDesigId(res5.data?.[0]?.desigId)
+                   
+                });
+            });
+        });
     });
    
 }
@@ -122,20 +190,18 @@ const handleSiteIdChange=(value)=>{
     const handleRoleIdChange=(value)=>{
         setRoleId(value)
         let roleId = value;
-         DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
-            setDepartments(res1.data);
-            setDeptId(res1.data?.[0].deptId)
-            let deptId = res1.data?.[0].deptId;
-             DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
-                setDesignations(res2.data);
-                setDesigId(res2.data?.[0]?.desigId)
-
-                let reportingEmpDesigId = res2.data?.[0]?.desigId
-                EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
-                    setEmployees(res.data.responseData.content);           
-                });
+        EmployeeDDService.getDeptFromEmployee({ regionId, siteId,companyId,roleId }).then((res4) => {
+            setDepartments(res4.data);
+            setDeptId(res4.data?.[0]?.deptId)
+           
+            let deptId = res4.data?.[0].deptId;
+            EmployeeDDService.getDesigFromEmployee({ regionId, siteId,companyId,roleId,deptId }).then((res5) => {
+                setDesignations(res5.data);
+                setDesigId(res5.data?.[0]?.desigId)
+               
             });
-    });}
+        });    
+    }
 
     const handleDesigIdChange=(value)=>{
         setDesigId(value)
@@ -147,19 +213,19 @@ const handleSiteIdChange=(value)=>{
     }
 
     const handleDeptIdChange=(value)=>{
-        console.log("Dept id =", value)
         setDeptId(value)
+           
         let deptId = value;
-        DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
-            setDesignations(res2.data);
-            setDesigId(res2.data?.[0]?.desigId)
+        EmployeeDDService.getDesigFromEmployee({ regionId, siteId,companyId,roleId,deptId }).then((res5) => {
+            setDesignations(res5.data);
+            setDesigId(res5.data?.[0]?.desigId)
 
-            let reportingEmpDesigId = res2.data?.[0]?.desigId
+            let reportingEmpDesigId = res5.data?.[0]?.desigId
             EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
                 setEmployees(res.data.responseData.content);           
             });
+           
         });
-       
     }
 
 
@@ -180,6 +246,63 @@ const handleSiteIdChange=(value)=>{
         <div className="row">
             <h3 className="text-center">Assign KPP to  New Employee</h3>
             <form className="form-horizontal">
+
+            <div className="form-group">
+            <div className="row">
+                <label className="control-label col-sm-2" htmlFor="regionName">Region Name:</label>
+                <div className="col-sm-2">
+                <div className="form-group">
+                <select className="form-control" id="regionId" onChange={(e) => handleRegionIdChange(e.target.value)}>
+                   
+                    {
+                        regions.map(
+                            region =>
+                                <option key={region.regionId} value={region.regionId}>{region.regionName}</option>
+                        )
+                    };
+
+                </select>
+            </div>
+                </div>
+
+                <label className="control-label col-sm-1" htmlFor="siteName">Site Name:</label>
+                <div className="col-sm-2">
+                <div className="form-group">
+                <select className="form-control" id="siteId" onChange={(e) => handleSiteIdChange(e.target.value)}>
+                   
+                    {
+                        sites.map(
+                            site =>
+                                <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
+                        )
+                    };
+
+                </select>
+            </div> 
+                </div>
+
+                <label className="control-label col-sm-1" htmlFor="companyName">Company Name:</label>
+                <div className="col-sm-2">
+                <div className="form-group">
+                <select className="form-control" id="roleId" onChange={(e) => handleCompanyIdChange(e.target.value)}>
+                   
+                    {
+                        companys.map(
+                            company =>
+                                <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
+                        )
+                    };
+
+                </select>
+            </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
                 <div className="form-group">
                     <label className="control-label col-sm-2" htmlFor="deptId">Select Role Name:</label>
                     <div className="col-sm-2">
