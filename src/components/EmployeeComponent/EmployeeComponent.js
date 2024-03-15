@@ -60,27 +60,7 @@ export default function EmployeeComponent() {
             setEmpBloodgroup(event);
         };
 
-    const saveEmployeeDetails = (e) => {
-        e.preventDefault()
-        let statusCd = 'A';
-        let regionId = '1';
-        let siteId = '1';
-        let createdUserId = Cookies.get('empEId');
-        console.log("login user id : ",createdUserId)
-        let employee = { empEId,roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd,createdUserId };
-        console.log(employee)
-
-        EmployeeService.saveEmployeeDetails(employee).then(res => {
-            EmployeeService.getEmployeeDetailsByPaging().then((res) => {
-                setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==3 && item.roleId!==4));
-            });
-            console.log("Employee added");
-        }
-        ).catch((err) => {
-            alert(err.response.data.details)
-         });
-        // window.location.reload(); 
-    }
+    
 
     useEffect(() => {
 
