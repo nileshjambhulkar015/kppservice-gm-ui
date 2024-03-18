@@ -6,7 +6,16 @@ const DESIGNATION_URL = "http://localhost:9091/designation";
 
 class DesignationService {
 
-    getDpartmentDetails() {
+    getAllDepartmentFromDesig() {
+        if (null != Cookies.get('empId')) {
+            return axios.get(DESIGNATION_URL +"/department")
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }       
+    }
+    
+    getAllDepartmentDetails() {
         if (null != Cookies.get('empId')) {
             return axios.get(DEPARTMENT_URL)
         } else {
@@ -16,10 +25,10 @@ class DesignationService {
     }
 
     //get all designation from department id for dropdown list
-    getDesignationDetailsForKpp(data) {
+    getDesignationDetailsForKpp(deptId) {
        
         if (null != Cookies.get('empId')) {
-            return axios.get(DESIGNATION_URL + `/by-role-dept?roleId=${data.roleId}&deptId=${data.deptId}`)
+            return axios.get(DESIGNATION_URL + `/by-desig-dept?deptId=${deptId}`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
@@ -43,7 +52,7 @@ class DesignationService {
 
     getDesignationDetailsByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/designation/search?statusCd=A&page=0&size=20&sort=role.role_id")
+            return axios.get("http://localhost:9091/designation/search?statusCd=A&page=0&size=20&sort=desig.desig_name")
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

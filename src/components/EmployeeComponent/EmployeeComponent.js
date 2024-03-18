@@ -66,20 +66,9 @@ export default function EmployeeComponent() {
 
        
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
-            setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==1));
+            setEmployees(res.data.responseData.content);
         });
-
-        RoleService.getRolesInDesignation().then((res) => {
-            setRoles(res.data?.filter((item)=>item.roleId!==1));
-        });
-
-        //reprting to employee role
-        RoleService.getRolesInDesignation().then((res) => {
-
-            setReportingRoles(res.data?.filter((item)=>item.roleId!==1));
-        });
-
-    }, []);
+});
 
     const searchEmployeeFirstName = (e) => {
         EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
@@ -88,43 +77,6 @@ export default function EmployeeComponent() {
         });
     }
 
-    //for all department by role id
-    useEffect((e) => {
-        roleId && DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res) => {
-            setDepartments(res.data);
-        });
-    }, [roleId]);
-
-     //for all department by role id for reporting to tab
-     useEffect((e) => {
-        reportingEmpRoleId && DepartmentService.getDepartmentByRoleIdFromDesign(reportingEmpRoleId).then((res) => {
-            setReportingDepartments(res.data);
-        });
-    }, [reportingEmpRoleId]);
-
-    //for all designation  by dept id
-    useEffect((e) => {
-        deptId && DesignationService.getDesignationDetailsForKpp(deptId).then((res) => {
-            setDesignations(res.data);
-        });
-    }, [deptId]);
-
-        //for all designation  by dept id for reporting to tab
-        useEffect((e) => {
-            reportingEmpDeptId && DesignationService.getDesignationDetailsForKpp(reportingEmpDeptId).then((res) => {
-                setReportingDesignations(res.data);
-            });
-        }, [reportingEmpDeptId]);
-
-    //for all reportingEmpId  by desig id
-    useEffect((e) => {
-        console.log("inside for employee : ", e)
-        console.log("inside for employee reportingEmpDesigId : ", reportingEmpDesigId)
-        reportingEmpDesigId && EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res) => {
-            console.log(res.data)
-            setReportingEmpName(res.data);
-        });
-    }, [reportingEmpDesigId]);
 
     const showEmployeeById = (e) => {
 

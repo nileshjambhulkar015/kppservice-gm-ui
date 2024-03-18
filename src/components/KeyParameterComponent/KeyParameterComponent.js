@@ -110,27 +110,27 @@ export default function KeyParameterComponent() {
            
         });
 
-        RoleService.getRolesInDesignation().then((res) => {
-            setRoles(res.data);
-            console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
-            setRoleId(res.data?.[0].roleId)
-           let roleId = res.data?.[0].roleId;
-            DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res1) => {
+        RoleService.getRoles().then((res) => {
+            setRoles(res.data);            
+            setRoleId(res.data?.[0].roleId)          
+        });
+
+        DesignationService.getAllDepartmentFromDesig().then((res1) => {
                 setDepartments(res1.data);
                 setDeptId(res1.data?.[0].deptId)
                 let deptId = res1.data?.[0].deptId;
-                 DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+                 DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
                     setDesignations(res2.data);
                     setDesigId(res2.data?.[0]?.desigId)
                    
                 });
             });
-        });        
+              
     }, []);
 
     const handleRoleIdChange=(value)=>{
         setRoleId(value)
-        let roleId = value;
+       /* let roleId = value;
          DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
             setDepartments(res1.data);
             setDeptId(res1.data?.[0].deptId)
@@ -139,7 +139,8 @@ export default function KeyParameterComponent() {
                 setDesignations(res2.data);
                 setDesigId(res2.data?.[0]?.desigId)
             });
-    });}
+    });*/
+}
 
     const handleDesigIdChange=(value)=>{
         setDesigId(value)       
@@ -149,11 +150,12 @@ export default function KeyParameterComponent() {
         console.log("Dept id =", value)
         setDeptId(value)
         let deptId = value;
-        DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+
+        DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
             setDesignations(res2.data);
             setDesigId(res2.data?.[0]?.desigId)
-        });
-       
+           
+        });       
     }
 
     

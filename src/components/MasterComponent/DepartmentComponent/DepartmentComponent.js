@@ -1,10 +1,9 @@
+import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
 import DepartmentService from "../../../services/DepartmentService";
-import RoleService from "../../../services/RoleService";
-
 export default function DepartmentComponent() {
-    const [roleId, setRoleId] = useState('');
-    const [roleName, setRoleName] = useState('');
+   
+   
     const [deptId, setDeptId] = useState('');
     const [deptName, setDeptName] = useState('');
     const [remark, setRemark] = useState('');
@@ -24,19 +23,9 @@ export default function DepartmentComponent() {
             setDepartments(res.data.responseData.content);
             console.log(res.data.responseData.content)
         });
-
-        RoleService.getRolesForDropdown().then((res) => {
-            setRoles(res.data);            
-            setRoleId(res.data?.[0].roleId)          
-        });
     }, []);
 
-     //for role change
-     const onRoleChangeHandler = (value) => {
-        let roleId =value
-      
-        setRoleId(roleId);
-    };
+ 
 
     //search department by it's name
     const searchDeptName = (e) => {
@@ -49,12 +38,13 @@ export default function DepartmentComponent() {
     const saveDepartment = (e) => {
         e.preventDefault()
         let statusCd = 'A';
-        let department = { roleId, deptName, remark, statusCd };
+        let employeeId = Cookies.get('empId')
+        let department = { deptName, remark, statusCd,employeeId };
 
         DepartmentService.saveDepartmentDetails(department).then(res => {
             console.log("res=", res.data)
             DepartmentService.getDepartmentDetailsByPaging().then((res) => {
-                setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 1));
+                setDepartments(res.data.responseData.content);
                 setDeptName('');
                 setRemark('');
 
@@ -69,8 +59,6 @@ export default function DepartmentComponent() {
 
         DepartmentService.getDepartmentById(e).then(res => {
             let department = res.data;
-            setRoleId(department.roleId)
-            setRoleName(department.roleName)
             setDeptId(department.deptId)
             setDeptName(department.deptName)
             setRemark(department.remark)
@@ -83,12 +71,12 @@ export default function DepartmentComponent() {
     const deleteDepartmentById = (e) => {
         DepartmentService.getDepartmentById(e).then(res => {
             let department = res.data;
-            let roleId = department.roleId;
+          
             let deptId = department.deptId;
             let deptName = department.deptName;
             let remark = department.remark;
             let statusCd = 'I';
-            let updateDepartment = { roleId, deptId, deptName, remark, statusCd };
+            let updateDepartment = { deptId, deptName, remark, statusCd };
 
             DepartmentService.updateDepartmentDetails(updateDepartment).then(res => {
                 DepartmentService.getDepartmentDetailsByPaging().then((res) => {
@@ -106,7 +94,7 @@ export default function DepartmentComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let department = { roleId, deptId, deptName, remark, statusCd };
+        let department = { deptId, deptName, remark, statusCd };
 
         DepartmentService.updateDepartmentDetails(department).then(res => {
             DepartmentService.getDepartmentDetailsByPaging().then((res) => {
@@ -168,7 +156,7 @@ export default function DepartmentComponent() {
                                 <tr>
                                     <th className="text-center">Sr No</th>
                                     <th className="text-center">Department Name</th>
-                                    <th className="text-center">Role Name</th>
+                                  
                                     <th className="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -179,7 +167,7 @@ export default function DepartmentComponent() {
                                             <tr key={department.deptId}>
                                                 <td className="text-center">{index + 1}</td>
                                                 <td>{department.deptName}</td>
-                                                <td>{department.roleName}</td>
+                                               
 
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDepartment" onClick={() => showDepartmentById(department.deptId)}>Update</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteDepartmentById(department.deptId)}>Delete</button>
@@ -239,21 +227,7 @@ export default function DepartmentComponent() {
                         </div>
                         <div className="modal-body">
                             <form className="form-horizontal">
-                                <div className="form-group">
-                                    <label className="control-label col-sm-4" htmlFor="deptName">Select Role Name:</label>
-                                    <div className="col-sm-8">
-                                        <select className="form-control" id="roleId" onChange={(e) => onRoleChangeHandler(e.target.value)}>
-                                            {
-                                                roles.map(
-                                                    role =>
-                                                        <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
-                                                )
-                                            };
-
-                                        </select>
-                                    </div>
-                                </div>
-
+            
                                 <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="deptName">Enter Department Name:</label>
@@ -326,14 +300,8 @@ export default function DepartmentComponent() {
                         </div>
                         <div className="modal-body">
                             <form className="form-horizontal">
-                                <div> <input type="hidden" id="roleId" name="roleId" value={roleId} /></div>
-                                <div className="form-group">
-                                    <label className="control-label col-sm-4" htmlFor="roleName" >Role Name:</label>
-                                    <div className="col-sm-8">
-                                        {roleName}
-                                    </div>
-                                </div>
-
+ 
+           
                                 <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="deptName" >Department Name:</label>

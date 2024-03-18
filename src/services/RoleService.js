@@ -62,9 +62,9 @@ class RoleService{
 
      //Get all roles present in designation table 
      //second used in adding new employee
-     getRolesInDesignation(){
+     getRoles(){
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/roles/designation/roles")
+            return axios.get("http://localhost:9091/roles")
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

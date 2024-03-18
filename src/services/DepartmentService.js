@@ -6,15 +6,6 @@ const BASE_URL = "http://localhost:9091/department";
 
 class DepartmentService {
 
-    /*getDpartmentDetails() {
-        if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL)
-        } else {
-            alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
-        }
-    }*/
-
     saveDepartmentDetails(department) {
         if (null != Cookies.get('empId')) {
             return axios.post(BASE_URL, department)
@@ -50,7 +41,7 @@ class DepartmentService {
     //at page load call all the departments load all departments
     getDepartmentDetailsByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/department/search?statusCd=A&page=0&size=1200&sort=role.role_name asc")
+            return axios.get("http://localhost:9091/department/search?statusCd=A&page=0&size=1200&sort=dept.dept_name asc")
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
@@ -90,17 +81,7 @@ class DepartmentService {
        
     }
 
-    //Get all roles present in department table from designation for KPP
-    getDepartmentByRoleIdFromDesign(roleId) {
-        if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL + '/desig/' + roleId)  
-        } else {
-            alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
-        }
-        
-    }
-
+   
      //Upload department
      uploadExcelDept(formData) {
         if (null != Cookies.get('empId')) {

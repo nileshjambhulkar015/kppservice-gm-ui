@@ -29,7 +29,7 @@ export default function AddNewEmployeeComponent() {
 
 
     const [reportingEmpId, setReportingEmpId] = useState('');
-   
+
     const [empFirstName, setEmpFirstName] = useState('');
     const [empMiddleName, setEmpMiddleName] = useState('');
     const [empLastName, setEmpLastName] = useState('');
@@ -44,13 +44,13 @@ export default function AddNewEmployeeComponent() {
     const [empBloodgroup, setEmpBloodgroup] = useState('A+');
     const [remark, setRemark] = useState('');
 
-    
+
     const [regions, setRegions] = useState([])
     const [sites, setSites] = useState([])
     const [companys, setCompanys] = useState([])
 
     const [employees, setEmployees] = useState([])
-    
+
     const [roles, setRoles] = useState([])
     const [reportingRoles, setReportingRoles] = useState([])
 
@@ -73,22 +73,22 @@ export default function AddNewEmployeeComponent() {
         setEmpBloodgroup(event);
     };
 
-    
+
 
     const saveEmployeeDetails = (e) => {
         e.preventDefault()
         let statusCd = 'A';
-      //  let regionId = '1';
+        //  let regionId = '1';
         //let siteId = '1';
         let employeeId = Cookies.get('empEId');
-       // console.log("login user id : ", createdUserId)
-        let employee = { empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId,companyId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd, employeeId };
+        // console.log("login user id : ", createdUserId)
+        let employee = { empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, companyId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd, employeeId };
         console.log(employee)
 
         EmployeeService.saveEmployeeDetails(employee).then(res => {
-           alert("Added New Employee Information");
-           navigate(`/employee`, { replace: true });
-          
+            alert("Added New Employee Information");
+            navigate(`/employee`, { replace: true });
+
         }
         ).catch((err) => {
             alert(err.response.data.details)
@@ -96,7 +96,7 @@ export default function AddNewEmployeeComponent() {
         // window.location.reload(); 
     }
 
-    
+
     const searchEmployeeFirstName = (e) => {
         EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
             setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
@@ -110,42 +110,62 @@ export default function AddNewEmployeeComponent() {
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
         });
-///
-EmployeeService.getRegionsFromCompany().then((res) => {
-    setRegions(res.data);
-    console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
-    setRegionId(res.data?.[0].regionId)
-   let regionId = res.data?.[0].regionId;
-    EmployeeService.getSitesByRegionIdFromCompany(regionId).then((res1) => {
-        setSites(res1.data);
-        setSiteId(res1.data?.[0].siteId)
-        let siteId = res1.data?.[0].siteId;
-        EmployeeService.getCompanyFromComany({ regionId, siteId }).then((res2) => {
-            setCompanys(res2.data);
-            setCompanyId(res2.data?.[0]?.companyId)
-           
-        });
-    });
-}); 
-////
-        RoleService.getRolesInDesignation().then((res) => {
-            setRoles(res.data);
-            console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
-            setRoleId(res.data?.[0].roleId)
-           let roleId = res.data?.[0].roleId;
-            DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res1) => {
-                setDepartments(res1.data);
-                setDeptId(res1.data?.[0].deptId)
-                let deptId = res1.data?.[0].deptId;
-                 DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
-                    setDesignations(res2.data);
-                    setDesigId(res2.data?.[0]?.desigId)
-                   
+        ///
+        EmployeeService.getRegionsFromCompany().then((res) => {
+            setRegions(res.data);
+            console.log("res.data?.[0].roleId = ", res.data?.[0].roleId)
+            setRegionId(res.data?.[0].regionId)
+            let regionId = res.data?.[0].regionId;
+            EmployeeService.getSitesByRegionIdFromCompany(regionId).then((res1) => {
+                setSites(res1.data);
+                setSiteId(res1.data?.[0].siteId)
+                let siteId = res1.data?.[0].siteId;
+                EmployeeService.getCompanyFromComany({ regionId, siteId }).then((res2) => {
+                    setCompanys(res2.data);
+                    setCompanyId(res2.data?.[0]?.companyId)
+
                 });
             });
-        }); 
+        });
+        ////
+        /* RoleService.getRolesInDesignation().then((res) => {
+             setRoles(res.data);
+             console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
+             setRoleId(res.data?.[0].roleId)
+            let roleId = res.data?.[0].roleId;
+             DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res1) => {
+                 setDepartments(res1.data);
+                 setDeptId(res1.data?.[0].deptId)
+                 let deptId = res1.data?.[0].deptId;
+                  DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+                     setDesignations(res2.data);
+                     setDesigId(res2.data?.[0]?.desigId)
+                    
+                 });
+             });
+         }); */
 
-        RoleService.getRolesInDesignation().then((res) => {
+        // for employee
+        RoleService.getRoles().then((res) => {
+            setRoles(res.data);
+            setRoleId(res.data?.[0].roleId)
+        });
+
+        DesignationService.getAllDepartmentFromDesig(roleId).then((res1) => {
+            setDepartments(res1.data);
+            setDeptId(res1.data?.[0].deptId)
+            let deptId = res1.data?.[0].deptId;
+            DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
+                setDesignations(res2.data);
+                setDesigId(res2.data?.[0]?.desigId)
+
+            });
+        });
+
+
+        // for empoyee reporting to    
+
+        /*RoleService.getRolesInDesignation().then((res) => {
             setReportingRoles(res.data);
             console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
             setReportingEmpRoleId(res.data?.[0].roleId)
@@ -166,14 +186,36 @@ EmployeeService.getRegionsFromCompany().then((res) => {
                    
                 });
             });
-        }); 
+        }); */
+
+        RoleService.getRoles().then((res) => {
+            setReportingRoles(res.data);
+            setReportingEmpRoleId(res.data?.[0].roleId)
+        });
+
+        DesignationService.getAllDepartmentFromDesig().then((res1) => {
+            setReportingDepartments(res1.data);
+            setReportingEmpDeptId(res1.data?.[0].deptId)
+            let deptId = res1.data?.[0].deptId;
+            DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
+                setReportingDesignations(res2.data);
+                setReportingEmpDesigId(res2.data?.[0]?.desigId)
+                EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
+                    setReportingEmpId(res3.data?.[0]?.empId)
+                    setReportingEmpName(res3.data);
+                    console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
+                });
+
+            });
+        });
+
 
 
     }, []);
 
     // handle region id change
     //for role , department and designation
-    const handleRegionIdChange=(value)=>{
+    const handleRegionIdChange = (value) => {
         setRegionId(value)
         let regionId = value;
         EmployeeService.getSitesByRegionIdFromCompany(regionId).then((res1) => {
@@ -183,32 +225,32 @@ EmployeeService.getRegionsFromCompany().then((res) => {
             EmployeeService.getCompanyFromComany({ regionId, siteId }).then((res2) => {
                 setCompanys(res2.data);
                 setCompanyId(res2.data?.[0]?.companyId)
-               
+
             });
         });
-}
+    }
 
 
-const handleCompanyIdChange=(value)=>{
-    setCompanyId(value)       
-}
+    const handleCompanyIdChange = (value) => {
+        setCompanyId(value)
+    }
 
-const handleSiteIdChange=(value)=>{
-    console.log("Site id =", value)
-    setSiteId(value)
-    let siteId = value;
-    EmployeeService.getCompanyFromComany({ regionId, siteId }).then((res2) => {
-        setCompanys(res2.data);
-        setCompanyId(res2.data?.[0]?.companyId)
-       
-    });
-   
-}
+    const handleSiteIdChange = (value) => {
+        console.log("Site id =", value)
+        setSiteId(value)
+        let siteId = value;
+        EmployeeService.getCompanyFromComany({ regionId, siteId }).then((res2) => {
+            setCompanys(res2.data);
+            setCompanyId(res2.data?.[0]?.companyId)
+
+        });
+
+    }
 
     //for role , department and designation
-    const handleRoleIdChange=(value)=>{
+    const handleRoleIdChange = (value) => {
         setRoleId(value)
-        let roleId = value;
+        /*let roleId = value;
          DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
             setDepartments(res1.data);
             setDeptId(res1.data?.[0].deptId)
@@ -218,30 +260,32 @@ const handleSiteIdChange=(value)=>{
                 setDesigId(res2.data?.[0]?.desigId)
                 
             });
-    });}
+    });
+*/
+    }
 
-    const handleDesigIdChange=(value)=>{
-        setDesigId(value)       
+    const handleDesigIdChange = (value) => {
+        setDesigId(value)
     }
 
 
 
-    const handleDeptIdChange=(value)=>{
+    const handleDeptIdChange = (value) => {
         console.log("Dept id =", value)
         setDeptId(value)
         let deptId = value;
-        DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+        DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
             setDesignations(res2.data);
             setDesigId(res2.data?.[0]?.desigId)
+
         });
-       
     }
 
     //for reporting role, department and designation
 
-    const handleReportingRoleIdChange=(value)=>{
+    const handleReportingRoleIdChange = (value) => {
         setReportingEmpRoleId(value)
-        let roleId = value;
+       /* let roleId = value;
          DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
             setReportingDepartments(res1.data);
             setReportingEmpDeptId(res1.data?.[0].deptId)
@@ -257,98 +301,116 @@ const handleSiteIdChange=(value)=>{
                    console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
                });
             });
-    });}
+    });
+*/}
 
-    const handleReportingDesigIdChange=(value)=>{
-        setReportingEmpDesigId(value) 
-        
+    const handleReportingDesigIdChange = (value) => {
+        setReportingEmpDesigId(value)
+
         let reportingEmpDesigId = value
+
         EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
-           setReportingEmpId(res3.data?.[0]?.empId)
-           setReportingEmpName(res3.data);
-           console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
-       });
+            setReportingEmpId(res3.data?.[0]?.empId)
+            setReportingEmpName(res3.data);
+            console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
+        });
+
+        /* EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
+            setReportingEmpId(res3.data?.[0]?.empId)
+            setReportingEmpName(res3.data);
+            console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
+        });*/
     }
 
-    const handleReportingDeptIdChange=(value)=>{
+    const handleReportingDeptIdChange = (value) => {
         console.log("Dept id =", value)
         setReportingEmpDeptId(value)
         let deptId = value;
-        DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+        /* DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+             setReportingDesignations(res2.data);
+             setReportingEmpDesigId(res2.data?.[0]?.desigId)
+         });*/
+        DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
             setReportingDesignations(res2.data);
             setReportingEmpDesigId(res2.data?.[0]?.desigId)
+            EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
+                setReportingEmpId(res3.data?.[0]?.empId)
+                setReportingEmpName(res3.data);
+                console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
+            });
+
         });
-       
+
     }
 
-     const handleReportingEmpIdChange=(value)=>{
+    const handleReportingEmpIdChange = (value) => {
         setReportingEmpId(value)
-        setDesigId(value)       
+        setDesigId(value)
     }
-    
+
     return (
         <div className="row">
             <h3 className="text-center">Add New Employee</h3>
             <form className="form-horizontal">
 
-            <div className="form-group">
-            <div className="row">
-                <label className="control-label col-sm-2" htmlFor="regionName">Region Name:</label>
-                <div className="col-sm-2">
                 <div className="form-group">
-                <select className="form-control" id="regionId" onChange={(e) => handleRegionIdChange(e.target.value)}>
-                   
-                    {
-                        regions.map(
-                            region =>
-                                <option key={region.regionId} value={region.regionId}>{region.regionName}</option>
-                        )
-                    };
+                    <div className="row">
+                        <label className="control-label col-sm-2" htmlFor="regionName">Region Name:</label>
+                        <div className="col-sm-2">
+                            <div className="form-group">
+                                <select className="form-control" id="regionId" onChange={(e) => handleRegionIdChange(e.target.value)}>
 
-                </select>
-            </div>
+                                    {
+                                        regions.map(
+                                            region =>
+                                                <option key={region.regionId} value={region.regionId}>{region.regionName}</option>
+                                        )
+                                    };
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <label className="control-label col-sm-1" htmlFor="siteName">Site Name:</label>
+                        <div className="col-sm-2">
+                            <div className="form-group">
+                                <select className="form-control" id="siteId" onChange={(e) => handleSiteIdChange(e.target.value)}>
+
+                                    {
+                                        sites.map(
+                                            site =>
+                                                <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
+                                        )
+                                    };
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <label className="control-label col-sm-1" htmlFor="companyName">Company Name:</label>
+                        <div className="col-sm-2">
+                            <div className="form-group">
+                                <select className="form-control" id="roleId" onChange={(e) => handleCompanyIdChange(e.target.value)}>
+
+                                    {
+                                        companys.map(
+                                            company =>
+                                                <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
+                                        )
+                                    };
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <label className="control-label col-sm-1" htmlFor="siteName">Site Name:</label>
-                <div className="col-sm-2">
-                <div className="form-group">
-                <select className="form-control" id="siteId" onChange={(e) => handleSiteIdChange(e.target.value)}>
-                   
-                    {
-                        sites.map(
-                            site =>
-                                <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
-                        )
-                    };
-
-                </select>
-            </div> 
-                </div>
-
-                <label className="control-label col-sm-1" htmlFor="companyName">Company Name:</label>
-                <div className="col-sm-2">
-                <div className="form-group">
-                <select className="form-control" id="roleId" onChange={(e) => handleCompanyIdChange(e.target.value)}>
-                   
-                    {
-                        companys.map(
-                            company =>
-                                <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
-                        )
-                    };
-
-                </select>
-            </div>
-                </div>
-            </div>
-        </div>
 
                 <div className="form-group">
                     <label className="control-label col-sm-2" htmlFor="roleId">Select Role Name:</label>
                     <div className="col-sm-2">
                         <div className="form-group">
                             <select className="form-control" id="roleId" onChange={(e) => handleRoleIdChange(e.target.value)}>
-                               
+
                                 {
                                     roles.map(
                                         role =>
@@ -366,7 +428,7 @@ const handleSiteIdChange=(value)=>{
                     <div className="col-sm-2">
                         <div className="form-group">
                             <select className="form-control" id="deptId" onChange={(e) => handleDeptIdChange(e.target.value)}>
-                               
+
                                 {
                                     departments.map(
                                         department =>
@@ -384,7 +446,7 @@ const handleSiteIdChange=(value)=>{
                     <div className="col-sm-2">
                         <div className="form-group">
                             <select className="form-control" id="desigId" onChange={(e) => handleDesigIdChange(e.target.value)}>
-                               
+
                                 {
                                     designations.map(
                                         designation =>
@@ -504,7 +566,7 @@ const handleSiteIdChange=(value)=>{
                     <div className="col-sm-2">
                         <div className="form-group">
                             <select className="form-control" id="reportingEmpRoleId" onChange={(e) => handleReportingRoleIdChange(e.target.value)}>
-                               
+
                                 {
                                     reportingRoles.map(
                                         role =>
@@ -523,7 +585,7 @@ const handleSiteIdChange=(value)=>{
                     <div className="col-sm-2">
                         <div className="form-group">
                             <select className="form-control" id="reportingEmpDeptId" onChange={(e) => handleReportingDeptIdChange(e.target.value)}>
-                               
+
                                 {
                                     reportingDepartments.map(
                                         department =>
@@ -535,13 +597,13 @@ const handleSiteIdChange=(value)=>{
                         </div>
                     </div>
                 </div>
-                 
+
                 <div className="form-group">
                     <label className="control-label col-sm-2" htmlFor="desigId">Select Designation Name:</label>
                     <div className="col-sm-2">
                         <div className="form-group">
                             <select className="form-control" id="reportingEmpDesigId" onChange={(e) => handleReportingDesigIdChange(e.target.value)}>
-                               
+
                                 {
                                     reportingDesignations.map(
                                         designation =>
@@ -582,16 +644,16 @@ const handleSiteIdChange=(value)=>{
                     </div>
                 </div>
 
-               
 
-<div className="form-group">
-<div className="row">
-<button type="submit" className="btn btn-success col-sm-offset-6" onClick={(e) => saveEmployeeDetails(e)}> Submit</button>
-<button type="submit" className="btn btn-info col-sm-offset-1"  onClick={() => navigate(`/employee`, { replace: true })} > Back</button>
-</div>
-</div>
+
+                <div className="form-group">
+                    <div className="row">
+                        <button type="submit" className="btn btn-success col-sm-offset-6" onClick={(e) => saveEmployeeDetails(e)}> Submit</button>
+                        <button type="submit" className="btn btn-info col-sm-offset-1" onClick={() => navigate(`/employee`, { replace: true })} > Back</button>
+                    </div>
+                </div>
             </form>
-            
+
         </div>
     );
 }
