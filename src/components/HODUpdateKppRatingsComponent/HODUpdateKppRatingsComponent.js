@@ -215,6 +215,7 @@ const HODUpdateKppRatingsComponent = () => {
                                                         <input type="number" className="form-control"
                                                             name={`${index}.gmOverallAchieve`}
                                                             min={0}
+                                                            max={5}
                                                             defaultValue={values?.fields?.[index]?.gmOverallAchieve}
 
                                                             onKeyDown={event => handleTodoChange(event, index, kppResponse.kppId, kppResponse.kppOverallWeightage, values?.fields?.[index]?.hodOverallTaskComp, kppResponse.kppRating1)}
@@ -285,9 +286,10 @@ const HODUpdateKppRatingsComponent = () => {
                                     <div className="col-sm-8"></div>
                                     <div className="col-sm-4">
                                     <button type="submit" className="btn btn-success"> Submit</button>
-                                        
+                                    
+                                    <a href={`http://localhost:9091/report/in-progress-hod-kpp-status?empId=${Cookies.get('hodEmpIdForKppRatings')}`}>
                                     <button type="button" className="btn btn-success col-sm-offset-1 " disabled={kppMasterResponses?.empKppStatus === "Pending"}   
-                                    onClick={() => { handleExcel()}}> Download</button>
+                                   > Download</button></a>
 
                                     <button type="submit" className="btn col-sm-offset-1 btn-success"   onClick={() => completeEmpKpp(empId)} >Finish</button>
 

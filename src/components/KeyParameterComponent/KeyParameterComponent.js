@@ -110,9 +110,15 @@ export default function KeyParameterComponent() {
            
         });
 
-        RoleService.getRoles().then((res) => {
+     /*   RoleService.getRoles().then((res) => {
             setRoles(res.data);            
             setRoleId(res.data?.[0].roleId)          
+        });*/
+
+           // for employee
+           RoleService.ddRolesExceptGM().then((res) => {
+            setRoles(res.data);
+            setRoleId(res.data?.[0].roleId)
         });
 
         DesignationService.getAllDepartmentFromDesig().then((res1) => {

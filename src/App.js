@@ -20,6 +20,7 @@ import RegionComponent from "./components/MasterComponent/RegionComponent/Region
 import UoMComponent from "./components/MasterComponent/UoMComponent/UoMComponent";
 import SiteComponent from "./components/MasterComponent/SiteComponent/SiteComponent";
 import CompanyMasterComponent from './components/MasterComponent/CompanyMasterComponent/CompanyMasterComponent'
+import EmployeeTypeComponent from "./components/MasterComponent/EmployeeTypeComponent/EmployeeTypeComponent";
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
             <li><Link to="/department">Department Master</Link></li>
             <li><Link to="/designation">Designation Master</Link></li>
             <li><Link to="/uomMaster">UoM Master</Link></li>
+            <li><Link to="/empTypeMaster">Employee Type Master</Link></li>
             <li><Link to="/regionMaster">Region Master</Link></li>
             <li><Link to="/siteMaster">Sites Master</Link></li>
             <li><Link to="/companyMaster">Company Master</Link></li>
@@ -86,6 +88,7 @@ function App() {
         <Route exact path="/siteMaster" element={<SiteComponent />}></Route>
         <Route exact path="/companyMaster" element={<CompanyMasterComponent />}></Route>
         <Route exact path="/uomMaster" element={<UoMComponent />}></Route>
+        <Route exact path="/empTypeMaster" element={<EmployeeTypeComponent />}></Route>
         <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
         <Route exact path="/employee" element={<EmployeeComponent />}></Route>
         <Route exact path="/showEmployeeForKpp" element={<ShowEmployeeForKppComponent / >}></Route>

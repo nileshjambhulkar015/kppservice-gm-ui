@@ -42,7 +42,7 @@ const EmplyeeUpdateKppRatingsComponent = () => {
     
 
         const sumOfGmAchivedWeight = (empKpps) => {
-            const sum = empKpps.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue.gmAchivedWeight), 0);
+            const sum = empKpps.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue.gmAchivedWeight), 0).toFixed(1);
             setTotalAchivedWeight(sum)
             return sum;
         }

@@ -70,6 +70,17 @@ class RoleService{
             window.location.replace("http://localhost:3008/");
         }        
     }  
+
+        //Get all roles present in department table for designation form
+        ddRolesExceptGM() {
+            if (null != Cookies.get('empId')) {
+                return axios.get("http://localhost:9091/roles/dd-role-except-gm-role")
+            } else {
+                alert("You need to login first")
+                window.location.replace("http://localhost:3008/");
+            }
+    
+        }
     
     
 }

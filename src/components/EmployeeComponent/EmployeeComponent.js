@@ -63,8 +63,6 @@ export default function EmployeeComponent() {
     
 
     useEffect(() => {
-
-       
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content);
         });
