@@ -1,12 +1,17 @@
-import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import DepartmentService from "../../services/DepartmentService";
 import DesignationService from "../../services/DesignationService";
 import EmployeeService from "../../services/EmployeeService";
+import EmployeeTypeService from "../../services/MasterService/EmployeeTypeService";
+import RegionService from "../../services/RegionService";
 import RoleService from "../../services/RoleService";
+import SiteService from "../../services/MasterService/SiteService";
+import CompanyMasterService from "../../services/MasterService/CompanyMasterService";
 export default function EmployeeComponent() {
     const navigate = useNavigate();
+
+
+    const [companyId, setCompanyId] = useState('');
     const [empId, setEmpId] = useState('');
     const [empEId, setEmpEId] = useState('');
     const [roleId, setRoleId] = useState('');
@@ -15,9 +20,6 @@ export default function EmployeeComponent() {
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
-    const [reportingEmpRoleId, setReportingEmpRoleId] = useState('');
-    const [reportingEmpDeptId, setReportingEmpDeptId] = useState('');
-    const [reportingEmpDesigId, setReportingEmpDesigId] = useState('');
     const [reportingEmpId, setReportingEmpId] = useState('');
     const [regionId, setRegionId] = useState('');
     const [regionName, setRegionName] = useState('');
@@ -36,41 +38,138 @@ export default function EmployeeComponent() {
     const [empGender, setEmpGender] = useState('Male');
     const [empBloodgroup, setEmpBloodgroup] = useState('A+');
     const [remark, setRemark] = useState('');
-    
-   
+    const [empTypeId, setEmpTypeId] = useState('');
 
+
+    const [compnays, setCompanys] = useState([])
+    const [regions, setRegions] = useState([])
+    const [sites, setSites] = useState([])
     const [employees, setEmployees] = useState([])
     const [roles, setRoles] = useState([])
-    const [reportingRoles, setReportingRoles] = useState([])
+
     const [departments, setDepartments] = useState([])
-    const [reportingDepartments, setReportingDepartments] = useState([])
+
     const [designations, setDesignations] = useState([])
-    const [reportingDesignations, setReportingDesignations] = useState([])
-    const [reportingEmpName, setReportingEmpName] = useState([])
 
     const [empFirstNameSearch, setEmpFirstNameSearch] = useState('');
+    const [empTypes, setEmpTypes] = useState([])
+    //for gender selection
+    const onGenderChangeHandler = (event) => {
+        setEmpGender(event);
+    };
 
-        //for gender selection
-        const onGenderChangeHandler = (event) => {
-            setEmpGender(event);
-        };
-    
-        //for blood group selection
-        const onBloodGroupChangeHandler = (event) => {
-            setEmpBloodgroup(event);
-        };
+    //for blood group selection
+    const onBloodGroupChangeHandler = (event) => {
+        setEmpBloodgroup(event);
+    };
 
-    
+
 
     useEffect(() => {
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content);
         });
-}, []);;
+
+        RoleService.getRoles().then((res) => {
+            setRoles(res.data);
+            setRoleId(res.data?.[0].roleId)
+        });
+
+        EmployeeTypeService.getDDEmployeeType().then((res) => {
+            setEmpTypes(res.data.responseData);
+            setEmpTypeId(res.data.responseData?.[0].empTypeId)
+            console.log("empTypeId", res.data.responseData?.[0].empTypeId)
+        });
+
+        DesignationService.getAllDepartmentDetails().then((res) => {
+            setDepartments(res.data);
+            setDeptId(res.data?.[0].regionId)
+        });
+
+        RegionService.ddRegions().then((res) => {
+            setRegions(res.data);
+            setRegionId(res.data?.[0].regionId)
+        });
+
+        SiteService.getAllSites().then((res) => {
+            setSites(res.data);
+            setSiteId(res.data?.[0].siteId)
+        });
+
+        CompanyMasterService.getAllCompanyies().then((res) => {
+            setCompanys(res.data);
+            setCompanyId(res.data?.[0].companyId)
+        });
+
+
+    }, []);;
+
+    
+    //for role , department and designation
+    const handleRoleIdChange = (value) => {
+        if(value=="Select Role"){
+            value=null;
+        }
+        setRoleId(value)
+    }
+
+    //Employee advance search
+
+    const handleEmployeeTypeChange = (value) => {
+        if(value=="Select Employee Type"){
+            value=null;
+        }
+        setEmpTypeId(value)
+    }
+
+    const handleDepartmentChange = (value) => {
+        if(value=="Select Department"){
+            value=null;
+        }
+        setDeptId(value)
+    }
+
+    //for role change
+    const onRegionChangeHandler = (value) => {
+        if(value=="Select Region"){
+            value=null;
+        }
+        setRegionId(value);
+    };
+
+      //for site change
+      const onSiteChangeHandler = (value) => {
+        if(value=="Select Site"){
+            value=null;
+        }
+        setSiteId(value);
+    };
+
+         //for Company change
+         const onCompanyChangeHandler = (value) => {
+            if(value=="Select Company"){
+                value=null;
+            }
+            setCompanyId(value);
+        };
+
+    // Advance search employee
+    const searchEmployeeDetails = (e) => {
+
+        e.preventDefault()
+        let advEmployeeSearch = { roleId, deptId, regionId,siteId,companyId,empTypeId };
+      
+        EmployeeService.advanceSearchEmployee(advEmployeeSearch).then(res => {
+            setEmployees(res.data.responseData.content);
+            console.log("Site added");
+        }
+        );
+    }
+
 
     const searchEmployeeFirstName = (e) => {
         EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
-            setEmployees(res.data.responseData.content?.filter((item)=>item.roleId!==1));
+            setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
             console.log(res.data)
         });
     }
@@ -141,7 +240,7 @@ export default function EmployeeComponent() {
             setEmpGender(employee.empGender)
             setEmpBloodgroup(employee.empBloodgroup)
             setRemark(employee.remark)
-          
+
             let statusCd = 'I';
 
             let employeeData = { empId, empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
@@ -173,8 +272,9 @@ export default function EmployeeComponent() {
         );
     }
 
-     //upload excel data for department
-     const handleSubmit = (event) => {
+
+    //upload excel data for department
+    const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         fetch('http://localhost:9091/employee/upload-employee', {
@@ -191,6 +291,8 @@ export default function EmployeeComponent() {
             });
     };
 
+
+
     return (
 
 
@@ -199,28 +301,28 @@ export default function EmployeeComponent() {
             <div className="col-md-1"></div>
             <div className="col-md-10">
                 <div className="row">
-                    <div className="col-sm-6">      
-                    <div className="form-group">
-                                <form className="form-horizontal">
-                                    <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter First Name:</label>
-                                    <div className="col-sm-4">
-                                        <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter First Name"  value={empFirstNameSearch} onChange={(e) => setEmpFirstNameSearch(e.target.value)}/>
-                                    </div>
-                                </form>
-                                <button type="submit" className="btn btn-primary" onClick={() => searchEmployeeFirstName(empFirstNameSearch)}>Search</button>
-                            </div>
+                    <div className="col-sm-6">
+                        <div className="form-group">
+                            <form className="form-horizontal">
+                                <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter First Name:</label>
+                                <div className="col-sm-4">
+                                    <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter First Name" value={empFirstNameSearch} onChange={(e) => setEmpFirstNameSearch(e.target.value)} />
+                                </div>
+                            </form>
+                            <button type="submit" className="btn btn-primary" onClick={() => searchEmployeeFirstName(empFirstNameSearch)}>Search</button>
+                        </div>
                     </div>
                     <div className="col-sm-5">
-                    <button type="button" className="btn btn-primary" onClick={() => navigate(`/newEmployee`, { replace: true })} >Add New Employee</button>
-                    <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#uploadExcelEmployee">Upload Excel</button>
-                    <button type="button" className="btn btn-primary col-sm-offset-1" >Advance Search</button>
+                        <button type="button" className="btn btn-primary" onClick={() => navigate(`/newEmployee`, { replace: true })} >Add New Employee</button>
+                        <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#uploadExcelEmployee">Upload Excel</button>
+                        <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#advanceSearchEmployee">Advance Search</button>
                     </div>
                 </div>
                 <div className="row">
                     <table className="table table-bordered">
                         <thead>
                             <tr>
-                                <th  className="text-center">Sr No</th>
+                                <th className="text-center">Sr No</th>
                                 <th className="text-center">Employee Name</th>
                                 <th className="text-center">Employee Id</th>
 
@@ -228,7 +330,7 @@ export default function EmployeeComponent() {
                                 <th className="text-center">Desig   nation Name</th>
                                 <th className="text-center">Role Name</th>
                                 <th className="text-center">Mobile No</th>
-                                
+
                                 <th className="text-center">Action</th>
                             </tr>
                         </thead>
@@ -245,7 +347,7 @@ export default function EmployeeComponent() {
                                             <td className="text-center">{employee.desigName}</td>
                                             <td className="text-center">{employee.roleName}</td>
                                             <td className="text-center">{employee.empMobileNo}</td>
-                                    
+
                                             <td className="col-sm-3 text-center"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateEmployee" onClick={() => showEmployeeById(employee.empId)}>Update</button>
                                                 <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteEmployeeById(employee.empId)}>Delete</button>
                                                 <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showEmployee" onClick={() => showEmployeeById(employee.empId)}>View</button></td>
@@ -259,35 +361,172 @@ export default function EmployeeComponent() {
             </div>
             <div className="col-md-1"></div>
 
-             {/* Modal for upload excel of employee details */}
-             <div className="modal fade" id="uploadExcelEmployee" role="dialog">
-             <form className="form-horizontal" onSubmit={handleSubmit} encType="multipart/form-data">
-                 <div className="modal-dialog">
-                     <div className="modal-content">
-                         <div className="modal-header">
-                             <button type="button" className="close" data-dismiss="modal">&times;</button>
-                             <h4 className="modal-title">Upload Employee</h4>
-                         </div>
-                         <div className="modal-body">
-                             <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
-                             <div className="form-group">
-                                 <label className="control-label col-sm-4" htmlFor="employee">Select file:</label>
-                                 <div className="col-sm-8">
-                                     <input type="file" id="file" name="file" />
-                                 </div>
-                             </div>
+            {/* Modal for upload excel of employee details */}
+            <div className="modal fade" id="uploadExcelEmployee" role="dialog">
+                <form className="form-horizontal" onSubmit={handleSubmit} encType="multipart/form-data">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                <h4 className="modal-title">Upload Employee</h4>
+                            </div>
+                            <div className="modal-body">
+                                <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
+                                <div className="form-group">
+                                    <label className="control-label col-sm-4" htmlFor="employee">Select file:</label>
+                                    <div className="col-sm-8">
+                                        <input type="file" id="file" name="file" />
+                                    </div>
+                                </div>
 
 
-                         </div>
-                         <div className="modal-footer">
-                             <input type="submit" id="file" name="file" value={"Upload"} className="btn btn-primary" />
-                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
-                         </div>
-                     </div>
+                            </div>
+                            <div className="modal-footer">
+                                <input type="submit" id="file" name="file" value={"Upload"} className="btn btn-primary" />
+                                <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
 
-                 </div>
-             </form>
-         </div>
+                    </div>
+                </form>
+            </div>
+
+
+            {/* Modal for Advance search for employee details */}
+            <div className="modal fade" id="advanceSearchEmployee" role="dialog">
+                <form className="form-horizontal" onSubmit={handleSubmit} encType="multipart/form-data">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                <h4 className="modal-title">Advance Search Employee</h4>
+                            </div>
+                            <div className="modal-body">
+
+                                <div className="form-group">
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Employee Type:</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                                <select className="form-control" id="empTypeId" onChange={(e) => handleEmployeeTypeChange(e.target.value)}>
+                                                <option>Select Employee Type</option>
+                                                
+                                                    {
+                                                     
+                                                        empTypes.map(
+                                                            empType =>
+                                                                <option key={empType.empTypeId} value={empType.empTypeId}>{empType.empTypeName}</option>
+                                                        )
+                                                    };
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Role :</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                                <select className="form-control" id="roleId" onChange={(e) => handleRoleIdChange(e.target.value)}>
+                                                <option>Select Role</option>    
+                                                {
+                                                        roles.map(
+                                                            role =>
+                                                                <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
+                                                        )
+                                                    };
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Department:</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                                <select className="form-control" id="deptId" onChange={(e) => handleDepartmentChange(e.target.value)}>
+                                                <option>Select Department</option>
+                                                    {
+                                                        departments.map(
+                                                            department =>
+                                                                <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
+                                                        )
+                                                    };
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Region:</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                                <select className="form-control" id="regionId" onChange={(e) => onRegionChangeHandler(e.target.value)}>
+                                                <option>Select Region</option>   
+                                                {
+                                                        regions.map(
+                                                            region =>
+                                                                <option key={region.regionId} value={region.regionId}>{region.regionName}</option>
+                                                        )
+                                                    };
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <label className="control-label col-sm-2" htmlFor="siteName">Site:</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                            <select className="form-control" id="regionId" onChange={(e) => onSiteChangeHandler(e.target.value)}>
+                                            <option>Select Site</option>
+                                            {
+                                                sites.map(
+                                                    site =>
+                                                        <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
+                                                )
+                                            };
+
+                                        </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="companyName">Company Name:</label>
+                                        <div className="col-sm-5">
+                                            <div className="form-group">
+                                            <select className="form-control" id="companyId" onChange={(e) => onCompanyChangeHandler(e.target.value)}>
+                                            <option>Select Company</option>
+                                            {
+                                                compnays.map(
+                                                    company =>
+                                                        <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
+                                                )
+                                            };
+
+                                        </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div className="modal-footer">
+                                
+                                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e) => searchEmployeeDetails(e)}>Search</button>
+                                <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
 
             {/* Update Employee Details */}
 

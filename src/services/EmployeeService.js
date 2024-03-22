@@ -113,6 +113,16 @@ class EmployeeService {
         }
     }
 
+      //advance search of employee
+      advanceSearchEmployee(advEmployeeSearch) {
+        if (null != Cookies.get('empId')) {
+            return axios.post("http://localhost:9091/employee/adv-search?page=0&size=200", advEmployeeSearch)
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }
+
+    }
      
 }
 

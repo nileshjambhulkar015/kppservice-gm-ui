@@ -16,6 +16,10 @@ class SiteService {
         }
 
     }
+
+
+  
+
     //http://localhost:9091/site/dd-search-sites?siteId=1
     //when click on view button of UI
     getSiteById(siteId) {
@@ -83,6 +87,15 @@ class SiteService {
             window.location.replace("http://localhost:3008/");
         }
         
+    }
+
+    getAllSites() {
+        if (null != Cookies.get('empId')) {
+            return axios.get("http://localhost:9091/site/dd-all-sites")
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }       
     }
 
 }

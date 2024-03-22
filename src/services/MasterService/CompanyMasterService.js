@@ -42,6 +42,15 @@ class CompanyMasterService {
         }
     }
 
+    getAllCompanyies() {
+        if (null != Cookies.get('empId')) {
+            return axios.get("http://localhost:9091/company-master/dd-all-company")
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }       
+    }
+
 }
 
 export default new CompanyMasterService()

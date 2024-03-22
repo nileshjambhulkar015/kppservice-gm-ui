@@ -17,7 +17,7 @@ export default function SiteComponent() {
 
     const [regions, setRegions] = useState([])
 
-   
+
 
     //loading all department and roles while page loading at first time
     useEffect(() => {
@@ -27,15 +27,15 @@ export default function SiteComponent() {
         });
 
         RegionService.ddRegions().then((res) => {
-            setRegions(res.data);            
-            setRegionId(res.data?.[0].regionId)          
+            setRegions(res.data);
+            setRegionId(res.data?.[0].regionId)
         });
     }, []);
 
-     //for role change
-     const onRegionChangeHandler = (value) => {
-        let regionId =value
-      
+    //for role change
+    const onRegionChangeHandler = (value) => {
+        let regionId = value
+
         setRegionId(regionId);
     };
 
@@ -63,7 +63,7 @@ export default function SiteComponent() {
         // window.location.reload(); 
     }
 
-  const showSiteById = (e) => {
+    const showSiteById = (e) => {
 
         SiteService.getSiteById(e).then(res => {
             let site = res.data;
@@ -86,7 +86,7 @@ export default function SiteComponent() {
             let remark = site.remark;
             let statusCd = 'I';
             let updateSite = { siteId, regionId, siteName, remark, statusCd };
-console.log("update site=", updateSite)
+            console.log("update site=", updateSite)
             SiteService.updateSiteDetails(updateSite).then(res => {
                 SiteService.getSiteDetailsByPaging().then((res) => {
                     setSites(res.data.responseData.content);
@@ -129,7 +129,7 @@ console.log("update site=", updateSite)
                                 <form className="form-horizontal" enctype="multipart/form-data">
                                     <label className="control-label col-sm-4" htmlFor="siteNameSearch"> Site Name:</label>
                                     <div className="col-sm-4">
-                                        <input type="text" className="form-control" id="siteNameSearch" placeholder="Enter Site Name"/>
+                                        <input type="text" className="form-control" id="siteNameSearch" placeholder="Enter Site Name" />
                                     </div>
                                 </form>
                                 <button type="submit" className="btn btn-primary">Search</button>
