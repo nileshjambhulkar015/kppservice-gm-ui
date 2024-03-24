@@ -72,33 +72,26 @@ export default function EmployeeComponent() {
 
         RoleService.getRoles().then((res) => {
             setRoles(res.data);
-           // setRoleId(res.data?.[0].roleId)
         });
 
         EmployeeTypeService.getDDEmployeeType().then((res) => {
             setEmpTypes(res.data.responseData);
-          //  setEmpTypeId(res.data.responseData?.[0].empTypeId)
-            console.log("empTypeId", res.data.responseData?.[0].empTypeId)
         });
 
         DesignationService.getAllDepartmentDetails().then((res) => {
             setDepartments(res.data);
-          //  setDeptId(res.data?.[0].regionId)
         });
 
         RegionService.ddRegions().then((res) => {
             setRegions(res.data);
-            //setRegionId(res.data?.[0].regionId)
         });
 
         SiteService.getAllSites().then((res) => {
             setSites(res.data);
-            //setSiteId(res.data?.[0].siteId)
         });
 
         CompanyMasterService.getAllCompanyies().then((res) => {
             setCompanys(res.data);
-            //setCompanyId(res.data?.[0].companyId)
         });
 
 

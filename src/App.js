@@ -51,8 +51,17 @@ function App() {
           <li><Link to="/keyparemeter">Key Indicator Master</Link></li>
           <li><Link to="/employee">Employee Master</Link></li>        
             <li><Link to="/showEmployeeForKpp">Assign Employee Kpp</Link></li>
+         
+
+            <li className="dropdown">
+            <a className="dropdown-toggle" data-toggle="dropdown" href="#">KPP Rating Master
+            <span className="caret"></span></a>
+            <ul className="dropdown-menu">           
             <li><Link to="/allHodKppStatus">HOD KPP</Link></li>
-            <li><Link to="/allEmployeeKppStatus">Employee KPP</Link></li>
+            <li><Link to="/allEmployeeKppStatus">Employee KPP</Link></li>        
+            </ul>
+          </li>
+
             <li className="dropdown">
             <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
             <span className="caret"></span></a>
