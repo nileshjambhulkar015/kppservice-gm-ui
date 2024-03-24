@@ -72,33 +72,33 @@ export default function EmployeeComponent() {
 
         RoleService.getRoles().then((res) => {
             setRoles(res.data);
-            setRoleId(res.data?.[0].roleId)
+           // setRoleId(res.data?.[0].roleId)
         });
 
         EmployeeTypeService.getDDEmployeeType().then((res) => {
             setEmpTypes(res.data.responseData);
-            setEmpTypeId(res.data.responseData?.[0].empTypeId)
+          //  setEmpTypeId(res.data.responseData?.[0].empTypeId)
             console.log("empTypeId", res.data.responseData?.[0].empTypeId)
         });
 
         DesignationService.getAllDepartmentDetails().then((res) => {
             setDepartments(res.data);
-            setDeptId(res.data?.[0].regionId)
+          //  setDeptId(res.data?.[0].regionId)
         });
 
         RegionService.ddRegions().then((res) => {
             setRegions(res.data);
-            setRegionId(res.data?.[0].regionId)
+            //setRegionId(res.data?.[0].regionId)
         });
 
         SiteService.getAllSites().then((res) => {
             setSites(res.data);
-            setSiteId(res.data?.[0].siteId)
+            //setSiteId(res.data?.[0].siteId)
         });
 
         CompanyMasterService.getAllCompanyies().then((res) => {
             setCompanys(res.data);
-            setCompanyId(res.data?.[0].companyId)
+            //setCompanyId(res.data?.[0].companyId)
         });
 
 
@@ -408,7 +408,7 @@ export default function EmployeeComponent() {
                                         <label className="control-label col-sm-3" htmlFor="regionName">Employee Type:</label>
                                         <div className="col-sm-3">
                                             <div className="form-group">
-                                                <select className="form-control" id="empTypeId" onChange={(e) => handleEmployeeTypeChange(e.target.value)}>
+                                                <select className="form-control" id="empTypeId" defaultValue={null} onChange={(e) => handleEmployeeTypeChange(e.target.value)}>
                                                 <option>Select Employee Type</option>
                                                 
                                                     {
@@ -428,7 +428,7 @@ export default function EmployeeComponent() {
                                         <label className="control-label col-sm-3" htmlFor="regionName">Role :</label>
                                         <div className="col-sm-3">
                                             <div className="form-group">
-                                                <select className="form-control" id="roleId" onChange={(e) => handleRoleIdChange(e.target.value)}>
+                                                <select className="form-control" id="roleId" defaultValue={null}  onChange={(e) => handleRoleIdChange(e.target.value)}>
                                                 <option>Select Role</option>    
                                                 {
                                                         roles.map(
@@ -445,7 +445,7 @@ export default function EmployeeComponent() {
                                         <label className="control-label col-sm-3" htmlFor="regionName">Department:</label>
                                         <div className="col-sm-3">
                                             <div className="form-group">
-                                                <select className="form-control" id="deptId" onChange={(e) => handleDepartmentChange(e.target.value)}>
+                                                <select className="form-control" id="deptId" defaultValue={null} onChange={(e) => handleDepartmentChange(e.target.value)}>
                                                 <option>Select Department</option>
                                                     {
                                                         departments.map(
@@ -464,7 +464,7 @@ export default function EmployeeComponent() {
                                         <label className="control-label col-sm-3" htmlFor="regionName">Region:</label>
                                         <div className="col-sm-3">
                                             <div className="form-group">
-                                                <select className="form-control" id="regionId" onChange={(e) => onRegionChangeHandler(e.target.value)}>
+                                                <select className="form-control" id="regionId" defaultValue={null} onChange={(e) => onRegionChangeHandler(e.target.value)}>
                                                 <option>Select Region</option>   
                                                 {
                                                         regions.map(
@@ -480,7 +480,7 @@ export default function EmployeeComponent() {
                                         <label className="control-label col-sm-2" htmlFor="siteName">Site:</label>
                                         <div className="col-sm-3">
                                             <div className="form-group">
-                                            <select className="form-control" id="regionId" onChange={(e) => onSiteChangeHandler(e.target.value)}>
+                                            <select className="form-control" id="regionId" defaultValue={null} onChange={(e) => onSiteChangeHandler(e.target.value)}>
                                             <option>Select Site</option>
                                             {
                                                 sites.map(
@@ -499,7 +499,7 @@ export default function EmployeeComponent() {
                                         <label className="control-label col-sm-3" htmlFor="companyName">Company Name:</label>
                                         <div className="col-sm-5">
                                             <div className="form-group">
-                                            <select className="form-control" id="companyId" onChange={(e) => onCompanyChangeHandler(e.target.value)}>
+                                            <select className="form-control" id="companyId" defaultValue={null} onChange={(e) => onCompanyChangeHandler(e.target.value)}>
                                             <option>Select Company</option>
                                             {
                                                 compnays.map(
