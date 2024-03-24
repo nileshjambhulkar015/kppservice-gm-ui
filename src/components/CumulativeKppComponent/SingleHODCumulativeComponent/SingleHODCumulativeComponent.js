@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import CumulativeService from "../../../services/CumulativeService";
 import Cookies from 'js-cookie';
-export default function SingleEmployeeCumulativeComponent() {
+export default function SingleHODCumulativeComponent() {
 
     const navigate = useNavigate();
 
@@ -12,18 +12,19 @@ export default function SingleEmployeeCumulativeComponent() {
     const [sumOfEmployeeRatings, setSumOfEmployeeRatings] = useState()
     const [sumOfHodRatings, setSumOfHodRatings] = useState()
     const [sumOfGMRatings, setSumOfGMRatings] = useState()
-    const [isSuccess, setIsSuccess] = useState(true)
+
     const [cummulativeRatings, setCummulativeRatings] = useState()
     const [avgCummulativeRatings, setAvgCummulativeRatings] = useState()
-
+    const [isSuccess, setIsSuccess] = useState(true)
     const [employees, setEmployees] = useState([])
 
+ 
     function clearDates(){
         document.getElementById("fromDate").value = "";
         document.getElementById("toDate").value = "";
     }
     const loadCumulativeData = ()=>{
-        CumulativeService.getSingleEmployeeKppReportDetailsByPaging().then((res) => {
+        CumulativeService.getSingleHODKppReportDetailsByPaging().then((res) => {
 
 
             if (res.data.success) {
@@ -46,14 +47,22 @@ export default function SingleEmployeeCumulativeComponent() {
             alert(err.response.data.details)
         });
 
+
     }
 
     useEffect(() => {
         loadCumulativeData();
     }, []);
 
+
+
+
+
+
+
+
     const getKPPDetailsByDate = (e) => {
-        CumulativeService.getSingleEmployeeKppReportByDates(fromDate, toDate).then((res) => {
+        CumulativeService.getSingleHODKppReportByDates(fromDate, toDate).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setSumOfEmployeeRatings(res.data.responseData.sumOfEmployeeRatings)
@@ -81,15 +90,15 @@ export default function SingleEmployeeCumulativeComponent() {
         return format.replace('YYYY', y).replace('MM', m).replace('DD', d)
     }
 
-    const navigateToViewEmployeeRating = () => {
+    const navigateToViewHODRating = () => {
       
-        Cookies.remove('viewSingleEmpIdForKppRatings');
-        navigate(`/viewEmployeeCumulativeKpp`, { replace: true })
+        Cookies.remove('viewSingleHODIdForKppRatings');
+        navigate(`/viewHODCumulativeKpp`, { replace: true })
     }
 
     return (
         <div className="row">
-            <h3 className="text-center">View Emplyee KPP Report</h3>
+            <h3 className="text-center">View HOD KPP Report</h3>
             <div className="form-group">
                 <form className="form-horizontal" enctype="multipart/form-data">
                     <label className="control-label col-sm-1" htmlFor="deptNameSearch"> From Date:</label>
@@ -100,16 +109,15 @@ export default function SingleEmployeeCumulativeComponent() {
 
                     <label className="control-label col-sm-1" htmlFor="deptNameSearch"> To Date:</label>
                     <div className="col-sm-2">
-                        <input type="date" className="form-control" id="toDate" defaultValue={toDate} name="toDate" onChange={(e) => setToDate(e.target.value)} />
+                        <input type="date" id="toDate" className="form-control" defaultValue={toDate} name="toDate" onChange={(e) => setToDate(e.target.value)} />
                     </div>
                 </form>
                 <button type="submit" className="btn btn-primary" onClick={(e) => getKPPDetailsByDate(fromDate, toDate)}>Search</button>
-                
                 <button type="submit" className="btn btn-primary col-sm-offset-1" onClick={(e) =>{
                     loadCumulativeData();
                     clearDates();   
                        } }>Clear</button>
-                <button type="submit" className="col-sm-offset-1 btn btn-primary" onClick={(e) => navigateToViewEmployeeRating()}>Back</button>
+                <button type="submit" className="col-sm-offset-1 btn btn-primary" onClick={(e) => navigateToViewHODRating()}>Back</button>
             </div>
 
 
@@ -120,7 +128,7 @@ export default function SingleEmployeeCumulativeComponent() {
                         <tr>
                             <th className="text-center">Sr No</th>
                             <th className="text-center">KPP Month</th>
-                            <th className="text-center">Employee Ratings</th>
+                      
                             <th className="text-center">HOD Ratings</th>
                             <th className="text-center">GM Ratings Name</th>
                             <th className="text-center">Total Ratings</th>
@@ -135,7 +143,7 @@ export default function SingleEmployeeCumulativeComponent() {
                                         <td className="text-center">{index + 1}</td>
                                         <td className="text-justify">{YYYY_MM_DD_Formater(employee.ekppMonth)}</td>
                                         <td className="text-center">{employee.empOverallAchive}</td>
-                                        <td className="text-center">{employee.hodOverallAchieve}</td>
+                           
                                         <td className="text-center">{employee.gmOverallAchieve}</td>
                                         <td className="text-center">{employee.sumOfRatings}</td>
 

@@ -21,7 +21,10 @@ import UoMComponent from "./components/MasterComponent/UoMComponent/UoMComponent
 import SiteComponent from "./components/MasterComponent/SiteComponent/SiteComponent";
 import CompanyMasterComponent from './components/MasterComponent/CompanyMasterComponent/CompanyMasterComponent'
 import EmployeeTypeComponent from "./components/MasterComponent/EmployeeTypeComponent/EmployeeTypeComponent";
-
+import ViewAllEmployeeCumulativeComponent from "./components/CumulativeKppComponent/ViewAllEmployeeCumulativeComponent/ViewAllEmployeeCumulativeComponent";
+import SingleEmployeeCumulativeComponent from "./components/CumulativeKppComponent/SingleEmployeeCumulativeComponent/SingleEmployeeCumulativeComponent"
+import ViewAllHODCumulativeComponent from "./components/CumulativeKppComponent/ViewAllHODCumulativeComponent/ViewAllHODCumulativeComponent";
+import SingleHODCumulativeComponent from "./components/CumulativeKppComponent/SingleHODCumulativeComponent/SingleHODCumulativeComponent";
 
 function App() {
  
@@ -61,6 +64,20 @@ function App() {
             <li><Link to="/allEmployeeKppStatus">Employee KPP</Link></li>        
             </ul>
           </li>
+
+          
+          <li className="dropdown">
+          <a className="dropdown-toggle" data-toggle="dropdown" href="#">Cumulative Master
+          <span className="caret"></span></a>
+          <ul className="dropdown-menu">
+        
+ 
+ 
+          <li><Link to="/viewHODCumulativeKpp">View HOD Cumulative Kpp</Link></li>
+          <li><Link to="/viewEmployeeCumulativeKpp">View Employee Cumulative Kpp</Link></li>
+      
+          </ul>
+        </li>
 
             <li className="dropdown">
             <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
@@ -107,10 +124,14 @@ function App() {
         
         <Route exact path="/allEmployeeKppStatus" element={<AllEmployeesKppComponent />}></Route>
         <Route exact path="/addEmployeeKppRating" element={<EmplyeeUpdateKppRatingsComponent />}></Route>
-
+        <Route exact path="/viewEmployeeCumulativeKpp" element={<ViewAllEmployeeCumulativeComponent />}></Route>
+        
 
         <Route exact path="/assignEmployeeKpp" element={<AssignEmployeeKppComponent />}></Route>
+        <Route exact path="/viewSingleEmployeeRatings" element={<SingleEmployeeCumulativeComponent />}></Route>
+        <Route exact path="/viewSingleHODRatings" element={<SingleHODCumulativeComponent />}></Route>
 
+        <Route exact path="/viewHODCumulativeKpp" element={<ViewAllHODCumulativeComponent />}></Route>
       </Routes>
     </BrowserRouter>
   );
