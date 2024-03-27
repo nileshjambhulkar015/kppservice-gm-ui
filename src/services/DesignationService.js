@@ -1,8 +1,9 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { BASE_URL_API, LOGIN_UI_BASE_URL } from "./URLConstants";
 
-const DEPARTMENT_URL = "http://localhost:9091/department";
-const DESIGNATION_URL = "http://localhost:9091/designation";
+const DEPARTMENT_URL = BASE_URL_API+"/department";
+const DESIGNATION_URL = BASE_URL_API+"/designation";
 
 class DesignationService {
 
@@ -11,7 +12,7 @@ class DesignationService {
             return axios.get(DESIGNATION_URL +"/department")
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }       
     }
     
@@ -20,7 +21,7 @@ class DesignationService {
             return axios.get(DEPARTMENT_URL)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }       
     }
 
@@ -31,7 +32,7 @@ class DesignationService {
             return axios.get(DESIGNATION_URL + `/by-desig-dept?deptId=${deptId}`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -43,7 +44,7 @@ class DesignationService {
             return axios.get(DESIGNATION_URL + `/by-role-dept?roleId=${data.reportingEmpRoleId}&deptId=${data.reportingEmpDeptId}`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -52,20 +53,20 @@ class DesignationService {
 
     getDesignationDetailsByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/designation/search?statusCd=A&page=0&size=20&sort=desig.desig_name")
+            return axios.get(BASE_URL_API+"/designation/search?statusCd=A&page=0&size=20&sort=desig.desig_name")
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }      
     }
 
 
     getDesignationDetailsByDesigNamePaging(desigName) {
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/designation/search?desigName=${desigName}&statusCd=A&page=0&size=20&sort=desig.desigName`)
+            return axios.get(BASE_URL_API+`/designation/search?desigName=${desigName}&statusCd=A&page=0&size=20&sort=desig.desigName`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }       
     }
     saveDesignationDetails(designation) {
@@ -73,7 +74,7 @@ class DesignationService {
             return axios.post(DESIGNATION_URL, designation)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }       
     }
 
@@ -82,7 +83,7 @@ class DesignationService {
             return axios.get(DESIGNATION_URL + `/by-desig-id?desigId=${desigId}`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -91,7 +92,7 @@ class DesignationService {
             return axios.put(DESIGNATION_URL, designation)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 

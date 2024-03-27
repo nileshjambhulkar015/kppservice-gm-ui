@@ -1,7 +1,8 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { BASE_URL_API, LOGIN_UI_BASE_URL } from "./URLConstants";
 
-const BASE_URL = "http://localhost:9091/employee-key-perform-parameter/kpp?roleId=1&deptId=1&desigId=1&statusCdEnum=A";
+
 
 
 class EmployeeKppsService {
@@ -10,10 +11,10 @@ class EmployeeKppsService {
     getKPPDetails() {
         if (null != Cookies.get('empId')) {
            
-            return axios.get(`http://localhost:9091/employee-kpp-status?empId=${Cookies.get('empIdForKppRatings')}`)
+            return axios.get(BASE_URL_API+`/employee-kpp-status?empId=${Cookies.get('empIdForKppRatings')}`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -21,19 +22,19 @@ class EmployeeKppsService {
      getHodKPPDetailsForGmApproval() {
         if (null != Cookies.get('empId')) {
            
-            return axios.get(`http://localhost:9091/employee-kpp-status?empId=${Cookies.get('hodEmpIdForKppRatings')}`)
+            return axios.get(BASE_URL_API+`/employee-kpp-status?empId=${Cookies.get('hodEmpIdForKppRatings')}`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
     saveEmployeeKppDetails(todos){
         if (null != Cookies.get('empId')) {
-            return axios.put("http://localhost:9091/employee-key-perform-parameter",todos)
+            return axios.put(BASE_URL_API+"/employee-key-perform-parameter",todos)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }  
     }
 
@@ -42,10 +43,10 @@ class EmployeeKppsService {
     updateEmpApproveOrRejectByHod(todos){
      
         if (null != Cookies.get('empId')) {
-            return axios.put("http://localhost:9091/gm-approval",todos)
+            return axios.put(BASE_URL_API+"/gm-approval",todos)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }  
     }
     
@@ -55,10 +56,10 @@ class EmployeeKppsService {
     assignEmployeeKppDetails(emplyeeKpp){
         if (null != Cookies.get('empId')) {
             console.log("Service =",emplyeeKpp)
-            return axios.post("http://localhost:9091/employee-kpp/assign-kpp",emplyeeKpp)
+            return axios.post(BASE_URL_API+"/employee-kpp/assign-kpp",emplyeeKpp)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }  
     }
 }

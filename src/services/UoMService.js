@@ -1,7 +1,8 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { BASE_URL_API, LOGIN_UI_BASE_URL } from "./URLConstants";
 
-const BASE_URL = "http://localhost:9091/uom";
+const BASE_URL = BASE_URL_API+"/uom";
 
 
 class UoMService {
@@ -12,7 +13,7 @@ class UoMService {
             return axios.post(BASE_URL, uom)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -23,7 +24,7 @@ class UoMService {
             return axios.get(BASE_URL + `/by-dept-id?deptId=${deptId}`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -33,7 +34,7 @@ class UoMService {
             return axios.put(BASE_URL, uom)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -42,30 +43,30 @@ class UoMService {
     //at page load call all the region load all departments
     getUoMByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/uom/search?statusCd=A&page=0&size=1200&sort=regionName asc")
+            return axios.get(BASE_URL_API+"/uom/search?statusCd=A&page=0&size=1200&sort=regionName asc")
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
       //to show uom for adding kpp
       getAllUoM() {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/uom/all-uom")
+            return axios.get(BASE_URL_API+"/uom/all-uom")
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
 
     getUoMById(uomId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/uom?uomId=${uomId}`)
+            return axios.get(BASE_URL_API+`/uom?uomId=${uomId}`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 

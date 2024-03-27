@@ -1,7 +1,8 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { BASE_URL_API, LOGIN_UI_BASE_URL } from "./URLConstants";
 
-const BASE_URL = "http://localhost:9091/department";
+const BASE_URL = BASE_URL_API+"/department";
 
 
 class DepartmentService {
@@ -11,7 +12,7 @@ class DepartmentService {
             return axios.post(BASE_URL, department)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -22,7 +23,7 @@ class DepartmentService {
             return axios.get(BASE_URL + `/by-dept-id?deptId=${deptId}`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -32,7 +33,7 @@ class DepartmentService {
             return axios.put(BASE_URL, department)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -41,20 +42,20 @@ class DepartmentService {
     //at page load call all the departments load all departments
     getDepartmentDetailsByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/department/search?statusCd=A&page=0&size=1200&sort=dept.dept_name asc")
+            return axios.get(BASE_URL_API+"/department/search?statusCd=A&page=0&size=1200&sort=dept.dept_name asc")
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
     // search department by its name
     getDepartmentDetailsByDeptNamePaging(deptName) {
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/department/search?deptName=${deptName}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
+            return axios.get(BASE_URL_API+`/department/search?deptName=${deptName}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -62,10 +63,10 @@ class DepartmentService {
     //Get all roles present in department table for designation form
     getRolesInDept() {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/roles/department/role")
+            return axios.get(BASE_URL_API+"/roles/department/role")
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -76,7 +77,7 @@ class DepartmentService {
             return axios.get(BASE_URL + '/dept/' + roleId)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
        
     }
@@ -85,13 +86,13 @@ class DepartmentService {
      //Upload department
      uploadExcelDept(formData) {
         if (null != Cookies.get('empId')) {
-            return axios.post("http://localhost:9091/department/upload-department",formData, {
+            return axios.post(BASE_URL_API+"/department/upload-department",formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },});
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
         
     }

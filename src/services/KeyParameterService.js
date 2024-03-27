@@ -1,8 +1,9 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { BASE_URL_API, LOGIN_UI_BASE_URL } from "./URLConstants";
 
-const DEPARTMENT_URL = "http://localhost:9091/designation/department";
-const BASE_URL = "http://localhost:9091/key-perform-parameter";
+const DEPARTMENT_URL = BASE_URL_API+ "/designation/department";
+const BASE_URL = BASE_URL_API+"/key-perform-parameter";
 
 class KeyParameterService {
 
@@ -12,7 +13,7 @@ class KeyParameterService {
             return axios.get(DEPARTMENT_URL)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -21,7 +22,7 @@ class KeyParameterService {
             return axios.post(BASE_URL, kpp)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -30,16 +31,16 @@ class KeyParameterService {
             return axios.get(BASE_URL)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
     getKPPDetailsByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/key-perform-parameter/search?statusCd=A&page=0&size=1200&sort=dept.dept_name");
+            return axios.get(BASE_URL_API+"/key-perform-parameter/search?statusCd=A&page=0&size=1200&sort=dept.dept_name");
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -47,20 +48,20 @@ class KeyParameterService {
 
         getKPPDetailsForAssignKppByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/key-perform-parameter/assign-employee-kpp-search?empId=${Cookies.get('empIdForKpp')}&roleId=${Cookies.get('empKppRoleId')}&deptId=${Cookies.get('empKppDeptId')}&desigId=${Cookies.get('empKppDesigId')}&statusCd=A&page=0&size=20&sort=dept.dept_name`);
+            return axios.get(BASE_URL_API+`/key-perform-parameter/assign-employee-kpp-search?empId=${Cookies.get('empIdForKpp')}&roleId=${Cookies.get('empKppRoleId')}&deptId=${Cookies.get('empKppDeptId')}&desigId=${Cookies.get('empKppDesigId')}&statusCd=A&page=0&size=20&sort=dept.dept_name`);
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
 
     getKPPDetailsByKppObjectivePaging(kppObjective) {
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/key-perform-parameter/search?kppObjective=${kppObjective}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
+            return axios.get(BASE_URL_API+`/key-perform-parameter/search?kppObjective=${kppObjective}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -69,7 +70,7 @@ class KeyParameterService {
             return axios.get(BASE_URL + '/' + kppId)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -78,7 +79,7 @@ class KeyParameterService {
             return axios.get(BASE_URL + '/' + deptId)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -87,7 +88,7 @@ class KeyParameterService {
             return axios.put(BASE_URL, kpp)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 }

@@ -1,7 +1,8 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { BASE_URL_API, LOGIN_UI_BASE_URL } from "./URLConstants";
 
-const BASE_URL = `http://localhost:9091/employee/employee-kpp-status?gmEmployeedId=${Cookies.get('empId')}&roleId=3&gmKppStatus=In-Progress&page=0&size=20&sort=desig.desig_name`;
+const BASE_URL = BASE_URL_API+`/employee/employee-kpp-status?gmEmployeedId=${Cookies.get('empId')}&roleId=3&gmKppStatus=In-Progress&page=0&size=20&sort=desig.desig_name`;
 
 class AllEmployeesKppService {
 
@@ -10,7 +11,7 @@ class AllEmployeesKppService {
             return axios.get(BASE_URL)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -18,10 +19,10 @@ class AllEmployeesKppService {
     getEmployeeByStatusByPagination(empKppStaus) {
         if (null != Cookies.get('empId')) {
             console.log("empKppStaus=",empKppStaus)
-            return axios.get(`http://localhost:9091/employee/employee-kpp-status?gmEmployeedId=${Cookies.get('empId')}&roleId=3&empKppStatus=${empKppStaus}&page=0&size=1200&sort=desig.desig.name`)
+            return axios.get(BASE_URL_API+`/employee/employee-kpp-status?gmEmployeedId=${Cookies.get('empId')}&roleId=3&empKppStatus=${empKppStaus}&page=0&size=1200&sort=desig.desig.name`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -29,10 +30,10 @@ class AllEmployeesKppService {
     
     completeEmpKppGM(empId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/gm-approval/report?empId=${empId}&statusCd=A`)
+            return axios.get(BASE_URL_API+`/gm-approval/report?empId=${empId}&statusCd=A`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
