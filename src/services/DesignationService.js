@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import { BASE_URL_API, LOGIN_UI_BASE_URL } from "./URLConstants";
 
-const DEPARTMENT_URL = BASE_URL_API+"/department";
+
 const DESIGNATION_URL = BASE_URL_API+"/designation";
 
 class DesignationService {
@@ -18,7 +18,7 @@ class DesignationService {
     
     getAllDepartmentDetails() {
         if (null != Cookies.get('empId')) {
-            return axios.get(DEPARTMENT_URL)
+            return axios.get(BASE_URL_API+"/department")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

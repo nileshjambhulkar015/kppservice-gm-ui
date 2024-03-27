@@ -29,9 +29,6 @@ export default function ShowEmployeeForKppComponent() {
     const [designations, setDesignations] = useState([])
     const [roles, setRoles] = useState([])
 
-    //  const [reportingDepartments, setReportingDepartments] = useState([])
-
-    //   const [reportingDesignations, setReportingDesignations] = useState([])
     const [employees, setEmployees] = useState([])
 
 
@@ -84,24 +81,6 @@ export default function ShowEmployeeForKppComponent() {
             });
         });
         ////
-
-        /*  RoleService.getRolesInDesignation().then((res) => {
-              setRoles(res.data);
-              console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
-              setRoleId(res.data?.[0].roleId)
-             let roleId = res.data?.[0].roleId;
-              DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res1) => {
-                  setDepartments(res1.data);
-                  setDeptId(res1.data?.[0].deptId)
-                  let deptId = res1.data?.[0].deptId;
-                   DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
-                      setDesignations(res2.data);
-                      setDesigId(res2.data?.[0]?.desigId)
-                     
-                  });
-              });
-          });*/
-
     }, []);
 
 

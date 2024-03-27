@@ -59,29 +59,6 @@ class DepartmentService {
         }
 
     }
-
-    //Get all roles present in department table for designation form
-    getRolesInDept() {
-        if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/roles/department/role")
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }
-
-    }
-
-    //Get all roles present in department table for designation form
-    getDepartmentByRoleId(roleId) {
-        if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL + '/dept/' + roleId)
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }
-       
-    }
-
    
      //Upload department
      uploadExcelDept(formData) {
