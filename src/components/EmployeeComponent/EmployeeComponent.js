@@ -7,6 +7,7 @@ import RegionService from "../../services/RegionService";
 import RoleService from "../../services/RoleService";
 import SiteService from "../../services/MasterService/SiteService";
 import CompanyMasterService from "../../services/MasterService/CompanyMasterService";
+import { BASE_URL_API } from "../../services/URLConstants";
 export default function EmployeeComponent() {
     const navigate = useNavigate();
 
@@ -270,7 +271,7 @@ export default function EmployeeComponent() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        fetch('http://localhost:9091/employee/upload-employee', {
+        fetch(BASE_URL_API+'/employee/upload-employee', {
             method: 'POST',
             body: formData
         })

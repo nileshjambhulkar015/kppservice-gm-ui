@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
 import DepartmentService from "../../../services/DepartmentService";
+import { BASE_URL_API } from '../../../services/URLConstants';
 export default function DepartmentComponent() {
    
    
@@ -111,7 +112,7 @@ export default function DepartmentComponent() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        fetch('http://localhost:9091/department/upload-department', {
+        fetch(BASE_URL_API+'/department/upload-department', {
             method: 'POST',
             body: formData
         })

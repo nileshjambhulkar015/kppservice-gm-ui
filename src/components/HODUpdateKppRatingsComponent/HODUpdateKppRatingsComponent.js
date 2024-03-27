@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 //import EmployeeKppsService from '../../services/EmployeeKppsService';
 import EmployeeKppsService from '../../services/EmployeeKppsService'
 import AllHodKppService from '../../services/AllHodKppService';
+import { BASE_URL_API } from '../../services/URLConstants';
 const HODUpdateKppRatingsComponent = () => {
     const navigate = useNavigate();
 
@@ -287,7 +288,7 @@ const HODUpdateKppRatingsComponent = () => {
                                     <div className="col-sm-4">
                                     <button type="submit" className="btn btn-success"> Submit</button>
                                     
-                                    <a href={`http://localhost:9091/report/in-progress-hod-kpp-status?empId=${Cookies.get('hodEmpIdForKppRatings')}`}>
+                                    <a href={BASE_URL_API+`/report/in-progress-hod-kpp-status?empId=${Cookies.get('hodEmpIdForKppRatings')}`}>
                                     <button type="button" className="btn btn-success col-sm-offset-1 " disabled={kppMasterResponses?.empKppStatus === "Pending"}   
                                    > Download</button></a>
 

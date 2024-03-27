@@ -4,6 +4,7 @@ import DesignationService from "../../services/DesignationService";
 import KeyParameterService from "../../services/KeyParameterService";
 import RoleService from "../../services/RoleService";
 import UoMService from "../../services/UoMService";
+import { BASE_URL_API } from "../../services/URLConstants";
 
 export default function KeyParameterComponent() {
     const [kppId, setKppId] = useState('');
@@ -244,7 +245,7 @@ export default function KeyParameterComponent() {
 
         event.preventDefault();
         const formData = new FormData(event.target);
-        fetch('http://localhost:9091/key-perform-parameter/upload-kpp', {
+        fetch(BASE_URL_API+'/key-perform-parameter/upload-kpp', {
             method: 'POST',
             body: formData
         })

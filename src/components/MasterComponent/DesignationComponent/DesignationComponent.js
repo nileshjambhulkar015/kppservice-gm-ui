@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DesignationService from "../../../services/DesignationService";
 import DepartmentService from "../../../services/DepartmentService";
+import { BASE_URL_API } from "../../../services/URLConstants";
 export default function DesignationComponent() {
     const [desigId, setDesigId] = useState('');
     const [deptId, setDeptId] = useState('');
@@ -119,7 +120,7 @@ export default function DesignationComponent() {
         
         event.preventDefault();
         const formData = new FormData(event.target);
-        fetch('http://localhost:9091/designation/upload-designation', {
+        fetch(BASE_URL_API+'/designation/upload-designation', {
             method: 'POST',
             body: formData
         })

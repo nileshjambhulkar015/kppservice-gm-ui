@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 //import EmployeeKppsService from '../../services/EmployeeKppsService';
 import EmployeeKppsService from '../../services/EmployeeKppsService'
 import AllHodKppService from '../../services/AllHodKppService';
+import { BASE_URL_API } from '../../services/URLConstants';
 const EmplyeeUpdateKppRatingsComponent = () => {
 
     const navigate = useNavigate();
@@ -293,7 +294,7 @@ const EmplyeeUpdateKppRatingsComponent = () => {
                                     <div className="col-sm-8"></div>
                                     <div className="col-sm-4">
                                     <button type="submit" className="btn btn-success"> Submit</button>    
-                                    <a href={`http://localhost:9091/report/in-progress-employee-kpp-status?empId=${Cookies.get('empIdForKppRatings')}`}>
+                                    <a href={BASE_URL_API+`/report/in-progress-employee-kpp-status?empId=${Cookies.get('empIdForKppRatings')}`}>
                                     <button type="button" className="btn btn-success col-sm-offset-1 " disabled={kppMasterResponses?.empKppStatus === "Pending"}> Download</button>
 </a>
                                     <button type="submit" className="btn col-sm-offset-1 btn-success"   onClick={() => completeEmpKpp(empId)} >Finish</button>
