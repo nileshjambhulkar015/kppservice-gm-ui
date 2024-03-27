@@ -1,7 +1,8 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { BASE_URL_API, LOGIN_UI_BASE_URL } from "../URLConstants";
 
-const BASE_URL = "http://localhost:9091/employee-type";
+const BASE_URL = BASE_URL_API+"/employee-type";
 
 
 class EmployeeTypeService {
@@ -11,7 +12,7 @@ class EmployeeTypeService {
             return axios.post(BASE_URL, employeeType)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -23,7 +24,7 @@ class EmployeeTypeService {
             return axios.get(BASE_URL + `?empTypeId=${empTypeId}&statusCd=A`)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -33,7 +34,7 @@ class EmployeeTypeService {
             return axios.put(BASE_URL, employeeType)
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }
@@ -42,10 +43,10 @@ class EmployeeTypeService {
     //at page load call all the departments load all departments
     getEmployeeTypeDetailsByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/employee-type?statusCd=A")
+            return axios.get(BASE_URL_API+"/employee-type?statusCd=A")
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -53,10 +54,10 @@ class EmployeeTypeService {
     //Get all roles present in department table for designation form
     getDDEmployeeType() {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/employee-type?statusCd=A")
+            return axios.get(BASE_URL_API+"/employee-type?statusCd=A")
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
 
     }

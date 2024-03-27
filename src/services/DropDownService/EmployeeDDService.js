@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { BASE_URL_API, LOGIN_UI_BASE_URL } from "../URLConstants";
 
-const BASE_URL = "http://localhost:9091/employee";
 
 class EmployeeDDService {
 
@@ -10,10 +10,10 @@ class EmployeeDDService {
     //get regions from company master
     getRegionsFromEmployee(){
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/employee-kpp/dd-regions-employee")
+            return axios.get(BASE_URL_API+"/employee-kpp/dd-regions-employee")
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }        
     }  
 
@@ -21,10 +21,10 @@ class EmployeeDDService {
      //Get all roles present in department table from designation for KPP
      getSitesByRegionIdFromEmployee(regionId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/employee-kpp/dd-sites-employee?regionId=${regionId}`)  
+            return axios.get(BASE_URL_API+`/employee-kpp/dd-sites-employee?regionId=${regionId}`)  
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
         
     }
@@ -33,11 +33,11 @@ class EmployeeDDService {
     getCompanyFromEmployee(data) {
        
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/employee-kpp/dd-company-employee?regionId=${data.regionId}&siteId=${data.siteId}`)
+            return axios.get(BASE_URL_API+`/employee-kpp/dd-company-employee?regionId=${data.regionId}&siteId=${data.siteId}`)
            
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -45,11 +45,11 @@ class EmployeeDDService {
      getRolesFromEmployee(data) {
        
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/employee-kpp/dd-roles-employee?regionId=${data.regionId}&siteId=${data.siteId}&companyId=${data.companyId}`)
+            return axios.get(BASE_URL_API+`/employee-kpp/dd-roles-employee?regionId=${data.regionId}&siteId=${data.siteId}&companyId=${data.companyId}`)
            
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -57,11 +57,11 @@ class EmployeeDDService {
     getDeptFromEmployee(data) {
        
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/employee-kpp/dd-dept-employee?regionId=${data.regionId}&siteId=${data.siteId}&companyId=${data.companyId}&roleId=${data.roleId}`)
+            return axios.get(BASE_URL_API+`/employee-kpp/dd-dept-employee?regionId=${data.regionId}&siteId=${data.siteId}&companyId=${data.companyId}&roleId=${data.roleId}`)
            
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
@@ -69,11 +69,11 @@ class EmployeeDDService {
     getDesigFromEmployee(data) {
        
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/employee-kpp/dd-desig-employee?regionId=${data.regionId}&siteId=${data.siteId}&companyId=${data.companyId}&roleId=${data.roleId}&deptId=${data.deptId}`)
+            return axios.get(BASE_URL_API+`/employee-kpp/dd-desig-employee?regionId=${data.regionId}&siteId=${data.siteId}&companyId=${data.companyId}&roleId=${data.roleId}&deptId=${data.deptId}`)
            
         } else {
             alert("You need to login first")
-            window.location.replace("http://localhost:3008/");
+            window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 }
