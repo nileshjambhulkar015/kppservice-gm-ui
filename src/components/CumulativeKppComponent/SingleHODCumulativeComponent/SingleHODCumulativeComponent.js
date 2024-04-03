@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CumulativeService from "../../../services/CumulativeService";
 import Cookies from 'js-cookie';
 import { BASE_URL_API } from "../../../services/URLConstants";
+import EmployeeService from "../../../services/EmployeeService";
 export default function SingleHODCumulativeComponent() {
 
     const navigate = useNavigate();
@@ -19,6 +20,15 @@ export default function SingleHODCumulativeComponent() {
     const [isSuccess, setIsSuccess] = useState(true)
     const [employees, setEmployees] = useState([])
 
+    const [empId, setEmpId] = useState('');
+    const [empEId, setEmpEId] = useState('');
+    const [empName, setEmpName] = useState('');
+    const [roleId, setRoleId] = useState('');
+    const [roleName, setRoleName] = useState('');
+    const [deptId, setDeptId] = useState('');
+    const [deptName, setDeptName] = useState('');
+    const [desigId, setDesigId] = useState('');
+    const [desigName, setDesigName] = useState('');
  
     function clearDates(){
         document.getElementById("fromDate").value = "";
@@ -48,6 +58,16 @@ export default function SingleHODCumulativeComponent() {
             alert(err.response.data.details)
         });
 
+
+        //for employee basic details
+        EmployeeService.searchEmployeeById(Cookies.get('viewSingleHODIdForKppRatings')).then((res)=>{
+            setEmpId(res.data.empId)
+            setEmpEId(res.data.empEId)
+            setEmpName(res.data.empFirstName +' '+res.data.empMiddleName+' '+res.data.empLastName )
+            setRoleName(res.data.roleName)
+            setDeptName(res.data.deptName)
+            setDesigName(res.data.desigName)
+        });
 
     }
 
@@ -98,7 +118,43 @@ export default function SingleHODCumulativeComponent() {
     }
 
     return (
+        
         <div className="row">
+        <div className="row" >
+        <form className="form-horizontal">
+            <div className="col-md-10">
+
+                <div className="form-group">
+                    <label className="control-label col-sm-2"  >Name :</label>
+                    <div className="col-sm-5">
+                        {empName}
+                    </div>
+                </div>
+
+                <div className="form-group">
+                <label className="control-label col-sm-2"  >Role :</label>
+                <div className="col-sm-5">
+                    {roleName}
+                </div>
+            </div>
+
+                <div className="form-group">
+                    <label className="control-label col-sm-2"  >Department :</label>
+                    <div className="col-sm-5">
+                        {deptName}
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label className="control-label col-sm-2"  >Designation:</label>
+                    <div className="col-sm-5">
+                        {desigName}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
             <h3 className="text-center">View HOD KPP Report</h3>
             <div className="form-group">
                 <form className="form-horizontal" enctype="multipart/form-data">
