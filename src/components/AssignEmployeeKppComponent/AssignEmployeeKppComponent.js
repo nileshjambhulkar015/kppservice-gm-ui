@@ -7,7 +7,7 @@ import EmployeeService from "../../services/EmployeeService";
 export default function AssignEmployeeKppComponent() {
 
     const navigate = useNavigate();
-
+  const[empKppOverallTargetCount,setEmpKppOverallTargetCount] = useState('')
     const [isSuccess, setIsSuccess] = useState(true)
     const [kppIsSuccess, setKppIsSuccess] = useState(true)
     const [kpps, setKpps] = useState([])
@@ -39,7 +39,8 @@ export default function AssignEmployeeKppComponent() {
         KeyParameterService.viewKPPDetailsForAssignKppByPaging().then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
-                setViewEmpKpps(res.data.responseData.content);
+                setEmpKppOverallTargetCount(res.data.responseData.empKppOverallTargetCount)
+                setViewEmpKpps(res.data.responseData.kppResponses.content);
             }
             else {
              
@@ -49,7 +50,7 @@ export default function AssignEmployeeKppComponent() {
          
         });
 
-       EmployeeService.SearchEmployeeById(Cookies.get('empIdForKpp')).then((res)=>{
+       EmployeeService.searchEmployeeById(Cookies.get('empIdForKpp')).then((res)=>{
             setEmpId(res.data.empId)
             setEmpEId(res.data.empEId)
             setEmpName(res.data.empFirstName +' '+res.data.empMiddleName+' '+res.data.empLastName )
@@ -103,7 +104,8 @@ export default function AssignEmployeeKppComponent() {
                
                 if (res.data.success) {
                     setIsSuccess(true);
-                    setViewEmpKpps(res.data.responseData.content);
+                    setEmpKppOverallTargetCount(res.data.responseData.empKppOverallTargetCount)
+                    setViewEmpKpps(res.data.responseData.kppResponses.content);
                 }
                 else {
                  
@@ -135,7 +137,8 @@ export default function AssignEmployeeKppComponent() {
             KeyParameterService.viewKPPDetailsForAssignKppByPaging().then((res) => {
                 if (res.data.success) {
                     setIsSuccess(true);
-                    setViewEmpKpps(res.data.responseData.content);
+                    setEmpKppOverallTargetCount(res.data.responseData.empKppOverallTargetCount)
+                    setViewEmpKpps(res.data.responseData.kppResponses.content);
                 }
                 else {
                  
@@ -308,6 +311,7 @@ export default function AssignEmployeeKppComponent() {
                         </tbody>
                     </table>
                     : <h3>No KPP Set to Employee</h3>}
+                    <h3>Total Kpp Target assign : {empKppOverallTargetCount}</h3>
                 </div>
 
             </div>
