@@ -167,7 +167,21 @@ export default function EmployeeComponent() {
         }
         );
     }
+   
 
+    const searchEmployeeEId = (e) => {
+        let empEId=e.target.value;
+        EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(empEId).then((res) => {
+
+            if (res.data.success) {
+                setIsSuccess(true);
+                setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
+            }
+            else {
+                setIsSuccess(false);
+            }
+        });
+    }
 
     const searchEmployeeFirstName = (e) => {
         EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
@@ -314,7 +328,7 @@ export default function EmployeeComponent() {
                             <form className="form-horizontal">
                                 <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter Employee Id:</label>
                                 <div className="col-sm-4">
-                                    <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter First Name" value={empFirstNameSearch} onChange={(e) => setEmpFirstNameSearch(e.target.value)} />
+                                    <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter First Name" value={empFirstNameSearch} onChange={(e) => searchEmployeeEId(e)} />
                                 </div>
                             </form>
                             <button type="submit" className="btn btn-primary" onClick={() => searchEmployeeFirstName(empFirstNameSearch)}>Search</button>
