@@ -29,12 +29,12 @@ export default function SingleHODCumulativeComponent() {
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
- 
-    function clearDates(){
+
+    function clearDates() {
         document.getElementById("fromDate").value = "";
         document.getElementById("toDate").value = "";
     }
-    const loadCumulativeData = ()=>{
+    const loadCumulativeData = () => {
         CumulativeService.getSingleHODKppReportDetailsByPaging().then((res) => {
 
 
@@ -60,10 +60,10 @@ export default function SingleHODCumulativeComponent() {
 
 
         //for employee basic details
-        EmployeeService.searchEmployeeById(Cookies.get('viewSingleHODIdForKppRatings')).then((res)=>{
+        EmployeeService.searchEmployeeById(Cookies.get('viewSingleHODIdForKppRatings')).then((res) => {
             setEmpId(res.data.empId)
             setEmpEId(res.data.empEId)
-            setEmpName(res.data.empFirstName +' '+res.data.empMiddleName+' '+res.data.empLastName )
+            setEmpName(res.data.empFirstName + ' ' + res.data.empMiddleName + ' ' + res.data.empLastName)
             setRoleName(res.data.roleName)
             setDeptName(res.data.deptName)
             setDesigName(res.data.desigName)
@@ -105,48 +105,48 @@ export default function SingleHODCumulativeComponent() {
     }
 
     const navigateToViewHODRating = () => {
-      
+
         Cookies.remove('viewSingleHODIdForKppRatings');
         navigate(`/viewHODCumulativeKpp`, { replace: true })
     }
 
     return (
-        
+
         <div className="row">
-        <div className="row" >
-        <form className="form-horizontal">
-            <div className="col-md-10">
+            <div className="row" >
+                <form className="form-horizontal">
+                    <div className="col-md-10">
 
-                <div className="form-group">
-                    <label className="control-label col-sm-2"  >Name :</label>
-                    <div className="col-sm-5">
-                        {empName}
+                        <div className="form-group">
+                            <label className="control-label col-sm-2"  >Name :</label>
+                            <div className="col-sm-5">
+                                {empName}
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="control-label col-sm-2"  >Role :</label>
+                            <div className="col-sm-5">
+                                {roleName}
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="control-label col-sm-2"  >Department :</label>
+                            <div className="col-sm-5">
+                                {deptName}
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="control-label col-sm-2"  >Designation:</label>
+                            <div className="col-sm-5">
+                                {desigName}
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <div className="form-group">
-                <label className="control-label col-sm-2"  >Role :</label>
-                <div className="col-sm-5">
-                    {roleName}
-                </div>
+                </form>
             </div>
-
-                <div className="form-group">
-                    <label className="control-label col-sm-2"  >Department :</label>
-                    <div className="col-sm-5">
-                        {deptName}
-                    </div>
-                </div>
-
-                <div className="form-group">
-                    <label className="control-label col-sm-2"  >Designation:</label>
-                    <div className="col-sm-5">
-                        {desigName}
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
             <h3 className="text-center">View HOD KPP Report</h3>
             <div className="form-group">
@@ -163,78 +163,78 @@ export default function SingleHODCumulativeComponent() {
                     </div>
                 </form>
                 <button type="submit" className="btn btn-primary" onClick={(e) => getKPPDetailsByDate(fromDate, toDate)}>Search</button>
-                <button type="submit" className="btn btn-primary col-sm-offset-1" onClick={(e) =>{
+                <button type="submit" className="btn btn-primary col-sm-offset-1" onClick={(e) => {
                     loadCumulativeData();
-                    clearDates();   
-                       } }>Clear</button>
+                    clearDates();
+                }}>Clear</button>
                 <button type="submit" className="col-sm-offset-1 btn btn-primary" onClick={(e) => navigateToViewHODRating()}>Back</button>
             </div>
 
 
             <div className="col-sm-8">
-            {isSuccess?
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th className="text-center">Sr No</th>
-                            <th className="text-center">KPP Month</th>
-                      
-                            <th className="text-center">HOD Ratings</th>
-                            <th className="text-center">GM Ratings Name</th>
-                            <th className="text-center">Total Ratings</th>
-                            <th className="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            employees.map(
-                                (employee, index) =>   //index is inbuilt variable of map started with 0
-                                    <tr key={employee.empId}>
-                                        <td className="text-center">{index + 1}</td>
-                                        <td className="text-justify">{YYYY_MM_DD_Formater(employee.ekppMonth)}</td>
-                                        <td className="text-center">{employee.empOverallAchive}</td>
-                           
-                                        <td className="text-center">{employee.gmOverallAchieve}</td>
-                                        <td className="text-center">{employee.sumOfRatings}</td>
+                {isSuccess ?
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th className="text-center">Sr No</th>
+                                <th className="text-center">KPP Month</th>
 
-                                        <td className="text-center">
+                                <th className="text-center">HOD Ratings</th>
+                                <th className="text-center">GM Ratings Name</th>
+                                <th className="text-center">Total Ratings</th>
+                                <th className="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                employees.map(
+                                    (employee, index) =>   //index is inbuilt variable of map started with 0
+                                        <tr key={employee.empId}>
+                                            <td className="text-center">{index + 1}</td>
+                                            <td className="text-justify">{YYYY_MM_DD_Formater(employee.ekppMonth)}</td>
+                                            <td className="text-center">{employee.empOverallAchive}</td>
 
-                                            <a href={BASE_URL_API+`/report/completed-hod-kpp-status?empId=${employee.empId}&ekppMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
-                                                <button type="submit" className="btn btn-info">Download</button>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                            <td className="text-center">{employee.gmOverallAchieve}</td>
+                                            <td className="text-center">{employee.sumOfRatings}</td>
 
-                            )
+                                            <td className="text-center">
 
-                        }
-                        <tr>
-                            <th className="text-right">Total</th>
-                            <td className="text-center"></td>
-                            <td className="text-center">{sumOfEmployeeRatings}</td>
-                            <td className="text-center">{sumOfHodRatings}</td>
-                            <td className="text-center">{sumOfGMRatings}</td>
-                            <td className="text-center"></td>
-                            <td className="text-center"></td>
-                        </tr>
-                        <tr>
-                            <th className="text-right">Overall Cummalative Ratings: </th>
-                            <td className="text-center">{cummulativeRatings}</td>
-                        </tr>
-                        <tr>
-                        <th className="text-right">Total Months:</th>
-                        <td className="text-center">{totalMonths}</td>
+                                                <a href={BASE_URL_API + `/report/completed-hod-kpp-status?empId=${employee.empId}&ekppMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
+                                                    <button type="submit" className="btn btn-info">Download</button>
+                                                </a>
+                                            </td>
+                                        </tr>
 
-                    </tr>
-                        <tr>
-                            <th className="text-right">Average Cummalative Ratings:</th>
-                            <td className="text-center">{avgCummulativeRatings}</td>
+                                )
 
-                        </tr>
-                    </tbody>
+                            }
+                            <tr>
+                                <th className="text-right">Total</th>
+                                <td className="text-center"></td>
+                                <td className="text-center">{sumOfEmployeeRatings}</td>
+                                <td className="text-center">{sumOfHodRatings}</td>
+                                <td className="text-center">{sumOfGMRatings}</td>
+                                <td className="text-center"></td>
+                                <td className="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th className="text-right">Overall Cummalative Ratings: </th>
+                                <td className="text-center">{cummulativeRatings}</td>
+                            </tr>
+                            <tr>
+                                <th className="text-right">Total Months:</th>
+                                <td className="text-center">{totalMonths}</td>
 
-                </table>
-                :<h1>No Data Found</h1>}
+                            </tr>
+                            <tr>
+                                <th className="text-right">Average Cummalative Ratings:</th>
+                                <td className="text-center">{avgCummulativeRatings}</td>
+
+                            </tr>
+                        </tbody>
+
+                    </table>
+                    : <h1>No Data Found</h1>}
             </div>
 
 

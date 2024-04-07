@@ -15,6 +15,8 @@ class DesignationService {
             window.location.replace(LOGIN_UI_BASE_URL);
         }       
     }
+
+ 
     
     getAllDepartmentDetails() {
         if (null != Cookies.get('empId')) {

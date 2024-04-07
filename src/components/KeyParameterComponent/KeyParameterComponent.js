@@ -14,6 +14,7 @@ export default function KeyParameterComponent() {
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
+    const [kppObjectiveNo, setKppObjectiveNo] = useState('');
     const [kppObjective, setKppObjective] = useState('');
     const [kppPerformanceIndi, setKppPerformanceIndi] = useState('');
     const [kppOverallTarget, setKppOverallTarget] = useState('');
@@ -27,7 +28,7 @@ export default function KeyParameterComponent() {
     const [kppRating4, setKppRating4] = useState('');
     const [kppRating5, setKppRating5] = useState('');
     const [remark, setRemark] = useState('');
-
+    const [isSuccess, setIsSuccess] = useState(true)
 
 
     const [kpps, setKpps] = useState([])
@@ -67,6 +68,7 @@ export default function KeyParameterComponent() {
             setDeptName(kpp.deptName)
             setDesigId(kpp.desigId)
             setDesigName(kpp.desigName)
+            setKppObjectiveNo(kpp.kppObjectiveNo)
             setKppObjective(kpp.kppObjective)
             setKppPerformanceIndi(kpp.kppPerformanceIndi)
             setKppOverallTarget(kpp.kppOverallTarget)
@@ -85,75 +87,53 @@ export default function KeyParameterComponent() {
         // window.location.reload(); 
     }
 
-    
-    //for all department by role id
-   /* useEffect((e) => {
-        roleId && DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res) => {
-            setDepartments(res.data);
-        });
-    }, [roleId]);*/
 
-    //for all designation  by dept id
-    /*useEffect((e) => {
-        deptId && DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res) => {
-            setDesignations(res.data);
-        });
-    }, [roleId,deptId]);*/
 
     useEffect(() => {
         KeyParameterService.getKPPDetailsByPaging().then((res) => {
-            setKpps(res.data.responseData.content);
+            if (res.data.success) {
+                setIsSuccess(true);
+                setKpps(res.data.responseData.content);
+            }
+            else {
+                setIsSuccess(false);
+            }
         });
 
         UoMService.getAllUoM().then((res) => {
             setUoms(res.data);
             setUomId(res.data?.[0]?.uomId)
-           
+
         });
 
-     /*   RoleService.getRoles().then((res) => {
-            setRoles(res.data);            
-            setRoleId(res.data?.[0].roleId)          
-        });*/
-
-           // for employee
-           RoleService.ddRolesExceptGM().then((res) => {
+        // for employee
+        RoleService.ddRolesExceptGM().then((res) => {
             setRoles(res.data);
             setRoleId(res.data?.[0].roleId)
         });
 
-        DesignationService.getAllDepartmentFromDesig().then((res1) => {
-                setDepartments(res1.data);
-                setDeptId(res1.data?.[0].deptId)
-                let deptId = res1.data?.[0].deptId;
-                 DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
-                    setDesignations(res2.data);
-                    setDesigId(res2.data?.[0]?.desigId)
-                   
-                });
-            });
-              
-    }, []);
-
-    const handleRoleIdChange=(value)=>{
-        setRoleId(value)
-       /* let roleId = value;
-         DepartmentService.getDepartmentByRoleIdFromDesign(value).then((res1) => {
+        KeyParameterService.getAllDepartment().then((res1) => {
             setDepartments(res1.data);
             setDeptId(res1.data?.[0].deptId)
             let deptId = res1.data?.[0].deptId;
-             DesignationService.getDesignationDetailsForKpp({ roleId, deptId }).then((res2) => {
+            DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
                 setDesignations(res2.data);
                 setDesigId(res2.data?.[0]?.desigId)
-            });
-    });*/
-}
 
-    const handleDesigIdChange=(value)=>{
-        setDesigId(value)       
+            });
+        });
+
+    }, []);
+
+    const handleRoleIdChange = (value) => {
+        setRoleId(value)
     }
 
-    const handleDeptIdChange=(value)=>{
+    const handleDesigIdChange = (value) => {
+        setDesigId(value)
+    }
+
+    const handleDeptIdChange = (value) => {
         console.log("Dept id =", value)
         setDeptId(value)
         let deptId = value;
@@ -161,31 +141,41 @@ export default function KeyParameterComponent() {
         DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
             setDesignations(res2.data);
             setDesigId(res2.data?.[0]?.desigId)
-           
-        });       
+
+        });
     }
 
-    
 
-    
+
+
 
     const saveKPPDetails = (e) => {
         e.preventDefault()
 
         let statusCd = 'A';
-        let kpp = { roleId, deptId, desigId, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, uomId, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
+        let kpp = { roleId, deptId, desigId, kppObjectiveNo, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, uomId, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
         console.log(kpp)
 
         KeyParameterService.saveKPPDetails(kpp).then(res => {
-            KeyParameterService.getKPPDetailsByPaging().then((res) => {
-                setKpps(res.data.responseData.content);
-            });
+            if (res.data.success) {
+                alert(res.data.responseMessage)
+                KeyParameterService.getKPPDetailsByPaging().then((res) => {
+                    setKpps(res.data.responseData.content);
+                });
+            }
+            else {
+               alert(kppObjectiveNo +" "+ res.data.responseMessage)
+            }
+
+
+
+    
         }
         );
         // window.location.reload(); 
     }
 
-   
+
 
     const deleteKppById = (e) => {
         KeyParameterService.getKppById(e).then(res => {
@@ -195,6 +185,7 @@ export default function KeyParameterComponent() {
             let roleId = kpp.roleId;
             let deptId = kpp.deptId;
             let desigId = kpp.desigId;
+            let kppObjectiveNo = kpp.kppObjectiveNo;
             let kppObjective = kpp.kppObjective;
             let kppPerformanceIndi = kpp.kppPerformanceIndi;
             let kppOverallTarget = kpp.kppOverallTarget;
@@ -211,7 +202,7 @@ export default function KeyParameterComponent() {
             console.log("deptId", deptId)
             console.log("KppId=", kppId)
             let statusCd = 'I';
-            let updateKpp = { roleId, kppId, deptId, desigId, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, setKppUoMId, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
+            let updateKpp = { roleId, kppId, deptId, desigId, kppObjectiveNo, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, setKppUoMId, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
 
             KeyParameterService.updateKppDetails(updateKpp).then(res => {
                 KeyParameterService.getKPPDetailsByPaging().then((res) => {
@@ -228,7 +219,7 @@ export default function KeyParameterComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let updateKpp = { kppId, roleId, deptId, desigId, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, uomId, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
+        let updateKpp = { kppId, roleId, deptId, desigId, kppObjectiveNo, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, uomId, kppOverallWeightage, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
 
         KeyParameterService.updateKppDetails(updateKpp).then(res => {
             KeyParameterService.getKPPDetailsByPaging().then((res) => {
@@ -245,7 +236,7 @@ export default function KeyParameterComponent() {
 
         event.preventDefault();
         const formData = new FormData(event.target);
-        fetch(BASE_URL_API+'/key-perform-parameter/upload-kpp', {
+        fetch(BASE_URL_API + '/key-perform-parameter/upload-kpp', {
             method: 'POST',
             body: formData
         })
@@ -285,15 +276,17 @@ export default function KeyParameterComponent() {
                     </div>
                 </div>
                 <div className="row">
+                {isSuccess ?
                     <table className="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Sr No</th>
-
+                                <th>KPP Objective No</th>
                                 <th>Department Name</th>
                                 <th>Designation Name</th>
                                 <th>Role Name</th>
                                 <th>KPP Objective</th>
+                              
                                 <th>Performance Indicator</th>
                                 <th>Action</th>
                             </tr>
@@ -303,13 +296,14 @@ export default function KeyParameterComponent() {
                                 kpps.map(
                                     (kpp, index) =>   //index is inbuilt variable of map started with 0
                                         <tr key={kpp.kppId}>
-                                            <td>{index + 1}</td>
-
+                                            <td className="text-center">{index + 1}</td>
+                                            <td className="text-justify">{kpp.kppObjectiveNo}</td>
                                             <td>{kpp.deptName}</td>
                                             <td>{kpp.desigName}</td>
                                             <td>{kpp.roleName}</td>
-                                            <td className="text-justify">{kpp.kppObjective}</td>
-                                            <td className="text-justify">{kpp.kppPerformanceIndi}</td>
+                                            
+                                            <td>{kpp.kppObjective}</td>
+                                            <td >{kpp.kppPerformanceIndi}</td>
                                             <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateKpp" onClick={() => showKppById(kpp.kppId)}>Update</button>
                                                 <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteKppById(kpp.kppId)}>Delete</button>
                                                 <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showKpp" onClick={() => showKppById(kpp.kppId)}>View</button></td>
@@ -318,7 +312,8 @@ export default function KeyParameterComponent() {
                                 )
                             }
                         </tbody>
-                    </table>
+                    </table> 
+                     : <h1>No Data Found</h1>}
                 </div>
 
             </div>
@@ -373,7 +368,7 @@ export default function KeyParameterComponent() {
                                     <div className="col-sm-4">
                                         <div className="form-group">
                                             <select className="form-control" id="roleId" onChange={(e) => handleRoleIdChange(e.target.value)}>
-                                              
+
                                                 {
                                                     roles.map(
                                                         role =>
@@ -391,7 +386,7 @@ export default function KeyParameterComponent() {
                                     <div className="col-sm-4">
                                         <div className="form-group">
                                             <select className="form-control" id="deptId" onChange={(e) => handleDeptIdChange(e.target.value)}>
-                                                
+
                                                 {
                                                     departments.map(
                                                         department =>
@@ -409,7 +404,7 @@ export default function KeyParameterComponent() {
                                     <div className="col-sm-4">
                                         <div className="form-group">
                                             <select className="form-control" id="desigId" onChange={(e) => handleDesigIdChange(e.target.value)}>
-                                                
+
                                                 {
                                                     designations.map(
                                                         designation =>
@@ -419,6 +414,13 @@ export default function KeyParameterComponent() {
 
                                             </select>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="control-label col-sm-4" htmlFor="kppObjective">KPP Objective No:</label>
+                                    <div className="col-sm-4">
+                                        <input type="text" className="form-control" id="kppObjectiveNo" value={kppObjectiveNo} onChange={(e) => setKppObjectiveNo(e.target.value)} placeholder="Enter KPP Objective Number here" />
                                     </div>
                                 </div>
 
@@ -440,7 +442,7 @@ export default function KeyParameterComponent() {
                                     <div className="row">
                                         <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppOverallTarget">Overall Target:</label>
                                         <div className="col-sm-2">
-                                            <input type="text" className="form-control" id="kppOverallTarget" value={kppOverallTarget} onChange={(e) => setKppOverallTarget(e.target.value)} placeholder="Enter KPP ObjectiveOverall Target here" />
+                                            <input type="text" className="form-control" id="kppOverallTarget" value={kppOverallTarget} onChange={(e) => setKppOverallTarget(e.target.value)} placeholder="Enter KPP Overall Target here" />
                                         </div>
                                         <label className="control-label col-sm-3" htmlFor="kppTargetPeriod">Target Period:</label>
                                         <div className="col-sm-2">
@@ -453,21 +455,21 @@ export default function KeyParameterComponent() {
                                     <div className="row">
                                         <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppUoM">Unit of Measurement:</label>
                                         <div className="col-sm-2">
-                                        <div className="form-group">
-                                        <select className="form-control" id="uomId" onChange={(e) => onUoMChangeHandler(e.target.value)}>
-                                            
-                                            {
-                                                uoms.map(
-                                                    uom =>
-                                                        <option key={uom.uomId} value={uom.uomId}>{uom.uomName}</option>
-                                                )
+                                            <div className="form-group">
+                                                <select className="form-control" id="uomId" onChange={(e) => onUoMChangeHandler(e.target.value)}>
 
-                                                
-                                            };
+                                                    {
+                                                        uoms.map(
+                                                            uom =>
+                                                                <option key={uom.uomId} value={uom.uomId}>{uom.uomName}</option>
+                                                        )
 
-                                        </select>
-                                    </div>
-                                    </div>
+
+                                                    };
+
+                                                </select>
+                                            </div>
+                                        </div>
                                         <label className="control-label col-sm-3" htmlFor="kppOverallWeightage">Overall Weightage In % :</label>
                                         <div className="col-sm-2">
                                             <input type="text" className="form-control" id="kppOverallWeightage" value={kppOverallWeightage} onChange={(e) => setKppOverallWeightage(e.target.value)} placeholder="Enter KPP Kpp Target Period here" />
@@ -479,13 +481,13 @@ export default function KeyParameterComponent() {
 
                                 <div className="form-group">
                                     <div className="row">
-                                        <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppRating1">Rating 1:</label>
+                                        <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppRating1">Rating 5:</label>
                                         <div className="col-sm-2">
-                                            <input type="text" className="form-control" id="kppRating1" value={kppRating1} onChange={(e) => setKppRating1(e.target.value)} placeholder="Enter KPP Rating 1 here" />
+                                            <input type="text" className="form-control" id="kppRating1" value={kppRating1} onChange={(e) => setKppRating1(e.target.value)} placeholder="Enter KPP Rating 5 here" />
                                         </div>
-                                        <label className="control-label col-sm-3" htmlFor="kppRating1">Rating 2:</label>
+                                        <label className="control-label col-sm-3" htmlFor="kppRating1">Rating 4:</label>
                                         <div className="col-sm-2">
-                                            <input type="text" className="form-control" id="kppRating2" value={kppRating2} onChange={(e) => setKppRating2(e.target.value)} placeholder="Enter KPP Rating 2 here" />
+                                            <input type="text" className="form-control" id="kppRating2" value={kppRating2} onChange={(e) => setKppRating2(e.target.value)} placeholder="Enter KPP Rating 4 here" />
                                         </div>
                                     </div>
                                 </div>
@@ -496,18 +498,18 @@ export default function KeyParameterComponent() {
                                         <div className="col-sm-2">
                                             <input type="text" className="form-control" id="kppRating3" value={kppRating3} onChange={(e) => setKppRating3(e.target.value)} placeholder="Enter KPP Rating 3 here" />
                                         </div>
-                                        <label className="control-label col-sm-3" htmlFor="kppRating1">Rating 4:</label>
+                                        <label className="control-label col-sm-3" htmlFor="kppRating1">Rating 2:</label>
                                         <div className="col-sm-2">
-                                            <input type="text" className="form-control" id="kppRating4" value={kppRating4} onChange={(e) => setKppRating4(e.target.value)} placeholder="Enter KPP Rating 4 here" />
+                                            <input type="text" className="form-control" id="kppRating4" value={kppRating4} onChange={(e) => setKppRating4(e.target.value)} placeholder="Enter KPP Rating 2 here" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="form-group">
                                     <div className="row">
-                                        <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppRating5">Rating 5:</label>
+                                        <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppRating5">Rating 1:</label>
                                         <div className="col-sm-2">
-                                            <input type="text" className="form-control" id="kppRating5" value={kppRating5} onChange={(e) => setKppRating5(e.target.value)} placeholder="Enter KPP Rating 5 here" />
+                                            <input type="text" className="form-control" id="kppRating5" value={kppRating5} onChange={(e) => setKppRating5(e.target.value)} placeholder="Enter KPP Rating 1 here" />
                                         </div>
 
                                     </div>
@@ -565,6 +567,14 @@ export default function KeyParameterComponent() {
                                     <label className="control-label col-sm-4" htmlFor="desigId">Select Designation Name:</label>
                                     <div className="col-sm-4">
                                         {desigName}
+                                    </div>
+                                </div>
+
+
+                                <div className="form-group">
+                                    <label className="control-label col-sm-4" htmlFor="kppObjective">KPP Objective No:</label>
+                                    <div className="col-sm-4">
+                                        <input type="text" className="form-control" id="kppObjectiveNo" value={kppObjectiveNo} onChange={(e) => setKppOverallTarget(e.target.value)} placeholder="Enter KPP Objective Number here" />
                                     </div>
                                 </div>
 
@@ -694,6 +704,14 @@ export default function KeyParameterComponent() {
                                     <label className="control-label col-sm-4" htmlFor="desigId">Select Designation Name:</label>
                                     <div className="col-sm-4">
                                         {desigName}
+                                    </div>
+                                </div>
+
+
+                                <div className="form-group">
+                                    <label className="control-label col-sm-4" htmlFor="kppObjective">KPP Objective Number:</label>
+                                    <div className="col-sm-8">
+                                        {kppObjectiveNo}
                                     </div>
                                 </div>
 

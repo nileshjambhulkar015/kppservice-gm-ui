@@ -214,6 +214,7 @@ export default function AssignEmployeeKppComponent() {
                             <tr>
                                 <th>Sr No</th>
                                 <th>Action</th>
+                                <th>KPP Objective No</th>
                                 <th>KPP Objective</th>
                                 <th>Performance Indicator</th>
 
@@ -236,6 +237,7 @@ export default function AssignEmployeeKppComponent() {
                                         <tr key={kpp.kppId}>
                                             <td className="text-center">{index + 1}</td>
                                             <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => saveKPPDetailsForEmployee(e, kpp.kppId)}>Assign</button></td>
+                                            <td className="text-justify">{kpp.kppObjectiveNo}</td>
                                             <td className="text-justify">{kpp.kppObjective}</td>
                                             <td className="text-justify">{kpp.kppPerformanceIndi}</td>
                                             <td className="text-center">{kpp.kppOverallTarget}</td>
@@ -268,6 +270,7 @@ export default function AssignEmployeeKppComponent() {
                             <tr>
                                 <th>Sr No</th>
                                 <th>Action</th>
+                                <th>KPP Objective No</th>
                                 <th>KPP Objective</th>
                                 <th>Performance Indicator</th>
 
@@ -290,6 +293,7 @@ export default function AssignEmployeeKppComponent() {
                                         <tr key={kpp.kppId}>
                                             <td className="text-center">{index + 1}</td>
                                             <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => deleteKPPDetailsForEmployee(kpp.kppId)}>Remove</button></td>
+                                            <td className="text-justify">{kpp.kppObjectiveNo}</td>
                                             <td className="text-justify">{kpp.kppObjective}</td>
                                             <td className="text-justify">{kpp.kppPerformanceIndi}</td>
                                             <td className="text-center">{kpp.kppOverallTarget}</td>

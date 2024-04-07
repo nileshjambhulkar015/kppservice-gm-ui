@@ -145,7 +145,7 @@ export default function AddNewEmployeeComponent() {
         console.log("empTypeId", res.data.responseData?.[0].empTypeId)
     });
 
-        DesignationService.getAllDepartmentFromDesig().then((res1) => {
+        DepartmentService.getAllDepartmentExceptGM().then((res1) => {
             setDepartments(res1.data);
             setDeptId(res1.data?.[0].deptId)
             let deptId = res1.data?.[0].deptId;
