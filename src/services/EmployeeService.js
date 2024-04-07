@@ -46,7 +46,7 @@ class EmployeeService {
 
     getEmployeeDetailsByEmpFirstNamePaging(empFirstName) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/employee/search?empFirstName=${empFirstName}&statusCd=A&page=0&size=20&sort=emp.emp_name`)
+            return axios.get(BASE_URL_API+`/employee/search?empEId=${empFirstName}&statusCd=A&page=0&size=20&sort=emp.emp_name`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

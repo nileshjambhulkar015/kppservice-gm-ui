@@ -159,8 +159,8 @@ export default function AssignEmployeeKppComponent() {
         <div className="row container-fluid">
 
             <div className="row">
-                <div className="col-md-8">
-                    <button type="submit" className="btn btn-info col-sm-offset-8 " onClick={() => removeCookies()}> Back</button>
+                <div className="col-md-12">
+                    <button type="submit" className="btn btn-success col-sm-offset-8 " onClick={() => removeCookies()}> Back</button>
                 </div>
             </div>
 

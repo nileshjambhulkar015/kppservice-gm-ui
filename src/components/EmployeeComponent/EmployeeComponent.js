@@ -51,7 +51,7 @@ export default function EmployeeComponent() {
     const [departments, setDepartments] = useState([])
 
     const [designations, setDesignations] = useState([])
-
+    const [isSuccess, setIsSuccess] = useState(true)
     const [empFirstNameSearch, setEmpFirstNameSearch] = useState('');
     const [empTypes, setEmpTypes] = useState([])
     //for gender selection
@@ -68,7 +68,15 @@ export default function EmployeeComponent() {
 
     useEffect(() => {
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
-            setEmployees(res.data.responseData.content);
+
+            if (res.data.success) {
+                setIsSuccess(true);
+                setEmployees(res.data.responseData.content);
+            }
+            else {
+                setIsSuccess(false);
+            }
+          
         });
 
         RoleService.getRoles().then((res) => {
@@ -163,8 +171,14 @@ export default function EmployeeComponent() {
 
     const searchEmployeeFirstName = (e) => {
         EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
-            setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
-            console.log(res.data)
+
+            if (res.data.success) {
+                setIsSuccess(true);
+                setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
+            }
+            else {
+                setIsSuccess(false);
+            }
         });
     }
 
@@ -298,7 +312,7 @@ export default function EmployeeComponent() {
                     <div className="col-sm-6">
                         <div className="form-group">
                             <form className="form-horizontal">
-                                <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter First Name:</label>
+                                <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter Employee Id:</label>
                                 <div className="col-sm-4">
                                     <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter First Name" value={empFirstNameSearch} onChange={(e) => setEmpFirstNameSearch(e.target.value)} />
                                 </div>
@@ -313,6 +327,7 @@ export default function EmployeeComponent() {
                     </div>
                 </div>
                 <div className="row">
+                {isSuccess?
                     <table className="table table-bordered">
                         <thead>
                             <tr>
@@ -350,6 +365,7 @@ export default function EmployeeComponent() {
                             }
                         </tbody>
                     </table>
+                    :<h4>Employee Id is not available</h4>}
                 </div>
 
             </div>
