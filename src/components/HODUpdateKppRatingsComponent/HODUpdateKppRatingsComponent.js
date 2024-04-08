@@ -258,11 +258,12 @@ const HODUpdateKppRatingsComponent = () => {
                                 </table>
 
                                 <div className="form-group">
-                                    <label className="control-label col-sm-4" htmlFor="reamrk">View Evidence:</label>
-                                    <div className="col-sm-3">
-                                        click here to download
-                                    </div>
+                                <label className="control-label col-sm-4" htmlFor="reamrk">View Evidence:</label>
+                                <div className="col-sm-3">Download evidence 
+                                <a href={BASE_URL_API+`/evidence?empId=${Cookies.get('hodEmpIdForKppRatings')}`}>
+                                Click here</a>
                                 </div>
+                            </div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="empRemark">Enter Remark:</label>
                                     <div className="col-sm-6">

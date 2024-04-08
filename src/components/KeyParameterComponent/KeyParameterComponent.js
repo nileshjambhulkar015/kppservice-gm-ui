@@ -313,7 +313,7 @@ export default function KeyParameterComponent() {
                             }
                         </tbody>
                     </table> 
-                     : <h1>No Data Found</h1>}
+                     : <h4>No KPP available</h4>}
                 </div>
 
             </div>
