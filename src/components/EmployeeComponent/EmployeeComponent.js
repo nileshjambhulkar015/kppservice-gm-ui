@@ -41,7 +41,7 @@ export default function EmployeeComponent() {
     const [remark, setRemark] = useState('');
     const [empTypeId, setEmpTypeId] = useState('');
 
-
+const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
     const [compnays, setCompanys] = useState([])
     const [regions, setRegions] = useState([])
     const [sites, setSites] = useState([])
@@ -52,7 +52,7 @@ export default function EmployeeComponent() {
 
     const [designations, setDesignations] = useState([])
     const [isSuccess, setIsSuccess] = useState(true)
-    const [empFirstNameSearch, setEmpFirstNameSearch] = useState('');
+    const [empEIdSearch, setEmpEIdSearch] = useState('');
     const [empTypes, setEmpTypes] = useState([])
     //for gender selection
     const onGenderChangeHandler = (event) => {
@@ -170,8 +170,9 @@ export default function EmployeeComponent() {
    
 
     const searchEmployeeEId = (e) => {
-        let empEId=e.target.value;
-        EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(empEId).then((res) => {
+        setEmpEIdSearch(e.target.value)
+    
+        EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e.target.value).then((res) => {
 
             if (res.data.success) {
                 setIsSuccess(true);

@@ -22,7 +22,8 @@ export default function DesignationComponent() {
         });
 
         DepartmentService.getAllDepartmentExceptGM().then((res) => {
-            setDepartments(res.data);            
+            setDepartments(res.data); 
+            setDeptId(res.data?.[0].deptId)           
                   
         });
     }, []);
