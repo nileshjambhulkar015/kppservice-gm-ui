@@ -125,6 +125,13 @@ export default function SingleHODCumulativeComponent() {
                         </div>
 
                         <div className="form-group">
+                            <label className="control-label col-sm-2"  >Employee Id :</label>
+                            <div className="col-sm-5">
+                                {empEId}
+                            </div>
+                        </div>
+
+                        <div className="form-group">
                             <label className="control-label col-sm-2"  >Role :</label>
                             <div className="col-sm-5">
                                 {roleName}
@@ -178,10 +185,10 @@ export default function SingleHODCumulativeComponent() {
                             <tr>
                                 <th className="text-center">Sr No</th>
                                 <th className="text-center">KPP Month</th>
-
                                 <th className="text-center">HOD Ratings</th>
                                 <th className="text-center">GM Ratings Name</th>
                                 <th className="text-center">Total Ratings</th>
+                                <th className="text-center">Evidence</th>
                                 <th className="text-center">Action</th>
                             </tr>
                         </thead>
@@ -198,7 +205,12 @@ export default function SingleHODCumulativeComponent() {
                                             <td className="text-center">{employee.sumOfRatings}</td>
 
                                             <td className="text-center">
-
+                                            <div className="col-sm-3">
+                                            <a href={BASE_URL_API+`/report-evidence?empId=${employee.empId}&evMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
+                                            View</a>
+                                            </div>
+                                            </td>
+                                            <td className="text-center">
                                                 <a href={BASE_URL_API + `/report/completed-hod-kpp-status?empId=${employee.empId}&ekppMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
                                                     <button type="submit" className="btn btn-info">Download</button>
                                                 </a>
