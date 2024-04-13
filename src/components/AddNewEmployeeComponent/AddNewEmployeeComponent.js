@@ -160,12 +160,36 @@ export default function AddNewEmployeeComponent() {
 
 
   
-        RoleService.getRoles().then((res) => {
+       /* EmployeeService.ddRolesExceptEmployee().then((res) => {
             setReportingRoles(res.data);
             setReportingEmpRoleId(res.data?.[0].roleId)
-        });
+        });*/
 
-        DesignationService.getAllDepartmentFromDesig().then((res1) => {
+        EmployeeService.ddRolesExceptEmployee().then((res) => {
+            setReportingRoles(res.data);
+            console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
+            setReportingEmpRoleId(res.data?.[0].roleId)
+           let roleId = res.data?.[0].roleId;
+           EmployeeService.ddDepartmentFromEmployee(roleId).then((res1) => {
+                setReportingDepartments(res1.data);
+                setReportingEmpDeptId(res1.data?.[0].deptId)
+                let deptId = res1.data?.[0].deptId;
+                EmployeeService.ddDesignationFromEmployee({ roleId, deptId }).then((res2) => {
+                    setReportingDesignations(res2.data);
+                    setReportingEmpDesigId(res2.data?.[0]?.desigId)
+                    let reportingEmpDesigId = res2.data?.[0]?.desigId
+                     EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
+                        setReportingEmpId(res3.data?.[0]?.empId)
+                        setReportingEmpName(res3.data);
+                        console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
+                    });
+                   
+                });
+            });
+        }); 
+
+            
+       /* DesignationService.getAllDepartmentFromDesig().then((res1) => {
             setReportingDepartments(res1.data);
             setReportingEmpDeptId(res1.data?.[0].deptId)
             let deptId = res1.data?.[0].deptId;
@@ -180,7 +204,7 @@ export default function AddNewEmployeeComponent() {
                 });
 
             });
-        });
+        });*/
 
 
 
@@ -213,7 +237,7 @@ export default function AddNewEmployeeComponent() {
     }
 
     const handleSiteIdChange = (value) => {
-        console.log("Site id =", value)
+       
         setSiteId(value)
         let siteId = value;
         EmployeeService.getCompanyFromComany({ regionId, siteId }).then((res2) => {
@@ -236,7 +260,7 @@ export default function AddNewEmployeeComponent() {
 
 
     const handleDeptIdChange = (value) => {
-        console.log("Dept id =", value)
+        
         setDeptId(value)
         let deptId = value;
         DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
@@ -250,37 +274,49 @@ export default function AddNewEmployeeComponent() {
 
     const handleReportingRoleIdChange = (value) => {
         setReportingEmpRoleId(value)
+        let roleId = value
+        EmployeeService.ddDepartmentFromEmployee(roleId).then((res1) => {
+            setReportingDepartments(res1.data);
+            setReportingEmpDeptId(res1.data?.[0].deptId)
+            let deptId = res1.data?.[0].deptId;
+            EmployeeService.ddDesignationFromEmployee({ roleId, deptId }).then((res2) => {
+                setReportingDesignations(res2.data);
+                setReportingEmpDesigId(res2.data?.[0]?.desigId)
+                let reportingEmpDesigId = res2.data?.[0]?.desigId
+                 EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
+                    setReportingEmpId(res3.data?.[0]?.empId)
+                    setReportingEmpName(res3.data);
+                    console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
+                });
+               
+            });
+        });
        }
 
     const handleReportingDesigIdChange = (value) => {
         setReportingEmpDesigId(value)
-
         let reportingEmpDesigId = value
-
         EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
-            setReportingEmpId(res3.data?.[0]?.empId)
-            setReportingEmpName(res3.data);
-            console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
-        });
-
-        
+           setReportingEmpId(res3.data?.[0]?.empId)
+           setReportingEmpName(res3.data);
+           console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
+       });        
     }
 
     const handleReportingDeptIdChange = (value) => {
-        console.log("Dept id =", value)
+       
         setReportingEmpDeptId(value)
         let deptId = value;
-      
-        DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
+        EmployeeService.ddDesignationFromEmployee({ roleId, deptId }).then((res2) => {
             setReportingDesignations(res2.data);
             setReportingEmpDesigId(res2.data?.[0]?.desigId)
-            let reportingEmpDesigId = res2.data?.[0]?.desigId;
-            EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
+            let reportingEmpDesigId = res2.data?.[0]?.desigId
+             EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
                 setReportingEmpId(res3.data?.[0]?.empId)
                 setReportingEmpName(res3.data);
                 console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
             });
-
+           
         });
 
     }

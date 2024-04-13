@@ -55,7 +55,7 @@ class EmployeeService {
 
     getEmployeeById(empId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL + '/' + empId)
+            return axios.get(BASE_URL + '/byEmpId?empId=' + empId)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -136,6 +136,36 @@ class EmployeeService {
         }
 
     }
+
+         //Get all roles present in department table for designation form
+         ddRolesExceptEmployee() {
+            if (null != Cookies.get('empId')) {
+                return axios.get(BASE_URL_API+"/employee/dd-role-except-emp-role")
+            } else {
+                alert("You need to login first")
+                window.location.replace(LOGIN_UI_BASE_URL);
+            }    
+        }
+
+          //Get all roles present in department table for designation form
+          ddDepartmentFromEmployee(roleId) {
+            if (null != Cookies.get('empId')) {
+                return axios.get(BASE_URL_API+`/employee/dd-dept-emp?roleId=${roleId}`)
+            } else {
+                alert("You need to login first")
+                window.location.replace(LOGIN_UI_BASE_URL);
+            }    
+        }
+
+           //Get all roles present in department table for designation form
+           ddDesignationFromEmployee(data) {
+            if (null != Cookies.get('empId')) {
+                return axios.get(BASE_URL_API+`/employee/dd-desig-emp?roleId=${data.roleId}&deptId=${data.deptId}`)
+            } else {
+                alert("You need to login first")
+                window.location.replace(LOGIN_UI_BASE_URL);
+            }    
+        }
      
 }
 
