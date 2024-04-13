@@ -29,8 +29,8 @@ export default function KeyParameterComponent() {
     const [kppRating5, setKppRating5] = useState('');
     const [remark, setRemark] = useState('');
     const [isSuccess, setIsSuccess] = useState(true)
-
-
+    
+    const [kppObjectiveNoSearch, setKppObjectiveNoSearch] = useState('');
     const [kpps, setKpps] = useState([])
     const [departments, setDepartments] = useState([])
     const [designations, setDesignations] = useState([])
@@ -46,10 +46,24 @@ export default function KeyParameterComponent() {
         setUomId(value);
     };
 
+    const searchByKppObjectiveNo = (e) => {
+        setKppObjectiveNoSearch(e.target.value)
+    
+        KeyParameterService.getKPPDetailsByKppObjectiveNoPaging(e.target.value).then((res) => {
+
+            if (res.data.success) {
+                setIsSuccess(true);
+                setKpps(res.data.responseData.content);
+            }
+            else {
+                setIsSuccess(false);
+            }
+        });
+    }
 
     // search kpp by objective name on click of search button
     const searchKppObjective = (e) => {
-        KeyParameterService.getKPPDetailsByKppObjectivePaging(e).then((res) => {
+        KeyParameterService.getKPPDetailsByKppObjectiveNoPaging(e).then((res) => {
             setKpps(res.data.responseData.content);
             console.log(res.data)
         });
@@ -233,7 +247,6 @@ export default function KeyParameterComponent() {
 
     //upload excel data for KPP
     const handleSubmit = (event) => {
-
         event.preventDefault();
         const formData = new FormData(event.target);
         fetch(BASE_URL_API + '/key-perform-parameter/upload-kpp', {
@@ -262,7 +275,7 @@ export default function KeyParameterComponent() {
                             <form className="form-horizontal">
                                 <label className="control-label col-sm-3" htmlFor="kppObjectiveSearch">Enter KPP Objective:</label>
                                 <div className="col-sm-4">
-                                    <input type="text" className="form-control" id="kppObjectiveSearch" placeholder="Enter Role Name" value={kppObjectiveSearch} onChange={(e) => setKppObjectiveSearch(e.target.value)} />
+                                    <input type="text" className="form-control" id="kppObjectiveNoSearch" placeholder="Enter Role Name" value={kppObjectiveNoSearch} onChange={(e) => searchByKppObjectiveNo(e)} />
                                 </div>
                             </form>
                             <button type="submit" className="btn btn-primary" onClick={() => searchKppObjective(kppObjectiveSearch)}>Search</button>

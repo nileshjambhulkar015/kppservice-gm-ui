@@ -77,6 +77,15 @@ class KeyParameterService {
         }
     }
 
+    getKPPDetailsByKppObjectiveNoPaging(kppObjectiveNo) {
+        if (null != Cookies.get('empId')) {
+            return axios.get(BASE_URL_API+`/key-perform-parameter/search?kppObjectiveNo=${kppObjectiveNo}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+    }
+
     getKppById(kppId) {
         if (null != Cookies.get('empId')) {
             return axios.get(BASE_URL + '/' + kppId)
