@@ -268,9 +268,13 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
 
             let employeeData = { empId, empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
             EmployeeService.updateEmployeeDetails(employeeData).then(res => {
+                if(res.data.success){
                 EmployeeService.getEmployeeDetailsByPaging().then((res) => {
                     setEmployees(res.data.responseData.content);
-                });
+                });}
+               else{
+                alert(res.data.responseMessage)
+               }
                 console.log("Employee deleted");
             }
             );
