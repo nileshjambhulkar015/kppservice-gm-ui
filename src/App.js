@@ -54,7 +54,7 @@ function App() {
 
           <li><Link to="/keyparemeter">Key Indicator Master</Link></li>
                  
-            <li><Link to="/showEmployeeForKpp">Assign Employee Kpp</Link></li>
+            
          
 
             <li className="dropdown">
@@ -71,6 +71,7 @@ function App() {
           <span className="caret"></span></a>
           <ul className="dropdown-menu">           
           <li><Link to="/employee">Employee Master</Link></li>
+          <li><Link to="/showEmployeeForKpp">Assign Employee Kpp</Link></li>
           <li><Link to="/transferemployeetohod">Transfer Employee to Other HOD</Link></li>        
           </ul>
         </li>

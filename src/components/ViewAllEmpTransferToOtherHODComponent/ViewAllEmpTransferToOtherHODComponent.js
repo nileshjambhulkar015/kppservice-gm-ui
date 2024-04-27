@@ -27,8 +27,8 @@ export default function ViewAllEmpTransferToOtherHODComponent() {
     const [roles, setRoles] = useState([])
 
     const [employees, setEmployees] = useState([])
-
-
+    const [empEIdSearch, setEmpEIdSearch] = useState('');
+    const [isSuccess, setIsSuccess] = useState(true)
     const [regions, setRegions] = useState([])
     const [sites, setSites] = useState([])
     const [companys, setCompanys] = useState([])
@@ -36,190 +36,24 @@ export default function ViewAllEmpTransferToOtherHODComponent() {
     useEffect(() => {
 
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
-            setEmployees(res.data.responseData.content);
+            setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 2));
         });
 
-        ///
-        EmployeeDDService.getRegionsFromEmployee().then((res) => {
-            setRegions(res.data);
-            console.log("res.data?.[0].roleId = ", res.data?.[0].roleId)
-            setRegionId(res.data?.[0].regionId)
-            let regionId = res.data?.[0].regionId;
-            EmployeeDDService.getSitesByRegionIdFromEmployee(regionId).then((res1) => {
-                setSites(res1.data);
-                setSiteId(res1.data?.[0].siteId)
-                let siteId = res1.data?.[0].siteId;
-                EmployeeDDService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
-                    setCompanys(res2.data);
-                    setCompanyId(res2.data?.[0]?.companyId)
-                    let companyId = res2.data?.[0].companyId;
-                    EmployeeDDService.getRolesFromEmployee({ regionId, siteId, companyId }).then((res3) => {
-                        setRoles(res3.data);
-                        setRoleId(res3.data?.[0]?.roleId)
-                        let roleId = res3.data?.[0].roleId;
-                        EmployeeDDService.getDeptFromEmployee({ regionId, siteId, companyId, roleId }).then((res4) => {
-                            setDepartments(res4.data);
-                            setDeptId(res4.data?.[0]?.deptId)
-
-                            let deptId = res4.data?.[0].deptId;
-                            EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-                                setDesignations(res5.data);
-                                setDesigId(res5.data?.[0]?.desigId)
-
-                                /*let reportingEmpDesigId = res5.data?.[0]?.desigId
-                                EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
-                                    setEmployees(res.data.responseData.content);
-                                });*/
-
-                            });
-                        });
-                    });
-                });
-            });
-        });
-        ////
+        
     }, []);
 
+    const searchEmployeeEId = (e) => {
+        setEmpEIdSearch(e.target.value)
+    
+        EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e.target.value).then((res) => {
 
-    // for region id, site id and company id
-    const handleRegionIdChange = (value) => {
-        setRegionId(value)
-        let regionId = value;
-        EmployeeDDService.getSitesByRegionIdFromEmployee(regionId).then((res1) => {
-            setSites(res1.data);
-            setSiteId(res1.data?.[0].siteId)
-            let siteId = res1.data?.[0].siteId;
-            EmployeeDDService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
-                setCompanys(res2.data);
-                setCompanyId(res2.data?.[0]?.companyId)
-                let companyId = res2.data?.[0].companyId;
-                EmployeeDDService.getRolesFromEmployee({ regionId, siteId, companyId }).then((res3) => {
-                    setRoles(res3.data);
-                    setRoleId(res3.data?.[0]?.roleId)
-                    let roleId = res3.data?.[0].roleId;
-                    EmployeeDDService.getDeptFromEmployee({ regionId, siteId, companyId, roleId }).then((res4) => {
-                        setDepartments(res4.data);
-                        setDeptId(res4.data?.[0]?.deptId)
-
-                        let deptId = res4.data?.[0].deptId;
-                        EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-                            setDesignations(res5.data);
-                            setDesigId(res5.data?.[0]?.desigId)
-                            let reportingEmpDesigId = res5.data?.[0]?.desigId
-                            EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
-                                setEmployees(res.data.responseData.content);
-                            });
-
-                        });
-                    });
-                });
-            });
-        });
-    }
-
-
-    const handleCompanyIdChange = (value) => {
-        setCompanyId(value)
-        let companyId = value;
-        EmployeeDDService.getRolesFromEmployee({ regionId, siteId, companyId }).then((res3) => {
-            setRoles(res3.data);
-            setRoleId(res3.data?.[0]?.roleId)
-            let roleId = res3.data?.[0].roleId;
-            EmployeeDDService.getDeptFromEmployee({ regionId, siteId, companyId, roleId }).then((res4) => {
-                setDepartments(res4.data);
-                setDeptId(res4.data?.[0]?.deptId)
-
-                let deptId = res4.data?.[0].deptId;
-                EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-                    setDesignations(res5.data);
-                    setDesigId(res5.data?.[0]?.desigId)
-
-                    let reportingEmpDesigId = res5.data?.[0]?.desigId
-                    EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res6) => {
-                        setEmployees(res6.data.responseData.content);
-                    });
-
-                });
-            });
-        });
-    }
-
-    const handleSiteIdChange = (value) => {
-        setSiteId(value)
-        let siteId = value;
-        EmployeeDDService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
-            setCompanys(res2.data);
-            setCompanyId(res2.data?.[0]?.companyId)
-            let companyId = res2.data?.[0].companyId;
-            EmployeeDDService.getRolesFromEmployee({ regionId, siteId, companyId }).then((res3) => {
-                setRoles(res3.data);
-                setRoleId(res3.data?.[0]?.roleId)
-                let roleId = res3.data?.[0].roleId;
-                EmployeeDDService.getDeptFromEmployee({ regionId, siteId, companyId, roleId }).then((res4) => {
-                    setDepartments(res4.data);
-                    setDeptId(res4.data?.[0]?.deptId)
-
-                    let deptId = res4.data?.[0].deptId;
-                    EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-                        setDesignations(res5.data);
-                        setDesigId(res5.data?.[0]?.desigId)
-
-                        let reportingEmpDesigId = res5.data?.[0]?.desigId
-                        EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res6) => {
-                            setEmployees(res6.data.responseData.content);
-                        });
-
-                    });
-                });
-            });
-        });
-
-    }
-
-
-    // for role , dept and desig
-    const handleRoleIdChange = (value) => {
-        setRoleId(value)
-        let roleId = value;
-        EmployeeDDService.getDeptFromEmployee({ regionId, siteId, companyId, roleId }).then((res4) => {
-            setDepartments(res4.data);
-            setDeptId(res4.data?.[0]?.deptId)
-
-            let deptId = res4.data?.[0].deptId;
-            EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-                setDesignations(res5.data);
-                setDesigId(res5.data?.[0]?.desigId)
-                let reportingEmpDesigId = res5.data?.[0]?.desigId
-                EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res6) => {
-                    setEmployees(res6.data.responseData.content);
-                });
-
-            });
-        });
-    }
-
-    const handleDesigIdChange = (value) => {
-        setDesigId(value)
-
-        let reportingEmpDesigId = value
-        EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res6) => {
-            setEmployees(res6.data.responseData.content);
-        });
-    }
-
-    const handleDeptIdChange = (value) => {
-        setDeptId(value)
-
-        let deptId = value;
-        EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-            setDesignations(res5.data);
-            setDesigId(res5.data?.[0]?.desigId)
-
-            let reportingEmpDesigId = res5.data?.[0]?.desigId
-            EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res6) => {
-                setEmployees(res6.data.responseData.content);
-            });
-
+            if (res.data.success) {
+                setIsSuccess(true);
+                setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 2));
+            }
+            else {
+                setIsSuccess(false);
+            }
         });
     }
 
@@ -239,120 +73,24 @@ export default function ViewAllEmpTransferToOtherHODComponent() {
 
     return (
         <div className="row">
-            <h3 className="text-center">Assign KPP to  New Employee</h3>
-            <form className="form-horizontal">
-
-                <div className="form-group">
-                    <div className="row">
-                        <label className="control-label col-sm-2" htmlFor="regionName">Region Name:</label>
-                        <div className="col-sm-2">
-                            <div className="form-group">
-                                <select className="form-control" id="regionId" onChange={(e) => handleRegionIdChange(e.target.value)}>
-
-                                    {
-                                        regions.map(
-                                            region =>
-                                                <option key={region.regionId} value={region.regionId}>{region.regionName}</option>
-                                        )
-                                    };
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <label className="control-label col-sm-1" htmlFor="siteName">Site Name:</label>
-                        <div className="col-sm-2">
-                            <div className="form-group">
-                                <select className="form-control" id="siteId" onChange={(e) => handleSiteIdChange(e.target.value)}>
-
-                                    {
-                                        sites.map(
-                                            site =>
-                                                <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
-                                        )
-                                    };
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <label className="control-label col-sm-1" htmlFor="companyName">Company Name:</label>
-                        <div className="col-sm-2">
-                            <div className="form-group">
-                                <select className="form-control" id="roleId" onChange={(e) => handleCompanyIdChange(e.target.value)}>
-
-                                    {
-                                        companys.map(
-                                            company =>
-                                                <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
-                                        )
-                                    };
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-                <div className="form-group">
-                    <label className="control-label col-sm-2" htmlFor="deptId">Select Role Name:</label>
-                    <div className="col-sm-2">
+            <h3 className="text-center">Transfer Employee to  Other HOD</h3>
+            <div className="col-sm-1"></div>
+            <div className="col-sm-10">
+            <div className="row">
+                    <div className="col-sm-6">
                         <div className="form-group">
-                            <select className="form-control" id="roleId" onChange={(e) => handleRoleIdChange(e.target.value)}>
-
-                                {
-                                    roles.map(
-                                        role =>
-                                            <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
-                                    )
-                                };
-                            </select>
+                            <form className="form-horizontal">
+                                <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter Employee Id:</label>
+                                <div className="col-sm-4">
+                                    <input type="text" className="form-control" id="empEIdSearch" placeholder="Enter Employee Ide" value={empEIdSearch} onChange={(e) => searchEmployeeEId(e)} />
+                                </div>
+                            </form>
+                           
                         </div>
                     </div>
+                  
                 </div>
-
-
-                <div className="form-group">
-                    <label className="control-label col-sm-2" htmlFor="deptId">Select Department Name:</label>
-                    <div className="col-sm-2">
-                        <div className="form-group">
-                            <select className="form-control" id="deptId" onChange={(e) => handleDeptIdChange(e.target.value)}>
-
-                                {
-                                    departments.map(
-                                        department =>
-                                            <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
-                                    )
-                                };
-
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="form-group">
-                    <label className="control-label col-sm-2" htmlFor="desigId">Select Designation Name:</label>
-                    <div className="col-sm-2">
-                        <div className="form-group">
-                            <select className="form-control" id="desigId" onChange={(e) => handleDesigIdChange(e.target.value)}>
-
-                                {
-                                    designations.map(
-                                        designation =>
-                                            <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
-                                    )
-                                };
-
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <div className="col-sm-8">
+                {isSuccess?
                 <table className="table table-bordered">
                     <thead>
                         <tr>
@@ -362,6 +100,7 @@ export default function ViewAllEmpTransferToOtherHODComponent() {
                             <th className="text-center">Department Name</th>
                             <th className="text-center">Designation Name</th>
                             <th className="text-center">Mobile No</th>
+                            <th className="text-center">HOD Name</th>
                             <th className="text-center">Action</th>
                         </tr>
                     </thead>
@@ -376,7 +115,8 @@ export default function ViewAllEmpTransferToOtherHODComponent() {
                                         <td className="text-center">{employee.deptName}</td>
                                         <td className="text-center">{employee.desigName}</td>
                                         <td className="text-center">{employee.empMobileNo}</td>
-
+                                        <td className="text-center">{employee.reportingHODName}</td>
+                                        
                                         <td className="text-center"> <button type="submit" className="btn btn-info" onClick={() =>
                                             navigateToAssignEmployee(employee.empId, employee.empEId, employee.roleId, employee.deptId, employee.desigId, employee.reportingEmpId)
                                         }>Transfer</button></td>
@@ -384,7 +124,7 @@ export default function ViewAllEmpTransferToOtherHODComponent() {
                             )
                         }
                     </tbody>
-                </table>
+                </table>  :<h4>Employee is not available</h4>}
             </div>
 
 
