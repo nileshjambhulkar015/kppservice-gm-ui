@@ -6,6 +6,10 @@ import DesignationService from "../../services/DesignationService";
 import EmployeeService from "../../services/EmployeeService";
 import RoleService from "../../services/RoleService";
 import EmployeeDDService from '../../services/DropDownService/EmployeeDDService';
+import EmployeeTypeService from '../../services/MasterService/EmployeeTypeService';
+import RegionService from '../../services/RegionService';
+import SiteService from '../../services/MasterService/SiteService';
+import CompanyMasterService from '../../services/MasterService/CompanyMasterService';
 export default function ShowEmployeeForKppComponent() {
 
     const navigate = useNavigate();
@@ -17,7 +21,7 @@ export default function ShowEmployeeForKppComponent() {
     const [companyId, setCompanyId] = useState('');
     const [companyName, setComapnyName] = useState('');
 
-
+    const [compnays, setCompanys] = useState([])
     const [roleId, setRoleId] = useState('');
     const [roleName, setRoleName] = useState('');
     const [deptId, setDeptId] = useState('');
@@ -31,198 +35,58 @@ export default function ShowEmployeeForKppComponent() {
 
     const [employees, setEmployees] = useState([])
 
-
     const [regions, setRegions] = useState([])
     const [sites, setSites] = useState([])
-    const [companys, setCompanys] = useState([])
-
+    
+    const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
+    const [isSuccess, setIsSuccess] = useState(true)
+    const [empEIdSearch, setEmpEIdSearch] = useState('');
+    const [empTypeId, setEmpTypeId] = useState('');
+    const [empTypes, setEmpTypes] = useState([])
     useEffect(() => {
 
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content);
         });
 
-        ///
-        EmployeeDDService.getRegionsFromEmployee().then((res) => {
-            setRegions(res.data);
-            console.log("res.data?.[0].roleId = ", res.data?.[0].roleId)
-            setRegionId(res.data?.[0].regionId)
-            let regionId = res.data?.[0].regionId;
-            EmployeeDDService.getSitesByRegionIdFromEmployee(regionId).then((res1) => {
-                setSites(res1.data);
-                setSiteId(res1.data?.[0].siteId)
-                let siteId = res1.data?.[0].siteId;
-                EmployeeDDService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
-                    setCompanys(res2.data);
-                    setCompanyId(res2.data?.[0]?.companyId)
-                    let companyId = res2.data?.[0].companyId;
-                    EmployeeDDService.getRolesFromEmployee({ regionId, siteId, companyId }).then((res3) => {
-                        setRoles(res3.data);
-                        setRoleId(res3.data?.[0]?.roleId)
-                        let roleId = res3.data?.[0].roleId;
-                        EmployeeDDService.getDeptFromEmployee({ regionId, siteId, companyId, roleId }).then((res4) => {
-                            setDepartments(res4.data);
-                            setDeptId(res4.data?.[0]?.deptId)
-
-                            let deptId = res4.data?.[0].deptId;
-                            EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-                                setDesignations(res5.data);
-                                setDesigId(res5.data?.[0]?.desigId)
-
-                                /*let reportingEmpDesigId = res5.data?.[0]?.desigId
-                                EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
-                                    setEmployees(res.data.responseData.content);
-                                });*/
-
-                            });
-                        });
-                    });
-                });
-            });
+        RoleService.getRoles().then((res) => {
+            setRoles(res.data);
         });
-        ////
+
+        EmployeeTypeService.getDDEmployeeType().then((res) => {
+            setEmpTypes(res.data.responseData);
+        });
+
+        DesignationService.getAllDepartmentDetails().then((res) => {
+            setDepartments(res.data);
+        });
+
+        RegionService.ddRegions().then((res) => {
+            setRegions(res.data);
+        });
+
+        SiteService.getAllSites().then((res) => {
+            setSites(res.data);
+        });
+
+        CompanyMasterService.getAllCompanyies().then((res) => {
+            setCompanys(res.data);
+        });
     }, []);
 
 
-    // for region id, site id and company id
-    const handleRegionIdChange = (value) => {
-        setRegionId(value)
-        let regionId = value;
-        EmployeeDDService.getSitesByRegionIdFromEmployee(regionId).then((res1) => {
-            setSites(res1.data);
-            setSiteId(res1.data?.[0].siteId)
-            let siteId = res1.data?.[0].siteId;
-            EmployeeDDService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
-                setCompanys(res2.data);
-                setCompanyId(res2.data?.[0]?.companyId)
-                let companyId = res2.data?.[0].companyId;
-                EmployeeDDService.getRolesFromEmployee({ regionId, siteId, companyId }).then((res3) => {
-                    setRoles(res3.data);
-                    setRoleId(res3.data?.[0]?.roleId)
-                    let roleId = res3.data?.[0].roleId;
-                    EmployeeDDService.getDeptFromEmployee({ regionId, siteId, companyId, roleId }).then((res4) => {
-                        setDepartments(res4.data);
-                        setDeptId(res4.data?.[0]?.deptId)
+    const searchEmployeeEId = (e) => {
+        setEmpEIdSearch(e.target.value)
+    
+        EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e.target.value).then((res) => {
 
-                        let deptId = res4.data?.[0].deptId;
-                        EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-                            setDesignations(res5.data);
-                            setDesigId(res5.data?.[0]?.desigId)
-                            let reportingEmpDesigId = res5.data?.[0]?.desigId
-                            EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res) => {
-                                setEmployees(res.data.responseData.content);
-                            });
-
-                        });
-                    });
-                });
-            });
-        });
-    }
-
-
-    const handleCompanyIdChange = (value) => {
-        setCompanyId(value)
-        let companyId = value;
-        EmployeeDDService.getRolesFromEmployee({ regionId, siteId, companyId }).then((res3) => {
-            setRoles(res3.data);
-            setRoleId(res3.data?.[0]?.roleId)
-            let roleId = res3.data?.[0].roleId;
-            EmployeeDDService.getDeptFromEmployee({ regionId, siteId, companyId, roleId }).then((res4) => {
-                setDepartments(res4.data);
-                setDeptId(res4.data?.[0]?.deptId)
-
-                let deptId = res4.data?.[0].deptId;
-                EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-                    setDesignations(res5.data);
-                    setDesigId(res5.data?.[0]?.desigId)
-
-                    let reportingEmpDesigId = res5.data?.[0]?.desigId
-                    EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res6) => {
-                        setEmployees(res6.data.responseData.content);
-                    });
-
-                });
-            });
-        });
-    }
-
-    const handleSiteIdChange = (value) => {
-        setSiteId(value)
-        let siteId = value;
-        EmployeeDDService.getCompanyFromEmployee({ regionId, siteId }).then((res2) => {
-            setCompanys(res2.data);
-            setCompanyId(res2.data?.[0]?.companyId)
-            let companyId = res2.data?.[0].companyId;
-            EmployeeDDService.getRolesFromEmployee({ regionId, siteId, companyId }).then((res3) => {
-                setRoles(res3.data);
-                setRoleId(res3.data?.[0]?.roleId)
-                let roleId = res3.data?.[0].roleId;
-                EmployeeDDService.getDeptFromEmployee({ regionId, siteId, companyId, roleId }).then((res4) => {
-                    setDepartments(res4.data);
-                    setDeptId(res4.data?.[0]?.deptId)
-
-                    let deptId = res4.data?.[0].deptId;
-                    EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-                        setDesignations(res5.data);
-                        setDesigId(res5.data?.[0]?.desigId)
-
-                        let reportingEmpDesigId = res5.data?.[0]?.desigId
-                        EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res6) => {
-                            setEmployees(res6.data.responseData.content);
-                        });
-
-                    });
-                });
-            });
-        });
-
-    }
-
-
-    // for role , dept and desig
-    const handleRoleIdChange = (value) => {
-        setRoleId(value)
-        let roleId = value;
-        EmployeeDDService.getDeptFromEmployee({ regionId, siteId, companyId, roleId }).then((res4) => {
-            setDepartments(res4.data);
-            setDeptId(res4.data?.[0]?.deptId)
-
-            let deptId = res4.data?.[0].deptId;
-            EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-                setDesignations(res5.data);
-                setDesigId(res5.data?.[0]?.desigId)
-                let reportingEmpDesigId = res5.data?.[0]?.desigId
-                EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res6) => {
-                    setEmployees(res6.data.responseData.content);
-                });
-
-            });
-        });
-    }
-
-    const handleDesigIdChange = (value) => {
-        setDesigId(value)
-
-        let reportingEmpDesigId = value
-        EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res6) => {
-            setEmployees(res6.data.responseData.content);
-        });
-    }
-
-    const handleDeptIdChange = (value) => {
-        setDeptId(value)
-
-        let deptId = value;
-        EmployeeDDService.getDesigFromEmployee({ regionId, siteId, companyId, roleId, deptId }).then((res5) => {
-            setDesignations(res5.data);
-            setDesigId(res5.data?.[0]?.desigId)
-
-            let reportingEmpDesigId = res5.data?.[0]?.desigId
-            EmployeeService.getEmployeeDetailsByDesignationByPaging(reportingEmpDesigId).then((res6) => {
-                setEmployees(res6.data.responseData.content);
-            });
-
+            if (res.data.success) {
+                setIsSuccess(true);
+                setEmployees(res.data.responseData.content);
+            }
+            else {
+                setIsSuccess(false);
+            }
         });
     }
 
@@ -238,124 +102,96 @@ export default function ShowEmployeeForKppComponent() {
         navigate(`/assignEmployeeKpp`, { replace: true });
     }
 
+        // Advance search employee
+        const searchEmployeeDetails = (e) => {
+
+            e.preventDefault()
+            let advEmployeeSearch = { roleId, deptId, regionId,siteId,companyId,empTypeId };
+          
+            EmployeeService.advanceSearchEmployee(advEmployeeSearch).then(res => {
+                setEmployees(res.data.responseData.content);
+                console.log("Site added");
+            }
+            );
+        }
+       
+
+  //Employee advance search
+
+      //for role , department and designation
+      const handleRoleIdChange = (value) => {
+        if(value=="Select Role"){
+            value=null;
+        }
+        setRoleId(value)
+    }
+
+  const handleEmployeeTypeChange = (value) => {
+    if(value=="Select Employee Type"){
+        value=null;
+    }
+    setEmpTypeId(value)
+}
+
+const handleDepartmentChange = (value) => {
+    if(value=="Select Department"){
+        value=null;
+    }
+    setDeptId(value)
+}
+
+//for role change
+const onRegionChangeHandler = (value) => {
+    if(value=="Select Region"){
+        value=null;
+    }
+    setRegionId(value);
+};
+
+  //for site change
+  const onSiteChangeHandler = (value) => {
+    if(value=="Select Site"){
+        value=null;
+    }
+    setSiteId(value);
+};
+
+     //for Company change
+     const onCompanyChangeHandler = (value) => {
+        if(value=="Select Company"){
+            value=null;
+        }
+        setCompanyId(value);
+    };
 
 
     return (
         <div className="row">
             <h3 className="text-center">Assign KPP to  New Employee</h3>
-            <form className="form-horizontal">
-
-                <div className="form-group">
-                    <div className="row">
-                        <label className="control-label col-sm-2" htmlFor="regionName">Region Name:</label>
-                        <div className="col-sm-2">
-                            <div className="form-group">
-                                <select className="form-control" id="regionId" onChange={(e) => handleRegionIdChange(e.target.value)}>
-
-                                    {
-                                        regions.map(
-                                            region =>
-                                                <option key={region.regionId} value={region.regionId}>{region.regionName}</option>
-                                        )
-                                    };
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <label className="control-label col-sm-1" htmlFor="siteName">Site Name:</label>
-                        <div className="col-sm-2">
-                            <div className="form-group">
-                                <select className="form-control" id="siteId" onChange={(e) => handleSiteIdChange(e.target.value)}>
-
-                                    {
-                                        sites.map(
-                                            site =>
-                                                <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
-                                        )
-                                    };
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <label className="control-label col-sm-1" htmlFor="companyName">Company Name:</label>
-                        <div className="col-sm-2">
-                            <div className="form-group">
-                                <select className="form-control" id="roleId" onChange={(e) => handleCompanyIdChange(e.target.value)}>
-
-                                    {
-                                        companys.map(
-                                            company =>
-                                                <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
-                                        )
-                                    };
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-                <div className="form-group">
-                    <label className="control-label col-sm-2" htmlFor="deptId">Select Role Name:</label>
-                    <div className="col-sm-2">
+            <div className="col-md-1"></div>
+            <div className="col-md-10">
+                <div className="row">
+                    <div className="col-sm-6">
                         <div className="form-group">
-                            <select className="form-control" id="roleId" onChange={(e) => handleRoleIdChange(e.target.value)}>
-
-                                {
-                                    roles.map(
-                                        role =>
-                                            <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
-                                    )
-                                };
-                            </select>
+                            <form className="form-horizontal">
+                                <label className="control-label col-sm-3" htmlFor="empEIdSearch">Enter Employee Id:</label>
+                                <div className="col-sm-4">
+                                    <input type="text" className="form-control" id="empEIdSearch" placeholder="Enter Employee Id" value={empEIdSearch} onChange={(e) => searchEmployeeEId(e)} />
+                                </div>
+                            </form>
+                           
                         </div>
                     </div>
-                </div>
-
-
-                <div className="form-group">
-                    <label className="control-label col-sm-2" htmlFor="deptId">Select Department Name:</label>
-                    <div className="col-sm-2">
-                        <div className="form-group">
-                            <select className="form-control" id="deptId" onChange={(e) => handleDeptIdChange(e.target.value)}>
-
-                                {
-                                    departments.map(
-                                        department =>
-                                            <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
-                                    )
-                                };
-
-                            </select>
-                        </div>
+                    <div className="col-sm-5">
+                        <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#advanceSearchEmployee">Advance Search</button>
                     </div>
                 </div>
+                
+            </div>
+            <div className="col-md-1"></div>
 
-                <div className="form-group">
-                    <label className="control-label col-sm-2" htmlFor="desigId">Select Designation Name:</label>
-                    <div className="col-sm-2">
-                        <div className="form-group">
-                            <select className="form-control" id="desigId" onChange={(e) => handleDesigIdChange(e.target.value)}>
-
-                                {
-                                    designations.map(
-                                        designation =>
-                                            <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
-                                    )
-                                };
-
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </form>
             <div className="col-sm-8">
+            {isSuccess?
                 <table className="table table-bordered">
                     <thead>
                         <tr>
@@ -387,9 +223,145 @@ export default function ShowEmployeeForKppComponent() {
                             )
                         }
                     </tbody>
-                </table>
+                </table>  :<h4>Employee Id is not available</h4>}
             </div>
 
+            
+            {/* Modal for Advance search for employee details */}
+            <div className="modal fade" id="advanceSearchEmployee" role="dialog">
+                <form className="form-horizontal"  encType="multipart/form-data">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                <h4 className="modal-title">Advance Search Employee</h4>
+                            </div>
+                            <div className="modal-body">
+
+                                <div className="form-group">
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Employee Type:</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                                <select className="form-control" id="empTypeId" defaultValue={null} onChange={(e) => handleEmployeeTypeChange(e.target.value)}>
+                                                <option>Select Employee Type</option>
+                                                
+                                                    {
+                                                     
+                                                        empTypes.map(
+                                                            empType =>
+                                                                <option key={empType.empTypeId} value={empType.empTypeId}>{empType.empTypeName}</option>
+                                                        )
+                                                    };
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Role :</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                                <select className="form-control" id="roleId" defaultValue={null}  onChange={(e) => handleRoleIdChange(e.target.value)}>
+                                                <option>Select Role</option>    
+                                                {
+                                                        roles.map(
+                                                            role =>
+                                                                <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
+                                                        )
+                                                    };
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Department:</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                                <select className="form-control" id="deptId" defaultValue={null} onChange={(e) => handleDepartmentChange(e.target.value)}>
+                                                <option>Select Department</option>
+                                                    {
+                                                        departments.map(
+                                                            department =>
+                                                                <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
+                                                        )
+                                                    };
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Region:</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                                <select className="form-control" id="regionId" defaultValue={null} onChange={(e) => onRegionChangeHandler(e.target.value)}>
+                                                <option>Select Region</option>   
+                                                {
+                                                        regions.map(
+                                                            region =>
+                                                                <option key={region.regionId} value={region.regionId}>{region.regionName}</option>
+                                                        )
+                                                    };
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <label className="control-label col-sm-2" htmlFor="siteName">Site:</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                            <select className="form-control" id="regionId" defaultValue={null} onChange={(e) => onSiteChangeHandler(e.target.value)}>
+                                            <option>Select Site</option>
+                                            {
+                                                sites.map(
+                                                    site =>
+                                                        <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
+                                                )
+                                            };
+
+                                        </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="companyName">Company Name:</label>
+                                        <div className="col-sm-5">
+                                            <div className="form-group">
+                                            <select className="form-control" id="companyId" defaultValue={null} onChange={(e) => onCompanyChangeHandler(e.target.value)}>
+                                            <option>Select Company</option>
+                                            {
+                                                compnays.map(
+                                                    company =>
+                                                        <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
+                                                )
+                                            };
+
+                                        </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div className="modal-footer">
+                                
+                                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e) => searchEmployeeDetails(e)}>Search</button>
+                                <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
 
         </div>
     );
