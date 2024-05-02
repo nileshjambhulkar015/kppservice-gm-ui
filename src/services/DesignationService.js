@@ -55,7 +55,7 @@ class DesignationService {
 
     getDesignationDetailsByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/designation/search?statusCd=A&page=0&size=20&sort=desig.desig_name")
+            return axios.get(BASE_URL_API+"/designation/search?statusCd=A&page=0&size=200&sort=desig.desig_name")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

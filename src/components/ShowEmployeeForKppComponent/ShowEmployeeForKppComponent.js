@@ -198,6 +198,7 @@ const onRegionChangeHandler = (value) => {
                             <th className="text-center">Sr No</th>
                             <th className="text-center">Employee Name</th>
                             <th className="text-center">Employee Id</th>
+                            <th className="text-center">Role Name</th>
                             <th className="text-center">Department Name</th>
                             <th className="text-center">Designation Name</th>
                             <th className="text-center">Mobile No</th>
@@ -212,6 +213,7 @@ const onRegionChangeHandler = (value) => {
                                         <td className="text-center">{index + 1}</td>
                                         <td className="text-justify">{employee.empFirstName + ' ' + employee.empMiddleName + ' ' + employee.empLastName}</td>
                                         <td className="text-center">{employee.empEId}</td>
+                                        <td className="text-center">{employee.roleName}</td>
                                         <td className="text-center">{employee.deptName}</td>
                                         <td className="text-center">{employee.desigName}</td>
                                         <td className="text-center">{employee.empMobileNo}</td>
