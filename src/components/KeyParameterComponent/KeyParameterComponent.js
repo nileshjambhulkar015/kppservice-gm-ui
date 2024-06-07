@@ -8,7 +8,7 @@ export default function KeyParameterComponent() {
     const [kppObjectiveNo, setKppObjectiveNo] = useState('');
     const [kppObjective, setKppObjective] = useState('');
     const [kppPerformanceIndi, setKppPerformanceIndi] = useState('');
-    const [kppOverallTarget, setKppOverallTarget] = useState('');
+   // const [kppOverallTarget, setKppOverallTarget] = useState('');
     const [kppTargetPeriod, setKppTargetPeriod] = useState('');
     const [uomId, setUomId] = useState();
     const [uomName, setUomName] = useState();
@@ -62,7 +62,7 @@ export default function KeyParameterComponent() {
             setKppObjectiveNo(kpp.kppObjectiveNo)
             setKppObjective(kpp.kppObjective)
             setKppPerformanceIndi(kpp.kppPerformanceIndi)
-            setKppOverallTarget(kpp.kppOverallTarget)
+            
             setKppTargetPeriod(kpp.kppTargetPeriod)
             setUomId(kpp.uomId)
             setUomName(kpp.uomName)
@@ -112,7 +112,7 @@ export default function KeyParameterComponent() {
         e.preventDefault()
 
         let statusCd = 'A';
-        let kpp = {kppObjectiveNo, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, uomId, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
+        let kpp = {kppObjectiveNo, kppObjective, kppPerformanceIndi, kppTargetPeriod, uomId, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
         console.log(kpp)
 
         KeyParameterService.saveKPPDetails(kpp).then(res => {
@@ -171,7 +171,7 @@ export default function KeyParameterComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let updateKpp = { kppId,  kppObjectiveNo, kppObjective, kppPerformanceIndi, kppOverallTarget, kppTargetPeriod, uomId, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
+        let updateKpp = { kppId,  kppObjectiveNo, kppObjective, kppPerformanceIndi, kppTargetPeriod, uomId, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
 
         KeyParameterService.updateKppDetails(updateKpp).then(res => {
             KeyParameterService.getKPPDetailsByPaging().then((res) => {
@@ -329,11 +329,7 @@ export default function KeyParameterComponent() {
 
                                 <div className="form-group">
                                     <div className="row">
-                                        <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppOverallTarget">Overall Target:</label>
-                                        <div className="col-sm-2">
-                                            <input type="text" className="form-control" id="kppOverallTarget" value={kppOverallTarget} onChange={(e) => setKppOverallTarget(e.target.value)} placeholder="Enter KPP Overall Target here" />
-                                        </div>
-                                        <label className="control-label col-sm-3" htmlFor="kppTargetPeriod">Target Period:</label>
+                                        <label className="control-label col-sm-4" htmlFor="kppTargetPeriod">Target Period:</label>
                                         <div className="col-sm-2">
                                             <input type="text" className="form-control" id="kppTargetPeriod" value={kppTargetPeriod} onChange={(e) => setKppTargetPeriod(e.target.value)} placeholder="Enter KPP Kpp Target Period here" />
                                         </div>
@@ -458,10 +454,6 @@ export default function KeyParameterComponent() {
 
                                 <div className="form-group">
                                     <div className="row">
-                                        <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppOverallTarget">Overall Target:</label>
-                                        <div className="col-sm-2">
-                                            <input type="text" className="form-control" id="kppOverallTarget" value={kppOverallTarget} onChange={(e) => setKppOverallTarget(e.target.value)} placeholder="Enter KPP ObjectiveOverall Target here" />
-                                        </div>
                                         <label className="control-label col-sm-3" htmlFor="kppTargetPeriod">Target Period:</label>
                                         <div className="col-sm-2">
                                             <input type="text" className="form-control" id="kppTargetPeriod" value={kppTargetPeriod} onChange={(e) => setKppTargetPeriod(e.target.value)} placeholder="Enter KPP Kpp Target Period here" />
@@ -558,10 +550,7 @@ export default function KeyParameterComponent() {
 
                                 <div className="form-group">
                                     <div className="row">
-                                        <label className="control-label col-sm-3 col-sm-offset-1" htmlFor="kppOverallTarget">Overall Target:</label>
-                                        <div className="col-sm-2">
-                                            {kppOverallTarget}
-                                        </div>
+                                        
                                         <label className="control-label col-sm-3" htmlFor="kppTargetPeriod">Target Period:</label>
                                         <div className="col-sm-2">
                                             {kppTargetPeriod}

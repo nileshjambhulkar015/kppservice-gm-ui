@@ -400,18 +400,18 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                 <h4 className="modal-title">Upload Employee</h4>
                             </div>
                             <div className="modal-body">
-                                <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
+                                
                                 <div className="form-group">
-                                    <label className="control-label col-sm-4" htmlFor="employee">Select file:</label>
+                                    <label className="control-label col-sm-4" htmlFor="file">Select file:</label>
                                     <div className="col-sm-8">
-                                        <input type="file" id="file" name="file" />
+                                        <input type="file" id="file" name="file" value={""}/>
                                     </div>
                                 </div>
 
 
                             </div>
                             <div className="modal-footer">
-                                <input type="submit" id="file" name="file" value={"Upload"} className="btn btn-primary" />
+                                <input type="submit"  value={"Upload"} className="btn btn-primary" />
                                 <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>
                         </div>

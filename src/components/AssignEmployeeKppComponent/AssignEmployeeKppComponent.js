@@ -214,14 +214,16 @@ export default function AssignEmployeeKppComponent() {
                             <tr>
                                 <th>Sr No</th>
                                 <th>Action</th>
+                                <th>Overall Target</th>
+                                <th>Overall Weightage</th>
                                 <th>KPP Objective No</th>
                                 <th>KPP Objective</th>
                                 <th>Performance Indicator</th>
 
-                                <th>Overall Target</th>
+                               
                                 <th>Target Period</th>
                                 <th>UOM</th>
-                                <th>Overall Weightage</th>
+                               
                                 <th className="text-center">Rating 5</th>
                                 <th className="text-center">Rating 4</th>
                                 <th className="text-center">Rating 3</th>
@@ -237,13 +239,19 @@ export default function AssignEmployeeKppComponent() {
                                         <tr key={kpp.kppId}>
                                             <td className="text-center">{index + 1}</td>
                                             <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => saveKPPDetailsForEmployee(e, kpp.kppId)}>Assign</button></td>
+                                            <td className="text-center">
+                                            <input type="number" className="form-control" name={`${index}.gmAchivedWeight`} />
+                                            </td>
+                                            <td className="text-center">
+                                            <input type="number" className="form-control" name={`${index}.gmAchivedWeight`} />
+                                            </td>
                                             <td className="text-justify">{kpp.kppObjectiveNo}</td>
                                             <td className="text-justify">{kpp.kppObjective}</td>
                                             <td className="text-justify">{kpp.kppPerformanceIndi}</td>
                                             <td className="text-center">{kpp.kppOverallTarget}</td>
-                                            <td className="text-center">{kpp.kppTargetPeriod}</td>
-                                            <td className="text-center">{kpp.kppUoM}</td>
-                                            <td className="text-center">{kpp.kppOverallWeightage}</td>
+                                            
+                                            <td className="text-center">{kpp.uomName}</td>
+                                            
                                             <td className="text-center">{kpp.kppRating1}</td>
                                             <td className="text-center">{kpp.kppRating2}</td>
                                             <td className="text-center">{kpp.kppRating3}</td>
