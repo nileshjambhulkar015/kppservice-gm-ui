@@ -248,7 +248,7 @@ export default function AssignEmployeeKppComponent() {
                                             <td className="text-justify">{kpp.kppObjectiveNo}</td>
                                             <td className="text-justify">{kpp.kppObjective}</td>
                                             <td className="text-justify">{kpp.kppPerformanceIndi}</td>
-                                            <td className="text-center">{kpp.kppOverallTarget}</td>
+                                            <td className="text-center">{kpp.kppTargetPeriod}</td>
                                             
                                             <td className="text-center">{kpp.uomName}</td>
                                             
