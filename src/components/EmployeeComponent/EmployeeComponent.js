@@ -404,7 +404,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="file">Select file:</label>
                                     <div className="col-sm-8">
-                                        <input type="file" id="file" name="file" value={""}/>
+                                        <input type="file" id="file" name="file"/>
                                     </div>
                                 </div>
 
