@@ -85,7 +85,11 @@ export default function AssignEmployeeKppComponent() {
         let desigId = Cookies.get('empKppDesigId');
         let reportingEmpId = Cookies.get('empReportingIdForKpp');
         let employeeId = Cookies.get('empId');
-        let kpp = { kppId, empId, empEId, roleId, deptId, desigId, reportingEmpId, statusCd, employeeId };
+
+        //TODO: read value from dynamic textbox
+        let kppOverallTarget = 50;
+        let kppOverallWeightage = 40;
+        let kpp = { kppId,kppOverallTarget,kppOverallWeightage, empId, empEId, roleId, deptId, desigId, reportingEmpId, statusCd, employeeId };
         console.log(kpp)
 
         EmployeeKppsService.assignEmployeeKppDetails(kpp).then(res => {
@@ -250,7 +254,7 @@ export default function AssignEmployeeKppComponent() {
                                             <td className="text-justify">{kpp.kppPerformanceIndi}</td>
                                             <td className="text-center">{kpp.kppTargetPeriod}</td>
                                             
-                                            <td className="text-center">{kpp.uomName}</td>
+                                            <td className="text-center">{kpp.kppUoM}</td>
                                             
                                             <td className="text-center">{kpp.kppRating1}</td>
                                             <td className="text-center">{kpp.kppRating2}</td>
