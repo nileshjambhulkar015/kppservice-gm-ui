@@ -24,6 +24,21 @@ export default function AssignEmployeeKppComponent() {
     const [desigName, setDesigName] = useState('');
   
 
+    const [overallTarget, setOverallTarget] = useState(0);
+    const [overallWeightage, setOverallWeightage] = useState(0);
+
+
+ //for Overall Targate change
+ const onOverallTargetChangeHandler = (value) => {
+    setOverallTarget(value);
+};
+
+//For Overall weightage chage
+const onOverallWeightageChangeHandler = (value) => {
+    setOverallWeightage(value);
+};
+
+
     useEffect(() => {
         KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
             if (res.data.success) {
@@ -87,8 +102,8 @@ export default function AssignEmployeeKppComponent() {
         let employeeId = Cookies.get('empId');
 
         //TODO: read value from dynamic textbox
-        let kppOverallTarget = 50;
-        let kppOverallWeightage = 40;
+        let kppOverallTarget = overallTarget;
+        let kppOverallWeightage = overallWeightage;
         let kpp = { kppId,kppOverallTarget,kppOverallWeightage, empId, empEId, roleId, deptId, desigId, reportingEmpId, statusCd, employeeId };
         console.log(kpp)
 
@@ -97,6 +112,8 @@ export default function AssignEmployeeKppComponent() {
                 if (res.data.success) {
                     setKppIsSuccess(true);
                     setKpps(res.data.responseData.content);
+                    setOverallTarget(0);
+                    setOverallWeightage(0);
                 }
                 else {             
                     setKppIsSuccess(false);
@@ -244,10 +261,11 @@ export default function AssignEmployeeKppComponent() {
                                             <td className="text-center">{index + 1}</td>
                                             <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => saveKPPDetailsForEmployee(e, kpp.kppId)}>Assign</button></td>
                                             <td className="text-center">
-                                            <input type="number" className="form-control" name={`${index}.gmAchivedWeight`} />
+                                            
+                                            <input type="number" className="form-control" defaultValue={0}  onChange={(e)=>setOverallTarget(e.target.value)  }/>
                                             </td>
                                             <td className="text-center">
-                                            <input type="number" className="form-control" name={`${index}.gmAchivedWeight`} />
+                                            <input type="number" className="form-control" defaultValue={0}  onChange={(e)=>setOverallWeightage(e.target.value)} />
                                             </td>
                                             <td className="text-justify">{kpp.kppObjectiveNo}</td>
                                             <td className="text-justify">{kpp.kppObjective}</td>
