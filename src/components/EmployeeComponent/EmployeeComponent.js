@@ -220,7 +220,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
             setEmpMiddleName(employee.empMiddleName)
             setEmpLastName(employee.empLastName)
             setEmpDob(employee.empDob)
-            setEmpPhoto(employee.empPhoto)
+            setEmpPhoto(employee.empPhoto || '')
             setEmpMobileNo(employee.empMobileNo)
             setEmpEmerMobileNo(employee.empEmerMobileNo)
             setEmailId(employee.emailId)
@@ -254,7 +254,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
             setEmpMiddleName(employee.empMiddleName)
             setEmpLastName(employee.empLastName)
             setEmpDob(employee.empDob)
-            setEmpPhoto(employee.empPhoto)
+            setEmpPhoto(employee.empPhoto || '')
             setEmpMobileNo(employee.empMobileNo)
             setEmpEmerMobileNo(employee.empEmerMobileNo)
             setEmailId(employee.emailId)
@@ -310,7 +310,12 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
         })
             .then(response => {
                 // Handle response
+                console.log("respons: ", response)
                 alert("Employee uploaded successfully")
+                EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+                    setEmployees(res.data.responseData.content);
+                });
+               
             })
             .catch(error => {
                 // Handle error

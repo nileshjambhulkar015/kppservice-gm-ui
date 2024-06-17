@@ -177,7 +177,7 @@ export default function KeyParameterComponent() {
             KeyParameterService.getKPPDetailsByPaging().then((res) => {
                 setKpps(res.data.responseData.content);
             });
-            console.log("Department added");
+            console.log("KPP added");
         }
         );
 
@@ -194,6 +194,9 @@ export default function KeyParameterComponent() {
             .then(response => {
                 // Handle response
                 alert("KPP uploaded successfully")
+                KeyParameterService.getKPPDetailsByPaging().then((res) => {
+                    setKpps(res.data.responseData.content);
+                });
             })
             .catch(error => {
                 // Handle error
