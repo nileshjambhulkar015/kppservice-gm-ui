@@ -100,7 +100,7 @@ export default function DepartmentComponent() {
         DepartmentService.updateDepartmentDetails(department).then(res => {
             DepartmentService.getDepartmentDetailsByPaging().then((res) => {
                 setDepartments(res.data.responseData.content);
-                console.log(res.data)
+                
             });
             console.log("Department added");
         }
@@ -119,6 +119,10 @@ export default function DepartmentComponent() {
             .then(response => {
                 // Handle response
                 alert("Department uploaded successfully")
+                DepartmentService.getDepartmentDetailsByPaging().then((res) => {
+                    setDepartments(res.data.responseData.content);
+                   
+                });
             })
             .catch(error => {
                 // Handle error

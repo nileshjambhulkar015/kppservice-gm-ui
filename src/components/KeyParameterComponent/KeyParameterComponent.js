@@ -214,9 +214,9 @@ export default function KeyParameterComponent() {
                     <div className="col-sm-5">
                         <div className="form-group">
                             <form className="form-horizontal">
-                                <label className="control-label col-sm-3" htmlFor="kppObjectiveSearch">Enter KPP Objective:</label>
+                                <label className="control-label col-sm-5" htmlFor="kppObjectiveSearch">Enter KPP Objective No:</label>
                                 <div className="col-sm-4">
-                                    <input type="text" className="form-control" id="kppObjectiveNoSearch" placeholder="Enter Role Name" value={kppObjectiveNoSearch} onChange={(e) => searchByKppObjectiveNo(e)} />
+                                    <input type="text" className="form-control" id="kppObjectiveNoSearch" placeholder="Enter Objective No" value={kppObjectiveNoSearch} onChange={(e) => searchByKppObjectiveNo(e)} />
                                 </div>
                             </form>
                             <button type="submit" className="btn btn-primary" onClick={() => searchKppObjective(kppObjectiveSearch)}>Search</button>

@@ -128,6 +128,10 @@ export default function DesignationComponent() {
             .then(response => {
                 // Handle response
                 alert("Designation uploaded successfully")
+                DesignationService.getDesignationDetailsByPaging().then((res) => {
+                    setDesignations(res.data.responseData.content);
+                });
+          
             })
             .catch(error => {
                 // Handle error
@@ -147,7 +151,7 @@ export default function DesignationComponent() {
                         <div className="col-sm-5">
                             <div className="form-group">
                                 <form className="form-horizontal">
-                                    <label className="control-label col-sm-4" htmlFor="desigNameSearch">Enter Designation Name:</label>
+                                    <label className="control-label col-sm-5" htmlFor="desigNameSearch">Enter Designation Name:</label>
                                     <div className="col-sm-4">
                                         <input type="text" className="form-control" id="desigNameSearch" placeholder="Enter Designation Name" value={desigNameSearch} onChange={(e) => setDesigNameSearch(e.target.value)} />
                                     </div>
@@ -165,12 +169,12 @@ export default function DesignationComponent() {
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Sr No</th>
+                                    <th className="text-center">Sr No</th>
 
-                                    <th>Department Name</th>
-                                    <th>Designation Name</th>
+                                    <th className="text-center">Department Name</th>
+                                    <th className="text-center">Designation Name</th>
                                    
-                                    <th>Action</th>
+                                    <th className="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -178,7 +182,7 @@ export default function DesignationComponent() {
                                     designations.map(
                                         (designation, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={designation.desigId}>
-                                                <td>{index + 1}</td>
+                                                <td className="text-center">{index + 1}</td>
 
                                                 <td>{designation.deptName}</td>
                                                 <td>{designation.desigName}</td>
