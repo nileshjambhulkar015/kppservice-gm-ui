@@ -360,7 +360,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                 <th className="text-center">Employee Id</th>
 
                                 <th className="text-center">Department Name</th>
-                                <th className="text-center">Desig   nation Name</th>
+                                <th className="text-center">Designation Name</th>
                                 <th className="text-center">Role Name</th>
                                 <th className="text-center">Mobile No</th>
 

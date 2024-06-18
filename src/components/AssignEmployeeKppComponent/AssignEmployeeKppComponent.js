@@ -262,10 +262,10 @@ const onOverallWeightageChangeHandler = (value) => {
                                             <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => saveKPPDetailsForEmployee(e, kpp.kppId)}>Assign</button></td>
                                             <td className="text-center">
                                             
-                                            <input type="number" className="form-control" defaultValue={0}  onChange={(e)=>setOverallTarget(e.target.value)  }/>
+                                            <input type="number" className="form-control" defaultValue={0} max={100} min={0} onChange={(e)=>setOverallTarget(e.target.value)  }/>
                                             </td>
                                             <td className="text-center">
-                                            <input type="number" className="form-control" defaultValue={0}  onChange={(e)=>setOverallWeightage(e.target.value)} />
+                                            <input type="number" className="form-control" defaultValue={0} max={100} min={0} onChange={(e)=>setOverallWeightage(e.target.value)} />
                                             </td>
                                             <td className="text-justify">{kpp.kppObjectiveNo}</td>
                                             <td className="text-justify">{kpp.kppObjective}</td>

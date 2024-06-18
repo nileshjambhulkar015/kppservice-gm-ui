@@ -480,11 +480,7 @@ export default function AddNewEmployeeComponent() {
                             <input type="text" className="form-control" id="empEId" value={empEId} onChange={(e) => setEmpEId(e.target.value)} placeholder="Enter Employee Id here" />
                         </div>
 
-                        <label className="control-label col-sm-2" htmlFor="empPhoto">Upload Photo:</label>
-
-                        <div className="col-sm-2">
-                            <input type="file" className="form-control" id="empPhoto" value={empPhoto} onChange={(e) => setEmpPhoto(e.target.value)} />
-                        </div>
+                        
                     </div>
                 </div>
 
