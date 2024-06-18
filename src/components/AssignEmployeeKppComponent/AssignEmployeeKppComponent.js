@@ -22,10 +22,16 @@ export default function AssignEmployeeKppComponent() {
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
+    const [kppObjectiveNo, setKppObjectiveNo] = useState('');
+
+    const [kppObjective, setKppObjective] = useState('');
+    const [kppPerformanceIndica, setKppPerformanceIndica] = useState('');
+    
   
 
     const [overallTarget, setOverallTarget] = useState(0);
     const [overallWeightage, setOverallWeightage] = useState(0);
+    const [kppObjectiveNoSearch, setKppObjectiveNoSearch] = useState('');
 
 
  //for Overall Targate change
@@ -38,7 +44,52 @@ const onOverallWeightageChangeHandler = (value) => {
     setOverallWeightage(value);
 };
 
+const searchByKppObjectiveNo = (e) => {
+    setKppObjectiveNoSearch(e.target.value)
 
+    KeyParameterService.getKPPDetailsForAssignKppByPaging(e.target.value).then((res) => {
+
+        if (res.data.success) {
+            setIsSuccess(true);
+            setKpps(res.data.responseData.content);
+        }
+        else {
+            setIsSuccess(false);
+        }
+    });
+}
+
+    // Advance search employee
+    const advanceSearchEmployeeKpp = (e) => {
+setKppObjectiveNo(e.target.value)
+        e.preventDefault()
+        let advanceKppSearch = { kppObjectiveNo, kppObjective, kppPerformanceIndica };
+      
+        KeyParameterService.advanceSearchEmployeeKPP(advanceKppSearch).then(res => {
+            if (res.data.success) {
+                setKppIsSuccess(true);
+                setKpps(res.data.responseData.content);
+            }
+            else {             
+                setKppIsSuccess(false);
+             }
+        }
+        );
+    }
+
+    const clearSearchAssignKpp = (e)=>{
+        KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
+            if (res.data.success) {
+                setKppIsSuccess(true);
+                setKpps(res.data.responseData.content);
+            }
+            else {             
+                setKppIsSuccess(false);
+             }
+           
+        });
+
+    }
     useEffect(() => {
         KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
             if (res.data.success) {
@@ -228,7 +279,24 @@ const onOverallWeightageChangeHandler = (value) => {
 
 
                 <div className="col-md-10">
-                    <h4 className="text-center">Key Parameter List</h4>
+                <div className="col-sm-5">
+                <div className="form-group">
+                    <form className="form-horizontal">
+                        <label className="control-label col-sm-5" htmlFor="kppObjectiveSearch">Enter KPP Objective No:</label>
+                        <div className="col-sm-4">
+                            <input type="text" className="form-control" id="kppObjectiveNo" placeholder="Enter Objective No" value={kppObjectiveNo} onChange={(e) => advanceSearchEmployeeKpp(e)} />
+                        </div>
+                    </form>
+                  
+
+                </div>
+            </div>
+                   <div className="col-sm-2"><h4 className="text-center">Key Parameter List</h4></div> 
+<div> 
+<button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#advanceSearchKPP">Advance Search</button>
+<button type="button" className="btn btn-primary col-sm-offset-1" onClick={(e)=>clearSearchAssignKpp(e)}>Clear Search</button>
+</div>
+
                     {kppIsSuccess ?
                     <table className="table table-bordered">
                         <thead>
@@ -348,6 +416,59 @@ const onOverallWeightageChangeHandler = (value) => {
                     <h3>Total Kpp Target assign : {empKppOverallTargetCount}</h3>
                 </div>
 
+            </div>
+
+            
+            {/* Modal for Advance search for employee details */}
+            <div className="modal fade" id="advanceSearchKPP" role="dialog">
+                <form className="form-horizontal">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                <h4 className="modal-title">Advance Search KPP</h4>
+                            </div>
+                            <div className="modal-body">
+
+                                <div className="form-group">
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Objevtive No :</label>
+                                        <div className="col-sm-3">
+                                            <div className="form-group">
+                                            <input type="text" className="form-control" id="kppObjectiveNo" placeholder="Enter Objective No" value={kppObjectiveNo} onChange={(e) => setKppObjectiveNo(e.target.value)} />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="row">
+                                    <label className="control-label col-sm-3" htmlFor="regionName">Objevtive Name :</label>
+                                    <div className="col-sm-8">
+                                        <div className="form-group">
+                                        <input type="text" className="form-control" id="kppObjective" placeholder="Enter Objective No" value={kppObjective} onChange={(e) => setKppObjective(e.target.value)} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="row">
+                                <label className="control-label col-sm-3" htmlFor="regionName">Objevtive Indicator :</label>
+                                <div className="col-sm-8">
+                                    <div className="form-group">
+                                    <input type="text" className="form-control" id="kppPerformanceIndica" placeholder="Enter Objective No" value={kppPerformanceIndica} onChange={(e) => setKppPerformanceIndica(e.target.value)} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            </div>
+                            </div>
+                            <div className="modal-footer">
+                                
+                                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e) => advanceSearchEmployeeKpp(e)}>Search</button>
+                                <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
             </div>
 
         </div>

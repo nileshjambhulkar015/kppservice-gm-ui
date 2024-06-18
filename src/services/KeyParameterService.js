@@ -55,6 +55,16 @@ class KeyParameterService {
         }
     }
 
+          //advance search of kpp
+          advanceSearchEmployeeKPP(advanceKppSearch) {
+            if (null != Cookies.get('empId')) {
+                return axios.post(BASE_URL_API+`/employee-kpp/assign-employee-kpp-advance-search?empId=${Cookies.get('empIdForKpp')}&page=0&size=200`, advanceKppSearch)
+            } else {
+                alert("You need to login first")
+                window.location.replace(LOGIN_UI_BASE_URL);
+            }
+    
+        }
     
     //View kpp For Employee page when user click from showEmployeeKppComponent
 
