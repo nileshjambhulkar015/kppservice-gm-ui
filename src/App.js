@@ -26,6 +26,7 @@ import SiteComponent from "./components/MasterComponent/SiteComponent/SiteCompon
 import UoMComponent from "./components/MasterComponent/UoMComponent/UoMComponent";
 import ShowEmployeeForKppComponent from './components/ShowEmployeeForKppComponent/ShowEmployeeForKppComponent';
 import ViewAllEmpTransferToOtherHODComponent from "./components/ViewAllEmpTransferToOtherHODComponent/ViewAllEmpTransferToOtherHODComponent";
+import ComplaintTypeComponent from "./components/MasterComponent/ComplaintTypeComponent/ComplaintTypeComponent";
 
 function App() {
  
@@ -95,6 +96,7 @@ function App() {
             <li><Link to="/designation">Designation Master</Link></li>
             <li><Link to="/uomMaster">UoM Master</Link></li>
             <li><Link to="/empTypeMaster">Employee Type Master</Link></li>
+            <li><Link to="/complaintTypeMaster">Complaint Type Master</Link></li>
             <li><Link to="/regionMaster">Region Master</Link></li>
             <li><Link to="/siteMaster">Sites Master</Link></li>
             <li><Link to="/companyMaster">Company Master</Link></li>
@@ -122,6 +124,7 @@ function App() {
         <Route exact path="/companyMaster" element={<CompanyMasterComponent />}></Route>
         <Route exact path="/uomMaster" element={<UoMComponent />}></Route>
         <Route exact path="/empTypeMaster" element={<EmployeeTypeComponent />}></Route>
+        <Route exact path="/complaintTypeMaster" element={<ComplaintTypeComponent />}></Route>
         <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
         <Route exact path="/employee" element={<EmployeeComponent />}></Route>
         <Route exact path="/showEmployeeForKpp" element={<ShowEmployeeForKppComponent / >}></Route>
