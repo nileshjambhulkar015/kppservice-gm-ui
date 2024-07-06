@@ -4,6 +4,7 @@ import './App.css';
 import KeyParameterComponent from './components/KeyParameterComponent/KeyParameterComponent';
 
 import EmployeeComponent from './components/EmployeeComponent/EmployeeComponent';
+
 import DesignationComponent from './components/MasterComponent/DesignationComponent/DesignationComponent';
 
 import Cookies from 'js-cookie';
@@ -27,6 +28,8 @@ import UoMComponent from "./components/MasterComponent/UoMComponent/UoMComponent
 import ShowEmployeeForKppComponent from './components/ShowEmployeeForKppComponent/ShowEmployeeForKppComponent';
 import ViewAllEmpTransferToOtherHODComponent from "./components/ViewAllEmpTransferToOtherHODComponent/ViewAllEmpTransferToOtherHODComponent";
 import ComplaintTypeComponent from "./components/MasterComponent/ComplaintTypeComponent/ComplaintTypeComponent";
+import PendingComplaintComponent from "./components/PendingComplaintComponent/PendingComplaintComponent";
+import ViewComplaintComponent from "./components/ViewComplaintComponent/ViewComplaintComponent";
 
 function App() {
  
@@ -83,7 +86,8 @@ function App() {
           <span className="caret"></span></a>
           <ul className="dropdown-menu">
           <li><Link to="/viewHODCumulativeKpp">View HOD Cumulative Kpp</Link></li>
-          <li><Link to="/viewEmployeeCumulativeKpp">View Employee Cumulative Kpp</Link></li>      
+          <li><Link to="/viewEmployeeCumulativeKpp">View Employee Cumulative Kpp</Link></li>    
+          
           </ul>
         </li>
 
@@ -105,6 +109,20 @@ function App() {
             </ul>
           </li>
 
+          
+
+          <li className="dropdown">
+          <a className="dropdown-toggle" data-toggle="dropdown" href="#">Complaint Management
+          <span className="caret"></span></a>
+          <ul className="dropdown-menu">
+          <li><Link to="/pendingComplaint">Pending Complaint</Link></li>  
+          <li><Link to="/viewComplaint">View Complaint</Link></li>  
+ 
+      
+          </ul>
+        </li>
+          
+          
           </ul>
           <ul className="nav navbar-nav navbar-right">
             <li><a href="#">Welcome: {Cookies.get('empEId')}</a></li>
@@ -142,6 +160,9 @@ function App() {
         <Route exact path="/viewSingleHODRatings" element={<SingleHODCumulativeComponent />}></Route>
         <Route exact path="/transferemployeetohod" element={<ViewAllEmpTransferToOtherHODComponent />}></Route>
         <Route exact path="/viewHODCumulativeKpp" element={<ViewAllHODCumulativeComponent />}></Route>
+        <Route exact path="/pendingComplaint" element={<PendingComplaintComponent />}></Route>
+        <Route exact path="/viewComplaint" element={<ViewComplaintComponent />}></Route>
+        
       </Routes>
     </BrowserRouter>
   );
