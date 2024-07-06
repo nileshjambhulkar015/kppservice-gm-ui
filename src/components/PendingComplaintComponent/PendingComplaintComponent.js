@@ -29,9 +29,7 @@ export default function PendingComplaintComponent() {
     const [compTypeId, setCompTypeId] = useState('');
     const [compTypeName, setCompTypeName] = useState('');
     const [remark, setRemark] = useState('');
-
-
-
+    const [isSuccess, setIsSuccess] = useState(true)
     const [complaints, setComplaints] = useState([])
 
     const [complaintTypes, setComplaintTypes] = useState([])
@@ -40,9 +38,9 @@ export default function PendingComplaintComponent() {
 
     const [message, setMessage] = useState('');
 
-   
-      //for gm approved or reject status selection
-      const onComplaintStatusChangeHandler = (event) => {
+
+    //for gm approved or reject status selection
+    const onComplaintStatusChangeHandler = (event) => {
         setCompStatus(event);
     };
 
@@ -85,10 +83,10 @@ export default function PendingComplaintComponent() {
             setCompTypeId(complaint.compTypeId)
             setCompDate(complaint.compDate)
             setCompResolveDate(complaint.compResolveDate)
-            
+
             setCompTypeName(complaint.compTypeName)
             setCompDesc(complaint.compDesc)
-            
+
         }
         );
         // window.location.reload(); 
@@ -110,11 +108,11 @@ export default function PendingComplaintComponent() {
 
         e.preventDefault()
 
-        let complaint = { empCompId,compStatus, remark };
+        let complaint = { empCompId, compStatus, remark };
 
         ComplaintService.updateComplaintDetails(complaint).then(res => {
             ComplaintService.getEmployeeCompaintsDetailsByPaging().then((res) => {
-                setComplaints(res.data.responseData.content?.filter((item) => item.compStatus !== 'Resolve'));  
+                setComplaints(res.data.responseData.content?.filter((item) => item.compStatus !== 'Resolve'));
 
             });
             console.log("Complaint added");
@@ -123,7 +121,21 @@ export default function PendingComplaintComponent() {
 
     }
 
+    const searchByComplaintId = (e) => {
+        setCompId(e.target.value)
     
+        ComplaintService.getComplaintDetailsByCompIdPaging(e.target.value).then((res) => {
+
+            if (res.data.success) {
+                setIsSuccess(true);
+                setComplaints(res.data.responseData.content?.filter((item) => item.compStatus !== 'Resolve'));
+            }
+            else {
+                setIsSuccess(false);
+            }
+        });
+    }
+
 
 
 
@@ -134,6 +146,24 @@ export default function PendingComplaintComponent() {
                 <h2 className="text-center">Pending Complaint List</h2>
 
                 <div className="col-md-12">
+                <div className="row">
+                <div className="col-sm-6">
+                    <div className="form-group">
+                        <form className="form-horizontal">
+                            <label className="control-label col-sm-3" htmlFor="compId">Enter Complaint Id:</label>
+                            <div className="col-sm-4">
+                                <input type="text" className="form-control" id="compId" placeholder="Enter Complaint Id" value={compId} onChange={(e) => searchByComplaintId(e)} />
+                            </div>
+                        </form>
+                      
+                    </div>
+                </div>
+                <div className="col-sm-6">
+                    
+                    
+                
+                </div>
+            </div>
                     <div className="row">
 
                         <table className="table table-bordered">
@@ -196,7 +226,7 @@ export default function PendingComplaintComponent() {
 
 
 
-           
+
 
             {/* Modal for show data when user click on view button */}
             <div className="modal fade" id="showData" role="dialog">
@@ -234,7 +264,7 @@ export default function PendingComplaintComponent() {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="empName" >Role Name:</label>
                                     <div className="col-sm-3">
@@ -242,7 +272,7 @@ export default function PendingComplaintComponent() {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="empName" >Department Name:</label>
                                     <div className="col-sm-3">
@@ -250,7 +280,7 @@ export default function PendingComplaintComponent() {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="empName" >Designation Name:</label>
                                     <div className="col-sm-8">
@@ -272,7 +302,7 @@ export default function PendingComplaintComponent() {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="reamrk" >Complaint Description :</label>
                                     <div className="col-sm-8">
@@ -281,14 +311,14 @@ export default function PendingComplaintComponent() {
                                 </div>
 
                                 <div className="form-group">
-                                <label className="control-label col-sm-3" htmlFor="hodKppStatus">Complaint Status:</label>
-                                <div className="col-sm-3">
-                                    <select className="form-control" id="compStatus"onChange={(e) => onComplaintStatusChangeHandler(e.target.value)} defaultValue={compStatus}>
-                                        <option value="Approved">Resolved</option>
-                                        <option value="Reject">In Progress</option>
-                                        <option value="Reject">Reject</option>
-                                    </select>
-                                </div>
+                                    <label className="control-label col-sm-3" htmlFor="hodKppStatus">Complaint Status:</label>
+                                    <div className="col-sm-3">
+                                        <select className="form-control" id="compStatus" onChange={(e) => onComplaintStatusChangeHandler(e.target.value)} defaultValue={compStatus}>
+                                            <option value="Approved">Resolved</option>
+                                            <option value="Reject">In Progress</option>
+                                            <option value="Reject">Reject</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div className="form-group">
@@ -298,11 +328,11 @@ export default function PendingComplaintComponent() {
                                     </div>
                                 </div>
 
-                               
+
                             </form>
                         </div>
                         <div className="modal-footer">
-                        <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => updateComplaint(e)} > Submit</button>
+                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => updateComplaint(e)} > Submit</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>

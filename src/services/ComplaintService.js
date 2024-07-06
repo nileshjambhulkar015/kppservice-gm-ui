@@ -23,10 +23,10 @@ class ComplaintService {
         }
     }
 
-    // search department by its name
-    getDepartmentDetailsByDeptNamePaging(deptName) {
+    // search complaint  by its complaint id
+    getComplaintDetailsByCompIdPaging(compId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/department/search?deptName=${deptName}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
+            return axios.get(BASE_URL_API+`/complaint/employee-search?compId=${compId}&statusCd=A&page=0&size=20&sort=empCompId`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

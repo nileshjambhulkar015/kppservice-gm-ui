@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 
 
 import ComplaintService from '../../services/ComplaintService';
+import RoleService from '../../services/RoleService';
+import DesignationService from '../../services/DesignationService';
 
 export default function ViewComplaintComponent() {
 
@@ -29,6 +31,7 @@ export default function ViewComplaintComponent() {
     const [compTypeId, setCompTypeId] = useState('');
     const [compTypeName, setCompTypeName] = useState('');
     const [remark, setRemark] = useState('');
+    const [isSuccess, setIsSuccess] = useState(true)
 
 
 
@@ -37,7 +40,8 @@ export default function ViewComplaintComponent() {
     const [complaintTypes, setComplaintTypes] = useState([])
 
     const [roles, setRoles] = useState([])
-
+    const [departments, setDepartments] = useState([])
+    
     const [message, setMessage] = useState('');
 
    
@@ -59,6 +63,15 @@ export default function ViewComplaintComponent() {
             setCompTypeId(res.data?.[0].compTypeId)
 
         });
+
+        RoleService.getRoles().then((res) => {
+            setRoles(res.data);
+        });
+
+        DesignationService.getAllDepartmentDetails().then((res) => {
+            setDepartments(res.data);
+        });
+
     }, []);
 
 
@@ -124,13 +137,48 @@ export default function ViewComplaintComponent() {
 
     }
     
+    
+    const searchByComplaintId = (e) => {
+        setCompId(e.target.value)
+    
+        ComplaintService.getComplaintDetailsByCompIdPaging(e.target.value).then((res) => {
+
+            if (res.data.success) {
+                setIsSuccess(true);
+                setComplaints(res.data.responseData.content?.filter((item) => item.compStatus === 'Resolve'));
+            }
+            else {
+                setIsSuccess(false);
+            }
+        });
+    }
+
+
     return (
 
-        <div className='container-fluid'>
+        <div className='container-fluid'> 
             <div className="row">
                 <h2 className="text-center">Resolve Complaint List</h2>
 
                 <div className="col-md-12">
+                <div className="row">
+                    <div className="col-sm-6">
+                        <div className="form-group">
+                            <form className="form-horizontal">
+                                <label className="control-label col-sm-3" htmlFor="compId">Enter Complaint Id:</label>
+                                <div className="col-sm-4">
+                                    <input type="text" className="form-control" id="compId" placeholder="Enter Complaint Id" value={compId} onChange={(e) => searchByComplaintId(e)} />
+                                </div>
+                            </form>
+                          
+                        </div>
+                    </div>
+                    <div className="col-sm-5">
+                        
+                        
+                        
+                    </div>
+                </div>
                     <div className="row">
 
                         <table className="table table-bordered">
