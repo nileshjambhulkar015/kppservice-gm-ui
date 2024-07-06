@@ -40,7 +40,7 @@ export default function EmployeeComponent() {
     const [empBloodgroup, setEmpBloodgroup] = useState('A+');
     const [remark, setRemark] = useState('');
     const [empTypeId, setEmpTypeId] = useState('');
-
+    const [reportingHODName, setReportingHODName] = useState('');
 const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
     const [compnays, setCompanys] = useState([])
     const [regions, setRegions] = useState([])
@@ -212,6 +212,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
             setDesigId(employee.desigId)
             setDesigName(employee.desigName)
             setReportingEmpId(employee.reportingEmpId)
+            setReportingHODName(employee.reportingHODName)
             setRegionId(employee.regionId)
             setRegionName(employee.regionName)
             setSiteId(employee.siteId)
@@ -228,6 +229,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
             setPermAddress(employee.permAddress)
             setEmpGender(employee.empGender)
             setEmpBloodgroup(employee.empBloodgroup)
+            
             setRemark(employee.remark)
         }
         );
@@ -330,8 +332,8 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
 
         <div className="row">
             <h2 className="text-center">Employee List</h2>
-            <div className="col-md-1"></div>
-            <div className="col-md-10">
+            
+            <div className="col-md-12">
                 <div className="row">
                     <div className="col-sm-6">
                         <div className="form-group">
@@ -363,7 +365,8 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                 <th className="text-center">Designation Name</th>
                                 <th className="text-center">Role Name</th>
                                 <th className="text-center">Mobile No</th>
-
+                                <th className="text-center">Reporting To</th>
+                                <th className="text-center">Reporting ID</th>
                                 <th className="text-center">Action</th>
                             </tr>
                         </thead>
@@ -380,7 +383,8 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                             <td className="text-center">{employee.desigName}</td>
                                             <td className="text-center">{employee.roleName}</td>
                                             <td className="text-center">{employee.empMobileNo}</td>
-
+                                            <td className="text-center">{employee.reportingHODName}</td>
+                                            <td className="text-center">{employee.reportingHODEId}</td>
                                             <td className="col-sm-3 text-center"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateEmployee" onClick={() => showEmployeeById(employee.empId)}>Update</button>
                                                 <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteEmployeeById(employee.empId)}>Delete</button>
                                                 <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showEmployee" onClick={() => showEmployeeById(employee.empId)}>View</button></td>
@@ -393,7 +397,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                 </div>
 
             </div>
-            <div className="col-md-1"></div>
+            
 
             {/* Modal for upload excel of employee details */}
             <div className="modal fade" id="uploadExcelEmployee" role="dialog">
@@ -843,6 +847,9 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                         </div>
                                     </div>
                                 </div>
+
+                               
+
 
                                 <div className="form-group">
                                     <div className="row">
