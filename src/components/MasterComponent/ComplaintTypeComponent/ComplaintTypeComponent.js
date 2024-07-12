@@ -2,6 +2,7 @@ import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
 import ComplaintTypeService from "../../../services/ComplaintTypeService";
 import { BASE_URL_API } from '../../../services/URLConstants';
+import DesignationService from '../../../services/DesignationService';
 export default function ComplaintTypeComponent() {
    
    
@@ -9,7 +10,12 @@ export default function ComplaintTypeComponent() {
     const [compTypeName, setCompTypeName] = useState('');
     const [remark, setRemark] = useState('');
 
-    
+    const [deptId, setDeptId] = useState('');
+    const [deptName, setDeptName] = useState('');
+   
+    const [roleId, setRoleId] = useState('');
+
+    const [departments, setDepartments] = useState([])
 
     const [complaintTypes, setComplaintTypes] = useState([]);
 
@@ -20,6 +26,11 @@ export default function ComplaintTypeComponent() {
         ComplaintTypeService.getComplaintTypeDetailsByPaging().then((res) => {
             setComplaintTypes(res.data.responseData.content);
         });
+
+        DesignationService.getAllDepartmentDetails().then((res) => {
+            setDepartments(res.data);
+        });
+        
     }, []);
 
 
@@ -27,13 +38,14 @@ export default function ComplaintTypeComponent() {
     const saveComplaintType = (e) => {
         e.preventDefault()
         let statusCd = 'A';
+        let roleId = 2;
         let employeeId = Cookies.get('empId')
-        let complaintType = { compTypeName, remark, statusCd,employeeId };
+        let complaintType = {roleId, deptId, compTypeName, remark, statusCd,employeeId };
 
         ComplaintTypeService.saveComplaintTypeDetails(complaintType).then(res => {
             alert("Complaint Type added successfully")
             ComplaintTypeService.getComplaintTypeDetailsByPaging().then((res) => {
-                setCompTypeName(res.data.responseData.content);
+                setComplaintTypes(res.data.responseData.content);
                 setCompTypeName('');
                 setRemark('');
 
@@ -49,6 +61,7 @@ export default function ComplaintTypeComponent() {
             let compType = res.data;
             setCompTypeId(compType.compTypeId)
             setCompTypeName(compType.compTypeName)
+            setDeptName(compType.deptName)
             setRemark(compType.remark)
         }
         );
@@ -95,6 +108,12 @@ export default function ComplaintTypeComponent() {
 
     }
 
+    const handleDepartmentChange = (value) => {
+        if(value=="Select Department"){
+            value=null;
+        }
+        setDeptId(value)
+    }
 
     return (
 
@@ -118,6 +137,7 @@ export default function ComplaintTypeComponent() {
                             <thead>
                                 <tr>
                                     <th className="text-center">Sr No</th>
+                                    <th className="text-center">Department Name</th>
                                     <th className="text-center">Complaint Type Name</th>
                                   
                                     <th className="text-center">Action</th>
@@ -129,6 +149,7 @@ export default function ComplaintTypeComponent() {
                                         (complaintType, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={complaintType.compTypeId}>
                                                 <td className="text-center">{index + 1}</td>
+                                                <td>{complaintType.deptName}</td>
                                                 <td>{complaintType.compTypeName}</td>
                                                
 
@@ -161,11 +182,28 @@ export default function ComplaintTypeComponent() {
             
                                 <div> <input type="hidden" id="compTypeId" name="compTypeId" value={compTypeId} /></div>
                                 <div className="form-group">
-                                    <label className="control-label col-sm-5" htmlFor="compTypeName">Complaint Type Name:</label>
+                                    <label className="control-label col-sm-5" htmlFor="compTypeName">Select Department:</label>
                                     <div className="col-sm-7">
-                                        <input type="text" className="form-control" id="compTypeName" placeholder="Enter Complaint Type Name here" value={compTypeName} onChange={(e) => setCompTypeName(e.target.value)} />
+                                    <select className="form-control" id="deptId" defaultValue={null} onChange={(e) => handleDepartmentChange(e.target.value)}>
+                                    <option>Select Department</option>
+                                        {
+                                            departments.map(
+                                                department =>
+                                                    <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
+                                            )
+                                        };
+
+                                    </select>
                                     </div>
                                 </div>
+
+                                <div className="form-group">
+                                <label className="control-label col-sm-5" htmlFor="compTypeName">Complaint Type Name:</label>
+                                <div className="col-sm-7">
+                                    <input type="text" className="form-control" id="compTypeName" placeholder="Enter Complaint Type Name here" value={compTypeName} onChange={(e) => setCompTypeName(e.target.value)} />
+                                </div>
+                            </div>
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-5" htmlFor="reamrk">Enter Remark:</label>
                                     <div className="col-sm-7">
@@ -234,6 +272,14 @@ export default function ComplaintTypeComponent() {
  
            
                                 <div> <input type="hidden" id="compTypeId" name="compTypeId" value={compTypeId} /></div>
+                                <div className="form-group">
+                                    <label className="control-label col-sm-4" htmlFor="compTypeName" >Department Name:</label>
+                                    <div className="col-sm-8">
+                                        {deptName}
+                                    </div>
+                                </div>
+                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="compTypeName" >Complaint Type Name:</label>
                                     <div className="col-sm-8">

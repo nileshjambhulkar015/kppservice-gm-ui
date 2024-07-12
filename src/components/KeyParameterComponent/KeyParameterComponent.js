@@ -235,7 +235,9 @@ export default function KeyParameterComponent() {
                         <thead>
                             <tr>
                                 <th className="text-center">Sr No</th>
+                               
                                 <th className="text-center">KPP Objective No</th>
+                                <th className="text-center">UoM Name</th>
                                 <th className="text-center">KPP Objective</th>                              
                                 <th className="text-center">Performance Indicator</th>
                                 <th className="text-center">Action</th>
@@ -247,7 +249,9 @@ export default function KeyParameterComponent() {
                                     (kpp, index) =>   //index is inbuilt variable of map started with 0
                                         <tr key={kpp.kppId}>
                                             <td className="text-center">{index + 1}</td>
-                                            <td className="text-justify">{kpp.kppObjectiveNo}</td>                                            
+                                             
+                                            <td className="text-center">{kpp.kppObjectiveNo}</td>      
+                                            <td className="text-center">{kpp.uomName}</td>                                          
                                             <td>{kpp.kppObjective}</td>
                                             <td >{kpp.kppPerformanceIndi}</td>
                                             <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateKpp" onClick={() => showKppById(kpp.kppId)}>Update</button>

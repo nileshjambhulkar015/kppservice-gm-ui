@@ -18,7 +18,6 @@ export default function ViewComplaintComponent() {
     const [roleId, setRoleId] = useState('');
     const [roleName, setRoleName] = useState('');
     const [deptId, setDeptId] = useState('');
-
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
