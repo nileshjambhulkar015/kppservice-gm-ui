@@ -184,7 +184,7 @@ export default function ComplaintTypeComponent() {
                                 <div className="form-group">
                                     <label className="control-label col-sm-5" htmlFor="compTypeName">Select Department:</label>
                                     <div className="col-sm-7">
-                                    <select className="form-control" id="deptId" defaultValue={null} onChange={(e) => handleDepartmentChange(e.target.value)}>
+                                    <select className="form-control" id="compTypeId" defaultValue={compTypeId} onChange={(e) => handleDepartmentChange(e.target.value)}>
                                     <option>Select Department</option>
                                         {
                                             departments.map(
