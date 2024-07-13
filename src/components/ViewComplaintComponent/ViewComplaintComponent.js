@@ -40,12 +40,12 @@ export default function ViewComplaintComponent() {
 
     const [roles, setRoles] = useState([])
     const [departments, setDepartments] = useState([])
-    
+
     const [message, setMessage] = useState('');
 
-   
-      //for gm approved or reject status selection
-      const onComplaintStatusChangeHandler = (event) => {
+
+    //for gm approved or reject status selection
+    const onComplaintStatusChangeHandler = (event) => {
         setCompStatus(event);
     };
 
@@ -101,45 +101,18 @@ export default function ViewComplaintComponent() {
             setCompStatus(complaint.compStatus)
             setCompTypeName(complaint.compTypeName)
             setCompDesc(complaint.compDesc)
-            
+
         }
         );
         // window.location.reload(); 
     }
 
 
-    const deleteDepartmentById = (e) => {
-        ComplaintService.deleteEmployeeComplaintById(empCompId).then(res => {
-            ComplaintService.getEmployeeCompaintsDetailsByPaging().then((res) => {
-                setComplaints(res.data.responseData.content);
-                console.log(res.data.responseData.content)
-            });
-            console.log("Department deleted");
-        }
-        );
-    }
 
-    const updateComplaint = (e) => {
 
-        e.preventDefault()
-
-        let complaint = { empCompId,compStatus, remark };
-
-        ComplaintService.updateComplaintDetails(complaint).then(res => {
-            ComplaintService.getEmployeeCompaintsDetailsByPaging().then((res) => {
-                setComplaints(res.data.responseData.content);
-
-            });
-            console.log("Complaint added");
-        }
-        );
-
-    }
-    
-    
     const searchByComplaintId = (e) => {
         setCompId(e.target.value)
-    
+
         ComplaintService.getComplaintDetailsByCompIdPaging(e.target.value).then((res) => {
 
             if (res.data.success) {
@@ -155,29 +128,29 @@ export default function ViewComplaintComponent() {
 
     return (
 
-        <div className='container-fluid'> 
+        <div className='container-fluid'>
             <div className="row">
                 <h2 className="text-center">Resolve Complaint List</h2>
 
                 <div className="col-md-12">
-                <div className="row">
-                    <div className="col-sm-6">
-                        <div className="form-group">
-                            <form className="form-horizontal">
-                                <label className="control-label col-sm-3" htmlFor="compId">Enter Complaint Id:</label>
-                                <div className="col-sm-4">
-                                    <input type="text" className="form-control" id="compId" placeholder="Enter Complaint Id" value={compId} onChange={(e) => searchByComplaintId(e)} />
-                                </div>
-                            </form>
-                          
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <div className="form-group">
+                                <form className="form-horizontal">
+                                    <label className="control-label col-sm-3" htmlFor="compId">Enter Complaint Id:</label>
+                                    <div className="col-sm-4">
+                                        <input type="text" className="form-control" id="compId" placeholder="Enter Complaint Id" value={compId} onChange={(e) => searchByComplaintId(e)} />
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                        <div className="col-sm-5">
+
+
+
                         </div>
                     </div>
-                    <div className="col-sm-5">
-                        
-                        
-                        
-                    </div>
-                </div>
                     <div className="row">
 
                         <table className="table table-bordered">
@@ -192,12 +165,12 @@ export default function ViewComplaintComponent() {
                                     <th className="text-center">Role</th>
                                     <th className="text-center">Department</th>
                                     <th className="text-center">Designation</th>
-                                     
+
 
                                     <th className="text-center">Complaint Date</th>
                                     <th className="text-center">Complaint Resolve Date</th>
                                     <th className="text-center">Complaint Type</th>
-                                  
+
 
                                 </tr>
                             </thead>
@@ -224,7 +197,7 @@ export default function ViewComplaintComponent() {
                                                 <td>{complaint.compDate}</td>
                                                 <td>{complaint.compResolveDate}</td>
                                                 <td>{complaint.compTypeName}</td>
-                                               
+
 
 
                                             </tr>
@@ -242,7 +215,7 @@ export default function ViewComplaintComponent() {
 
 
 
-           
+
 
             {/* Modal for show data when user click on view button */}
             <div className="modal fade" id="showData" role="dialog">
@@ -280,7 +253,7 @@ export default function ViewComplaintComponent() {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="empName" >Role Name:</label>
                                     <div className="col-sm-3">
@@ -288,7 +261,7 @@ export default function ViewComplaintComponent() {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="empName" >Department Name:</label>
                                     <div className="col-sm-3">
@@ -296,7 +269,7 @@ export default function ViewComplaintComponent() {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="empName" >Designation Name:</label>
                                     <div className="col-sm-8">
@@ -319,13 +292,13 @@ export default function ViewComplaintComponent() {
                                 </div>
 
                                 <div className="form-group">
-                                <label className="control-label col-sm-3" htmlFor="deptName" >Complaint Resolve Date:</label>
-                                <div className="col-sm-8">
-                                    {compResolveDate}
+                                    <label className="control-label col-sm-3" htmlFor="deptName" >Complaint Resolve Date:</label>
+                                    <div className="col-sm-8">
+                                        {compResolveDate}
+                                    </div>
                                 </div>
-                            </div>
 
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="reamrk" >Complaint Description :</label>
                                     <div className="col-sm-8">
@@ -334,10 +307,10 @@ export default function ViewComplaintComponent() {
                                 </div>
 
                                 <div className="form-group">
-                                <label className="control-label col-sm-3" htmlFor="hodKppStatus">Complaint Status:</label>
-                                <div className="col-sm-3">
-                                   {compStatus}
-                                </div>
+                                    <label className="control-label col-sm-3" htmlFor="hodKppStatus">Complaint Status:</label>
+                                    <div className="col-sm-3">
+                                        {compStatus}
+                                    </div>
                                 </div>
 
                                 <div className="form-group">
@@ -347,11 +320,11 @@ export default function ViewComplaintComponent() {
                                     </div>
                                 </div>
 
-                               
+
                             </form>
                         </div>
                         <div className="modal-footer">
-                        
+
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
