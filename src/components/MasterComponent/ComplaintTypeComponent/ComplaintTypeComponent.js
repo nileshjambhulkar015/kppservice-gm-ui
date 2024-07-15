@@ -12,8 +12,6 @@ export default function ComplaintTypeComponent() {
 
     const [deptId, setDeptId] = useState('');
     const [deptName, setDeptName] = useState('');
-   
-    const [roleId, setRoleId] = useState('');
 
     const [departments, setDepartments] = useState([])
 
@@ -38,9 +36,8 @@ export default function ComplaintTypeComponent() {
     const saveComplaintType = (e) => {
         e.preventDefault()
         let statusCd = 'A';
-        let roleId = 2;
         let employeeId = Cookies.get('empId')
-        let complaintType = {roleId, deptId, compTypeName, remark, statusCd,employeeId };
+        let complaintType = {deptId, compTypeName, remark, statusCd,employeeId };
 
         ComplaintTypeService.saveComplaintTypeDetails(complaintType).then(res => {
             alert("Complaint Type added successfully")
@@ -207,7 +204,7 @@ export default function ComplaintTypeComponent() {
                                 <div className="form-group">
                                     <label className="control-label col-sm-5" htmlFor="reamrk">Enter Remark:</label>
                                     <div className="col-sm-7">
-                                        <textarea row="5" className="form-control" id="remark" placeholder="Enter Remark here" value={remark} onChange={(e) => setRemark(e.target.value)} />
+                                        <textarea row="15" cols="150" className="form-control" id="remark" placeholder="Enter Remark here" value={remark} onChange={(e) => setRemark(e.target.value)} />
                                     </div>
                                 </div>
 
