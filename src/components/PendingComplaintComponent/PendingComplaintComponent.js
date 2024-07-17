@@ -314,8 +314,7 @@ export default function PendingComplaintComponent() {
                                     <label className="control-label col-sm-3" htmlFor="hodKppStatus">Complaint Status:</label>
                                     <div className="col-sm-3">
                                         <select className="form-control" id="compStatus" onChange={(e) => onComplaintStatusChangeHandler(e.target.value)} defaultValue={compStatus}>
-                                            <option value="Approved">Resolved</option>
-                                            <option value="Reject">In Progress</option>
+                                            <option value="Resolved">Resolved</option>
                                             <option value="Reject">Reject</option>
                                         </select>
                                     </div>
