@@ -91,23 +91,7 @@ function App() {
           </ul>
         </li>
 
-            <li className="dropdown">
-            <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
-            <span className="caret"></span></a>
-            <ul className="dropdown-menu">
-            <li><Link to="/role">Role Master</Link></li>
-            <li><Link to="/department">Department Master</Link></li>
-            <li><Link to="/designation">Designation Master</Link></li>
-            <li><Link to="/uomMaster">UoM Master</Link></li>
-            <li><Link to="/empTypeMaster">Employee Type Master</Link></li>
-            <li><Link to="/complaintTypeMaster">Complaint Type Master</Link></li>
-            <li><Link to="/regionMaster">Region Master</Link></li>
-            <li><Link to="/siteMaster">Sites Master</Link></li>
-            <li><Link to="/companyMaster">Company Master</Link></li>
-   
         
-            </ul>
-          </li>
 
           
 
@@ -122,6 +106,23 @@ function App() {
           </ul>
         </li>
           
+        <li className="dropdown">
+        <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
+        <span className="caret"></span></a>
+        <ul className="dropdown-menu">
+        <li><Link to="/role">Role Master</Link></li>
+        <li><Link to="/department">Department Master</Link></li>
+        <li><Link to="/designation">Designation Master</Link></li>
+        <li><Link to="/uomMaster">UoM Master</Link></li>
+        <li><Link to="/empTypeMaster">Employee Type Master</Link></li>
+        <li><Link to="/complaintTypeMaster">Complaint Type Master</Link></li>
+        <li><Link to="/regionMaster">Region Master</Link></li>
+        <li><Link to="/siteMaster">Sites Master</Link></li>
+        <li><Link to="/companyMaster">Company Master</Link></li>
+
+    
+        </ul>
+      </li>
           
           </ul>
           <ul className="nav navbar-nav navbar-right">
