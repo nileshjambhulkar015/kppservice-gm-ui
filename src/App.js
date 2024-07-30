@@ -28,8 +28,10 @@ import UoMComponent from "./components/MasterComponent/UoMComponent/UoMComponent
 import ShowEmployeeForKppComponent from './components/ShowEmployeeForKppComponent/ShowEmployeeForKppComponent';
 import ViewAllEmpTransferToOtherHODComponent from "./components/ViewAllEmpTransferToOtherHODComponent/ViewAllEmpTransferToOtherHODComponent";
 import ComplaintTypeComponent from "./components/MasterComponent/ComplaintTypeComponent/ComplaintTypeComponent";
-import PendingComplaintComponent from "./components/PendingComplaintComponent/PendingComplaintComponent";
-import ViewComplaintComponent from "./components/ViewComplaintComponent/ViewComplaintComponent";
+import OthersPendingComplaintComponent from './components/ComplaintManagementComponent/OthersPendingComplaintComponent';
+import OthersResolveComplaintComponent from './components/ComplaintManagementComponent/OthersResolveComplaintComponent';
+import OthersInProgressComplaintComponent from './components/ComplaintManagementComponent/OthersInProgressComplaintComponent';
+
 
 function App() {
  
@@ -91,20 +93,17 @@ function App() {
           </ul>
         </li>
 
-        
-
-          
-
-          <li className="dropdown">
-          <a className="dropdown-toggle" data-toggle="dropdown" href="#">Complaint Management
+        <li className="dropdown">
+        <a className="dropdown-toggle" data-toggle="dropdown" href="#">Complaint Management
           <span className="caret"></span></a>
-          <ul className="dropdown-menu">
-          <li><Link to="/pendingComplaint">Pending Complaint</Link></li>  
-          <li><Link to="/viewComplaint">View Complaint</Link></li>  
- 
-      
-          </ul>
-        </li>
+        <ul className="dropdown-menu">
+          
+          <li><Link to="/othersPendingComplaint">Other's Pending Complaint</Link></li>
+          <li><Link to="/othersInProgressComplaint">Other's In Progress Complaint</Link></li>
+          <li><Link to="/othersResolveComplaint">Other's Resolve Complaint</Link></li>
+        </ul>
+      </li>
+
           
         <li className="dropdown">
         <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
@@ -161,8 +160,10 @@ function App() {
         <Route exact path="/viewSingleHODRatings" element={<SingleHODCumulativeComponent />}></Route>
         <Route exact path="/transferemployeetohod" element={<ViewAllEmpTransferToOtherHODComponent />}></Route>
         <Route exact path="/viewHODCumulativeKpp" element={<ViewAllHODCumulativeComponent />}></Route>
-        <Route exact path="/pendingComplaint" element={<PendingComplaintComponent />}></Route>
-        <Route exact path="/viewComplaint" element={<ViewComplaintComponent />}></Route>
+        
+        <Route exact path="/othersPendingComplaint" element={<OthersPendingComplaintComponent />}></Route>
+        <Route exact path="/othersInProgressComplaint" element={<OthersInProgressComplaintComponent />}></Route>
+        <Route exact path="/othersResolveComplaint" element={<OthersResolveComplaintComponent />}></Route>
         
       </Routes>
     </BrowserRouter>

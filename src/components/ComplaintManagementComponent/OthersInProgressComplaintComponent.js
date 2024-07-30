@@ -1,28 +1,19 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
+import OthersResolveComplaintService from '../../services/OthersResolveComplaintService';
+import OthersInProgressComplaintService from '../../services/OthersInProgressComplaintService';
 
 
-import ComplaintService from '../../services/ComplaintService';
-import RoleService from '../../services/RoleService';
-import DesignationService from '../../services/DesignationService';
 
-export default function ViewComplaintComponent() {
+
+export default function OthersInProgressComplaintComponent() {
 
 
     const [compId, setCompId] = useState('');
 
-    const [empId, setEmpId] = useState('');
-    const [empEId, setEmpEId] = useState('');
-    const [empName, setEmpName] = useState('');
-    const [empMobileNo, setEmpMobileNo] = useState('');
-    const [roleId, setRoleId] = useState('');
-    const [roleName, setRoleName] = useState('');
-    const [deptId, setDeptId] = useState('');
-    const [deptName, setDeptName] = useState('');
-    const [desigId, setDesigId] = useState('');
-    const [desigName, setDesigName] = useState('');
+    const [compTypeDeptId, setCompTypeDeptId] = useState('');
 
-    const [compStatus, setCompStatus] = useState('Resolve');
+    const [compStatus, setCompStatus] = useState('Resolved');
     const [compDate, setCompDate] = useState('');
     const [compResolveDate, setCompResolveDate] = useState('');
     const [empCompId, setEmpCompId] = useState('');
@@ -30,45 +21,36 @@ export default function ViewComplaintComponent() {
     const [compTypeId, setCompTypeId] = useState('');
     const [compTypeName, setCompTypeName] = useState('');
     const [remark, setRemark] = useState('');
-    const [isSuccess, setIsSuccess] = useState(true)
+
+    const [empId, setEmpId] = useState('');
+    const [empEId, setEmpEId] = useState('');
+    const [empName, setEmpName] = useState('');
+    const [empMobileNo, setEmpMobileNo] = useState('');
+
+    const [roleId, setRoleId] = useState('');
+    const [roleName, setRoleName] = useState('');
+    const [deptId, setDeptId] = useState('');
+
+    const [deptName, setDeptName] = useState('');
+    const [desigId, setDesigId] = useState('');
+    const [desigName, setDesigName] = useState('');
 
 
 
     const [complaints, setComplaints] = useState([])
+    const [ekppMonth, setEkppMonth] = useState('');
+    const [compResolveDateTime, setCompResolveDateTime] = useState('');
+    
 
-    const [complaintTypes, setComplaintTypes] = useState([])
 
-    const [roles, setRoles] = useState([])
     const [departments, setDepartments] = useState([])
 
-    const [message, setMessage] = useState('');
-
-
-    //for gm approved or reject status selection
-    const onComplaintStatusChangeHandler = (event) => {
-        setCompStatus(event);
-    };
-
-
+    
     //loading all department and roles while page loading at first time
     useEffect(() => {
-        ComplaintService.getResolveEmployeeCompaintsDetailsByPaging().then((res) => {
+        OthersInProgressComplaintService.getEmployeeCompaintsDetailsByPaging().then((res) => {
             setComplaints(res.data.responseData.content);
             console.log(res.data.responseData.content)
-        });
-
-        ComplaintService.getAllComplaintType().then((res) => {
-            setComplaintTypes(res.data);
-            setCompTypeId(res.data?.[0].compTypeId)
-
-        });
-
-        RoleService.getRoles().then((res) => {
-            setRoles(res.data);
-        });
-
-        DesignationService.getAllDepartmentDetails().then((res) => {
-            setDepartments(res.data);
         });
 
     }, []);
@@ -76,10 +58,9 @@ export default function ViewComplaintComponent() {
 
     const getComplaintById = (e) => {
 
-        ComplaintService.getComplaintById(e).then(res => {
+        OthersInProgressComplaintService.getComplaintById(e).then(res => {
             let complaint = res.data;
-            setEmpCompId(complaint.empCompId)
-            setCompId(complaint.compId)
+
             setEmpId(complaint.empId)
             setEmpEId(complaint.empEId)
 
@@ -94,62 +75,59 @@ export default function ViewComplaintComponent() {
             setDesigName(complaint.desigName)
 
 
+            setEmpCompId(complaint.empCompId)
+            setCompId(complaint.compId)
             setCompTypeId(complaint.compTypeId)
             setCompDate(complaint.compDate)
             setCompResolveDate(complaint.compResolveDate)
-            setRemark(complaint.remark)
-            setCompStatus(complaint.compStatus)
+            
             setCompTypeName(complaint.compTypeName)
             setCompDesc(complaint.compDesc)
-
+            setRemark(complaint.remark)
         }
         );
-        // window.location.reload(); 
+
+    }
+
+    const onComplaintStatusChangeHandler = (event) => {
+        setCompStatus(event);
+    };
+
+    const updateComplaint = (e) => {
+
+        e.preventDefault()
+       
+        let compResolveEmpId = Cookies.get('empId');
+        let compResolveEmpName = Cookies.get('empFirstName') + " " + Cookies.get('empMiddleName') + " " + Cookies.get('empLastName');
+        let compResolveEmpEId = Cookies.get('empEId');
+
+        let complaint = { empCompId, compStatus,compResolveDateTime, compResolveEmpId, compResolveEmpName, compResolveEmpEId,remark };
+
+        OthersInProgressComplaintService.updateComplaintDetails(complaint).then(res => {
+            OthersInProgressComplaintService.getEmployeeCompaintsDetailsByPaging().then((res) => {
+                setComplaints(res.data.responseData.content?.filter((item) => item.compStatus != 'Pending'));
+
+            });
+            console.log("Complaint added");
+        }
+        );
+
     }
 
 
 
-
-    const searchByComplaintId = (e) => {
-        setCompId(e.target.value)
-
-        ComplaintService.getComplaintDetailsByCompIdPaging(e.target.value).then((res) => {
-
-            if (res.data.success) {
-                setIsSuccess(true);
-                setComplaints(res.data.responseData.content?.filter((item) => item.compStatus === 'Resolve'));
-            }
-            else {
-                setIsSuccess(false);
-            }
-        });
-    }
 
 
     return (
 
-        <div className='container-fluid'>
+        <div>
             <div className="row">
-                <h2 className="text-center">Resolve Complaint List</h2>
-
-                <div className="col-md-12">
+                <h2 className="text-center">In Progress Complaint List</h2>
+                <div className="col-md-1"></div>
+                <div className="col-md-9">
                     <div className="row">
-                        <div className="col-sm-6">
-                            <div className="form-group">
-                                <form className="form-horizontal">
-                                    <label className="control-label col-sm-3" htmlFor="compId">Enter Complaint Id:</label>
-                                    <div className="col-sm-4">
-                                        <input type="text" className="form-control" id="compId" placeholder="Enter Complaint Id" value={compId} onChange={(e) => searchByComplaintId(e)} />
-                                    </div>
-                                </form>
-
-                            </div>
-                        </div>
-                        <div className="col-sm-5">
 
 
-
-                        </div>
                     </div>
                     <div className="row">
 
@@ -168,9 +146,8 @@ export default function ViewComplaintComponent() {
 
 
                                     <th className="text-center">Complaint Date</th>
-                                    <th className="text-center">Complaint Resolve Date</th>
                                     <th className="text-center">Complaint Type</th>
-
+                                    <th className="text-center">Complaint Status</th>
 
                                 </tr>
                             </thead>
@@ -180,10 +157,7 @@ export default function ViewComplaintComponent() {
                                         (complaint, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={complaint.empCompId}>
                                                 <td className="text-center">{index + 1}</td>
-                                                <td>
-
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => getComplaintById(complaint.empCompId)}>View</button></td>
-
+                                                <td> <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => getComplaintById(complaint.empCompId)}>View</button></td>
                                                 <td>{complaint.compId}</td>
 
 
@@ -195,8 +169,9 @@ export default function ViewComplaintComponent() {
 
 
                                                 <td>{complaint.compDate}</td>
-                                                <td>{complaint.compResolveDate}</td>
                                                 <td>{complaint.compTypeName}</td>
+                                                <td>{complaint.compStatus}</td>
+
 
 
 
@@ -208,14 +183,9 @@ export default function ViewComplaintComponent() {
                     </div>
 
                 </div>
-
+                <div className="col-md-2"></div>
 
             </div>
-
-
-
-
-
 
             {/* Modal for show data when user click on view button */}
             <div className="modal fade" id="showData" role="dialog">
@@ -245,6 +215,7 @@ export default function ViewComplaintComponent() {
                                     </div>
                                 </div>
 
+                               
 
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="empName" >Mobile Number:</label>
@@ -291,13 +262,6 @@ export default function ViewComplaintComponent() {
                                     </div>
                                 </div>
 
-                                <div className="form-group">
-                                    <label className="control-label col-sm-3" htmlFor="deptName" >Complaint Resolve Date:</label>
-                                    <div className="col-sm-8">
-                                        {compResolveDate}
-                                    </div>
-                                </div>
-
 
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="reamrk" >Complaint Description :</label>
@@ -307,16 +271,27 @@ export default function ViewComplaintComponent() {
                                 </div>
 
                                 <div className="form-group">
+                                <label className="control-label col-sm-3"  >Resolve Date and Time:</label>
+                                <div className="col-sm-3">
+                                    <input type="datetime-local" className="form-control" defaultValue={compResolveDateTime} name="compResolveDateTime" onChange={(e) => setCompResolveDateTime(e.target.value)} />
+                                </div>
+                            </div>
+              
+
+                                <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="hodKppStatus">Complaint Status:</label>
                                     <div className="col-sm-3">
-                                        {compStatus}
+                                        <select className="form-control" id="compStatus" onChange={(e) => onComplaintStatusChangeHandler(e.target.value)} defaultValue={compStatus}>
+                                            <option value="Resolved">Resolved</option>                                            
+                                            <option value="Reject">Reject</option>
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="remark">Remark :</label>
                                     <div className="col-sm-8">
-                                        {remark}
+                                        <textarea row="5" className="form-control" id="remark" placeholder="Enter Complaint remark here" onChange={(e) => setRemark(e.target.value)} />
                                     </div>
                                 </div>
 
@@ -324,13 +299,14 @@ export default function ViewComplaintComponent() {
                             </form>
                         </div>
                         <div className="modal-footer">
-
+                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => updateComplaint(e)} > Submit</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
 
                 </div>
             </div>
+ 
         </div>
     );
 }
