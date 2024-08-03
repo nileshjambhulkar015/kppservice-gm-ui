@@ -324,7 +324,7 @@ export default function OthersInProgressComplaintComponent() {
                                 <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e) => advSearchEmployeeComplaints(e)}>Search</button>
 
 
-                                <a href={BASE_URL_API + `/complaint/download-employee-complaint?compFromDate=${compFromDate}&compToDate=${compToDate}&asCompResolveEmpId=${Cookies.get('empId')}&empCompDeptId=${empCompDeptId}&asCompTypeDeptId=${Cookies.get('deptId')}&empCompId=${asCompId}&asCompStatus=In Progress`}>
+                                <a href={BASE_URL_API + `/complaint/download-employee-complaint?compFromDate=${compFromDate}&compToDate=${compToDate}&empCompDeptId=${empCompDeptId}&empCompId=${asCompId}&asCompStatus=In Progress`}>
                                     <button type="button" className="btn btn-success col-sm-offset-1 "> Download</button>
                                 </a>
                                 <button type="button" className="btn btn-danger col-sm-offset-1" data-dismiss="modal">Close</button>
