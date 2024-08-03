@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
 import OthersResolveComplaintService from '../../services/OthersResolveComplaintService';
+import { BASE_URL_API } from '../../services/URLConstants';
 
 
 
@@ -35,13 +36,23 @@ export default function OthersResolveComplaintComponent() {
     const [desigName, setDesigName] = useState('');
     const [compResolveEmpName, setCompResolveEmpName] = useState('');
     const [compResolveEmpEId, setCompResolveEmpEId] = useState('');
-    
+
+
+    const [empCompIdSearch, setEmpCompIdSearch] = useState();
+    const [isSuccess, setIsSuccess] = useState(true)
 
     const [complaints, setComplaints] = useState([])
 
     const [complaintTypes, setComplaintTypes] = useState([])
 
     const [departments, setDepartments] = useState([])
+
+    const [compFromDate, setCompFromDate] = useState('')
+    const [compToDate, setCompToDate] = useState('')
+    const [asDeptId, setAsDeptId] = useState('')
+    const [asCompId, setAsCompId] = useState('')
+    const [asCompTypeDeptId, setAsCompTypeDeptId] = useState('')
+    const [empCompDeptId, setEmpCompDeptId] = useState('')
 
     //loading all department and roles while page loading at first time
     useEffect(() => {
@@ -50,8 +61,45 @@ export default function OthersResolveComplaintComponent() {
             console.log(res.data.responseData.content)
         });
 
+        OthersResolveComplaintService.getAllDepartmentDetails().then((res) => {
+            setDepartments(res.data);
+        });
+
+
     }, []);
 
+
+    const handleDepartmentChange = (value) => {
+        if (value == "Select Department") {
+            value = null;
+        }
+        setEmpCompDeptId(value)
+    }
+
+
+
+    // Advance search employee
+    const advSearchEmployeeComplaints = (e) => {
+     
+
+        let asCompStatus = 'Resolved';
+      
+
+        
+        e.preventDefault()
+        let advComplaintSearch = { compFromDate, compToDate, empCompDeptId, asCompTypeDeptId, asCompId, asCompStatus };
+
+        OthersResolveComplaintService.advanceSearchComplaintDetails(advComplaintSearch).then(res => {
+            if (res.data.success) {
+                setIsSuccess(true);
+                setComplaints(res.data.responseData.content);
+            }
+            else {
+                setIsSuccess(false);
+            }
+        }
+        );
+    }
 
     const getComplaintById = (e) => {
 
@@ -83,11 +131,33 @@ export default function OthersResolveComplaintComponent() {
             setRemark(complaint.remark)
             setCompResolveEmpName(complaint.compResolveEmpName);
             setCompResolveEmpEId(complaint.compResolveEmpEId);
-            
+
         }
         );
 
     }
+
+
+    const searchComplaintById = (e) => {
+        setEmpCompIdSearch(e.target.value)
+
+        OthersResolveComplaintService.getEmployeeCompaintsByComplaintId(e.target.value).then((res) => {
+
+            if (res.data.success) {
+                setIsSuccess(true);
+                setComplaints(res.data.responseData.content);
+                // setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
+            }
+            else {
+                setIsSuccess(false);
+            }
+        });
+    }
+
+
+
+
+
 
 
     const updateComplaint = (e) => {
@@ -122,68 +192,158 @@ export default function OthersResolveComplaintComponent() {
         <div>
             <div className="row">
                 <h2 className="text-center">Resolve Complaint List</h2>
-             
-                <div className="col-md-12">
+
+                <div className="col-md-11">
                     <div className="row">
+                        <div className="col-sm-12">
+                            <div className="form-group">
+                                <form className="form-horizontal">
+                                    <label className="control-label col-sm-2" htmlFor="empCompIdSearch">Enter Complaint Id:</label>
+                                    <div className="col-sm-2">
+                                        <input type="text" className="form-control" id="empCompIdSearch" placeholder="Enter Complaint Id" value={empCompIdSearch} onChange={(e) => searchComplaintById(e)} />
 
+                                    </div>
+                                    <div className="col-sm-7" align="right">
+                                        <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#advanceSearchEmployee">Advance Search</button>
+                                    </div>
+                                </form>
 
+                            </div>
+                        </div>
                     </div>
+
                     <div className="row">
+                        {isSuccess ?
+                            <table className="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th className="text-center">Sr No</th>
+                                        <th className="text-center">Action</th>
+                                        <th className="text-center">Complaint No</th>
 
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th className="text-center">Sr No</th>
-                                    <th className="text-center">Action</th>
-                                    <th className="text-center">Complaint No</th>
-
-                                    <th className="text-center">Employee Name</th>
-                                    <th className="text-center">Employee ID</th>
-                                    <th className="text-center">Role</th>
-                                    <th className="text-center">Department</th>
-                                    <th className="text-center">Designation</th>
-                                    <th className="text-center">Complaint Date</th>
-                                    <th className="text-center">Resolved Date</th>
-                                    <th className="text-center">Complaint Type</th>
-                                    <th className="text-center">Complaint Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    complaints.map(
-                                        (complaint, index) =>   //index is inbuilt variable of map started with 0
-                                            <tr key={complaint.empCompId}>
-                                                <td className="text-center">{index + 1}</td>
-                                                <td> <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => getComplaintById(complaint.empCompId)}>View</button></td>
-                                                <td>{complaint.compId}</td>
-
-
-                                                <td>{complaint.empName}</td>
-                                                <td>{complaint.empEId}</td>
-                                                <td>{complaint.roleName}</td>
-                                                <td>{complaint.deptName}</td>
-                                                <td>{complaint.desigName}</td>
+                                        <th className="text-center">Employee Name</th>
+                                        <th className="text-center">Employee ID</th>
+                                        <th className="text-center">Role</th>
+                                        <th className="text-center">Department</th>
+                                        <th className="text-center">Designation</th>
+                                        <th className="text-center">Complaint Date</th>
+                                        <th className="text-center">Resolved Date</th>
+                                        <th className="text-center">Complaint Type</th>
+                                        <th className="text-center">Complaint Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        complaints.map(
+                                            (complaint, index) =>   //index is inbuilt variable of map started with 0
+                                                <tr key={complaint.empCompId}>
+                                                    <td className="text-center">{index + 1}</td>
+                                                    <td> <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => getComplaintById(complaint.empCompId)}>View</button></td>
+                                                    <td>{complaint.compId}</td>
 
 
-                                                <td>{complaint.compDate}</td>
-                                                <td>{complaint.compResolveDate}</td>
-                                                <td>{complaint.compTypeName}</td>
-                                                <td>{complaint.compStatus}</td>
+                                                    <td>{complaint.empName}</td>
+                                                    <td>{complaint.empEId}</td>
+                                                    <td>{complaint.roleName}</td>
+                                                    <td>{complaint.deptName}</td>
+                                                    <td>{complaint.desigName}</td>
+
+
+                                                    <td>{complaint.compDate}</td>
+                                                    <td>{complaint.compResolveDate}</td>
+                                                    <td>{complaint.compTypeName}</td>
+                                                    <td>{complaint.compStatus}</td>
 
 
 
 
-                                            </tr>
-                                    )
-                                }
-                            </tbody>
-                        </table>
+                                                </tr>
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+                            : <h1>No Data Found</h1>}
                     </div>
 
                 </div>
-               
+
 
             </div>
+
+
+            {/* Modal for Advance search for employe comlaint details */}
+            <div className="modal fade" id="advanceSearchEmployee" role="dialog">
+                <form className="form-horizontal">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                <h4 className="modal-title">Advance Search Complaint</h4>
+                            </div>
+                            <div className="modal-body">
+
+                                <div className="form-group">
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-4" htmlFor="regionName">Complaint Statrt Date:</label>
+                                        <div className="col-sm-5">
+                                            <div className="form-group">
+                                                <input type="date" className="form-control" id="compFromDate" defaultValue={compFromDate} name="compFromDate" onChange={(e) => setCompFromDate(e.target.value)} />                                 </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-4" htmlFor="regionName">Comlaint End Date:</label>
+                                        <div className="col-sm-5">
+                                            <div className="form-group">
+                                                <input type="date" className="form-control" id="compToDate" defaultValue={compToDate} name="compToDate" onChange={(e) => setCompToDate(e.target.value)} />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    <div className="row">
+                                        <label className="control-label col-sm-4" htmlFor="regionName">Department Name:</label>
+                                        <div className="col-sm-5">
+                                            <div className="form-group">
+                                                <select className="form-control" id="asDeptId" defaultValue={null} onChange={(e) => handleDepartmentChange(e.target.value)}>
+                                                    <option>Select Department</option>
+                                                    {
+                                                        departments.map(
+                                                            department =>
+                                                                <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
+                                                        )
+                                                    };
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                            <div className="modal-footer">
+
+                                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e) => advSearchEmployeeComplaints(e)}>Search</button>
+
+                                <a href={BASE_URL_API + `/complaint/download-employee-complaint?compFromDate=${compFromDate}&compToDate=${compToDate}&empCompDeptId=${empCompDeptId}&empCompId=${asCompId}&asCompStatus=Resolved`}>
+                                    <button type="button" className="btn btn-success col-sm-offset-1 "> Download</button>
+                                </a>
+                                <button type="button" className="btn btn-danger col-sm-offset-1" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+
 
             {/* Modal for show data when user click on view button */}
             <div className="modal fade" id="showData" role="dialog">
@@ -281,7 +441,7 @@ export default function OthersResolveComplaintComponent() {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="hodKppStatus">Resolved By Employee Name:</label>
                                     <div className="col-sm-3">
@@ -289,7 +449,7 @@ export default function OthersResolveComplaintComponent() {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-3" htmlFor="hodKppStatus">Resolved By Employee Id:</label>
                                     <div className="col-sm-3">
