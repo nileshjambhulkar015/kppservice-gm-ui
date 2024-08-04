@@ -149,6 +149,23 @@ export default function OthersPendingComplaintComponent() {
     }
 
 
+    const clearSearchData = () => {
+        
+        OthersPendingComplaintService.getEmployeeCompaintsDetailsByPaging().then((res) => {
+            if (res.data.success) {
+                setIsSuccess(true);
+                setComplaints(res.data.responseData.content);
+            }
+            else {
+                setIsSuccess(false);
+            }
+
+        });
+
+    }
+
+
+
     const updateComplaint = (e) => {
 
         e.preventDefault()
@@ -195,7 +212,8 @@ export default function OthersPendingComplaintComponent() {
                                     </div>
                                     <div className="col-sm-7" align="right">
                                         <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#advanceSearchEmployee">Advance Search</button>
-                                    </div>
+                                        <button type="button" className="btn btn-primary col-sm-offset-1" onClick={() => clearSearchData()}>Clear Search</button>
+                                        </div>
                                 </form>
 
                             </div>
