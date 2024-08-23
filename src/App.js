@@ -31,6 +31,7 @@ import ComplaintTypeComponent from "./components/MasterComponent/ComplaintTypeCo
 import OthersPendingComplaintComponent from './components/ComplaintManagementComponent/OthersPendingComplaintComponent';
 import OthersResolveComplaintComponent from './components/ComplaintManagementComponent/OthersResolveComplaintComponent';
 import OthersInProgressComplaintComponent from './components/ComplaintManagementComponent/OthersInProgressComplaintComponent';
+import MeetingMasterComponent from "./components/MeetingMasterComponent/MeetingMasterComponent";
 
 
 function App() {
@@ -122,7 +123,7 @@ function App() {
     
         </ul>
       </li>
-          
+      <li><Link to="/meetingMaster">Meeting Master</Link></li>
           </ul>
           <ul className="nav navbar-nav navbar-right">
             <li><a href="#">Welcome: {Cookies.get('empEId')}</a></li>
@@ -164,6 +165,8 @@ function App() {
         <Route exact path="/othersPendingComplaint" element={<OthersPendingComplaintComponent />}></Route>
         <Route exact path="/othersInProgressComplaint" element={<OthersInProgressComplaintComponent />}></Route>
         <Route exact path="/othersResolveComplaint" element={<OthersResolveComplaintComponent />}></Route>
+
+        <Route exact path="/meetingMaster" element={<MeetingMasterComponent />}></Route>
         
       </Routes>
     </BrowserRouter>
