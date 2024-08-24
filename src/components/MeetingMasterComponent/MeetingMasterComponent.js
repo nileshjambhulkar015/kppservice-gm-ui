@@ -64,25 +64,32 @@ export default function MeetingMasterComponent() {
 
     const cancelMeeting = (e) => {
 
-        MeetingMasterService.getMeetingById(e).then(res => {
-            let ExsitingMeeting = res.data;
-          
-            let meetId = ExsitingMeeting.meetId;
-       
-        
-        let meetStatus='Cancel'
-        let meeting = { meetId, meetStatus};
-
-        MeetingMasterService.cancelEmployeeMeeting(meeting).then(res => {
-            MeetingMasterService.getEmployeeMeetingByPaging().then((res) => {
-                setMeetings(res.data.responseData.content);
-                console.log(res.data.responseData.content)
-            });
-            console.log("Meeting cancel");
+        if (window.confirm("Do you want to cancel this meeting ?")) {
+            MeetingMasterService.getMeetingById(e).then(res => {
+            
+                let ExsitingMeeting = res.data;
+              
+                let meetId = ExsitingMeeting.meetId;
+           
+            
+            let meetStatus='Cancel'
+            let meeting = { meetId, meetStatus};
+    
+            MeetingMasterService.cancelEmployeeMeeting(meeting).then(res => {
+                MeetingMasterService.getEmployeeMeetingByPaging().then((res) => {
+                    setMeetings(res.data.responseData.content);
+                    console.log(res.data.responseData.content)
+                });
+                console.log("Meeting cancel");
+            }
+            );
+        });
+    
+        } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
         }
-        );
-    });
-
+       
     }
 
 
@@ -167,7 +174,7 @@ export default function MeetingMasterComponent() {
                                                 <td>
                                                 
                                                     <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => showMeetingById(meeting.meetId)}>View</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => cancelMeeting(meeting.meetId)}>Cancel</button></td>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" disabled={meeting?.meetStatus === "Cancel"} onClick={() => cancelMeeting(meeting.meetId)}>Cancel</button></td>
                                             </tr>
                                     )
                                 }
@@ -184,7 +191,7 @@ export default function MeetingMasterComponent() {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <button type="button" className="close" data-dismiss="modal">&times;</button>
-                                <h4 className="modal-title">Add Department</h4>
+                                <h4 className="modal-title">Add Meeting</h4>
                             </div>
                             <div className="modal-body">
                                 <form className="form-horizontal">
