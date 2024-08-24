@@ -54,24 +54,30 @@ export default function RegionComponent() {
 
 
     const deleteRegionById = (e) => {
-        RegionService.getRegionsById(e).then(res => {
 
-            let regionId = res.data.responseData.regionId;
-            let regionName = res.data.responseData.regionName;
+        if (window.confirm("Do you want to delete this Region ?")) {
+            RegionService.getRegionsById(e).then(res => {
 
-            let remark = res.data.responseData.remark;
-            let statusCd = 'I';
-            let updateRegion = { regionId, regionName, remark, statusCd };
+                let regionId = res.data.responseData.regionId;
+                let regionName = res.data.responseData.regionName;
 
-            RegionService.updateRegion(updateRegion).then(res => {
-                RegionService.getRegionsByPaging().then((res) => {
-                    setRegions(res.data.responseData.content);
-                });
-                console.log("Region deleted");
+                let remark = res.data.responseData.remark;
+                let statusCd = 'I';
+                let updateRegion = { regionId, regionName, remark, statusCd };
+
+                RegionService.updateRegion(updateRegion).then(res => {
+                    RegionService.getRegionsByPaging().then((res) => {
+                        setRegions(res.data.responseData.content);
+                    });
+                    console.log("Region deleted");
+                }
+                );
             }
             );
+        } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
         }
-        );
     }
 
     const updateRegion = (e) => {

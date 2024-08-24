@@ -7,7 +7,7 @@ import EmployeeService from "../../services/EmployeeService";
 export default function AssignEmployeeKppComponent() {
 
     const navigate = useNavigate();
-  const[empKppOverallTargetCount,setEmpKppOverallTargetCount] = useState('')
+    const [empKppOverallTargetCount, setEmpKppOverallTargetCount] = useState('')
     const [isSuccess, setIsSuccess] = useState(true)
     const [kppIsSuccess, setKppIsSuccess] = useState(true)
     const [kpps, setKpps] = useState([])
@@ -26,67 +26,67 @@ export default function AssignEmployeeKppComponent() {
 
     const [kppObjective, setKppObjective] = useState('');
     const [kppPerformanceIndica, setKppPerformanceIndica] = useState('');
-    
-  
+
+
 
     const [overallTarget, setOverallTarget] = useState(0);
     const [overallWeightage, setOverallWeightage] = useState(0);
     const [kppObjectiveNoSearch, setKppObjectiveNoSearch] = useState('');
 
 
- //for Overall Targate change
- const onOverallTargetChangeHandler = (value) => {
-    setOverallTarget(value);
-};
+    //for Overall Targate change
+    const onOverallTargetChangeHandler = (value) => {
+        setOverallTarget(value);
+    };
 
-//For Overall weightage chage
-const onOverallWeightageChangeHandler = (value) => {
-    setOverallWeightage(value);
-};
+    //For Overall weightage chage
+    const onOverallWeightageChangeHandler = (value) => {
+        setOverallWeightage(value);
+    };
 
-const searchByKppObjectiveNo = (e) => {
-    setKppObjectiveNoSearch(e.target.value)
+    const searchByKppObjectiveNo = (e) => {
+        setKppObjectiveNoSearch(e.target.value)
 
-    KeyParameterService.getKPPDetailsForAssignKppByPaging(e.target.value).then((res) => {
+        KeyParameterService.getKPPDetailsForAssignKppByPaging(e.target.value).then((res) => {
 
-        if (res.data.success) {
-            setIsSuccess(true);
-            setKpps(res.data.responseData.content);
-        }
-        else {
-            setIsSuccess(false);
-        }
-    });
-}
+            if (res.data.success) {
+                setIsSuccess(true);
+                setKpps(res.data.responseData.content);
+            }
+            else {
+                setIsSuccess(false);
+            }
+        });
+    }
 
     // Advance search employee
     const advanceSearchEmployeeKpp = (e) => {
-setKppObjectiveNo(e.target.value)
+        setKppObjectiveNo(e.target.value)
         e.preventDefault()
         let advanceKppSearch = { kppObjectiveNo, kppObjective, kppPerformanceIndica };
-      
+
         KeyParameterService.advanceSearchEmployeeKPP(advanceKppSearch).then(res => {
             if (res.data.success) {
                 setKppIsSuccess(true);
                 setKpps(res.data.responseData.content);
             }
-            else {             
+            else {
                 setKppIsSuccess(false);
-             }
+            }
         }
         );
     }
 
-    const clearSearchAssignKpp = (e)=>{
+    const clearSearchAssignKpp = (e) => {
         KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
             if (res.data.success) {
                 setKppIsSuccess(true);
                 setKpps(res.data.responseData.content);
             }
-            else {             
+            else {
                 setKppIsSuccess(false);
-             }
-           
+            }
+
         });
 
     }
@@ -96,10 +96,10 @@ setKppObjectiveNo(e.target.value)
                 setKppIsSuccess(true);
                 setKpps(res.data.responseData.content);
             }
-            else {             
+            else {
                 setKppIsSuccess(false);
-             }
-           
+            }
+
         });
 
         KeyParameterService.viewKPPDetailsForAssignKppByPaging().then((res) => {
@@ -109,17 +109,17 @@ setKppObjectiveNo(e.target.value)
                 setViewEmpKpps(res.data.responseData.kppResponses.content);
             }
             else {
-             
+
                 setIsSuccess(false);
             }
 
-         
+
         });
 
-       EmployeeService.searchEmployeeById(Cookies.get('empIdForKpp')).then((res)=>{
+        EmployeeService.searchEmployeeById(Cookies.get('empIdForKpp')).then((res) => {
             setEmpId(res.data.empId)
             setEmpEId(res.data.empEId)
-            setEmpName(res.data.empFirstName +' '+res.data.empMiddleName+' '+res.data.empLastName )
+            setEmpName(res.data.empFirstName + ' ' + res.data.empMiddleName + ' ' + res.data.empLastName)
             setRoleName(res.data.roleName)
             setDeptName(res.data.deptName)
             setDesigName(res.data.desigName)
@@ -140,90 +140,92 @@ setKppObjectiveNo(e.target.value)
 
 
     const saveKPPDetailsForEmployee = (e, newKppId) => {
-        e.preventDefault()
-        let statusCd = 'A';
-        let kppId = newKppId;
-        let empId = Cookies.get('empIdForKpp');
-        let empEId = Cookies.get('empEIdForKpp');
+        if (window.confirm("Do you want to assign this Employee KPP ?")) {
+            e.preventDefault()
+            let statusCd = 'A';
+            let kppId = newKppId;
+            let empId = Cookies.get('empIdForKpp');
+            let empEId = Cookies.get('empEIdForKpp');
 
-        let roleId = Cookies.get('empKppRoleId');
-        let deptId = Cookies.get('empKppDeptId');
-        let desigId = Cookies.get('empKppDesigId');
-        let reportingEmpId = Cookies.get('empReportingIdForKpp');
-        let employeeId = Cookies.get('empId');
+            let roleId = Cookies.get('empKppRoleId');
+            let deptId = Cookies.get('empKppDeptId');
+            let desigId = Cookies.get('empKppDesigId');
+            let reportingEmpId = Cookies.get('empReportingIdForKpp');
+            let employeeId = Cookies.get('empId');
 
-        //TODO: read value from dynamic textbox
-        let kppOverallTarget = overallTarget;
-        let kppOverallWeightage = overallWeightage;
-        let kpp = { kppId,kppOverallTarget,kppOverallWeightage, empId, empEId, roleId, deptId, desigId, reportingEmpId, statusCd, employeeId };
-        console.log(kpp)
+            //TODO: read value from dynamic textbox
+            let kppOverallTarget = overallTarget;
+            let kppOverallWeightage = overallWeightage;
+            let kpp = { kppId, kppOverallTarget, kppOverallWeightage, empId, empEId, roleId, deptId, desigId, reportingEmpId, statusCd, employeeId };
+            console.log(kpp)
 
-        EmployeeKppsService.assignEmployeeKppDetails(kpp).then(res => {
-            KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
-                if (res.data.success) {
-                    setKppIsSuccess(true);
-                    setKpps(res.data.responseData.content);
-                    setOverallTarget(0);
-                    setOverallWeightage(0);
-                }
-                else {             
-                    setKppIsSuccess(false);
-                 }
-                
-            });
+            EmployeeKppsService.assignEmployeeKppDetails(kpp).then(res => {
 
-            KeyParameterService.viewKPPDetailsForAssignKppByPaging().then((res) => {
-               
-                if (res.data.success) {
-                    setIsSuccess(true);
-                    setEmpKppOverallTargetCount(res.data.responseData.empKppOverallTargetCount)
-                    setViewEmpKpps(res.data.responseData.kppResponses.content);
-                }
-                else {
-                 
-                    setIsSuccess(false);
-                }
-              
-            });
-            console.log("res=", res.data)
+                KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
+                    if (res.data.success) {
+                        setKppIsSuccess(true);
+                        setKpps(res.data.responseData.content);
+                        setOverallTarget(0);
+                        setOverallWeightage(0);
+                    }
+                    else {
+                        setKppIsSuccess(false);
+                    }
 
-            alert("Employee Kpp added");
+                });
+
+                KeyParameterService.viewKPPDetailsForAssignKppByPaging().then((res) => {
+
+                    if (res.data.success) {
+                        setIsSuccess(true);
+                        setEmpKppOverallTargetCount(res.data.responseData.empKppOverallTargetCount)
+                        setViewEmpKpps(res.data.responseData.kppResponses.content);
+                    }
+                    else {
+
+                        setIsSuccess(false);
+                    }
+
+                });
+            }
+            );
+        } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
         }
-        );
-        // window.location.reload(); 
     }
 
     const deleteKPPDetailsForEmployee = (kppId) => {
+        if (window.confirm("Do you want to delete this Employee KPP ?")) {
+            EmployeeKppsService.deleteEmployeeKppDetails(kppId).then(res => {
+                KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
+                    if (res.data.success) {
+                        setKppIsSuccess(true);
+                        setKpps(res.data.responseData.content);
+                    }
+                    else {
+                        setKppIsSuccess(false);
+                    }
+                });
 
-        EmployeeKppsService.deleteEmployeeKppDetails(kppId).then(res => {
-            KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
-                if (res.data.success) {
-                    setKppIsSuccess(true);
-                    setKpps(res.data.responseData.content);
-                }
-                else {             
-                    setKppIsSuccess(false);
-                 }
-            });
+                KeyParameterService.viewKPPDetailsForAssignKppByPaging().then((res) => {
+                    if (res.data.success) {
+                        setIsSuccess(true);
+                        setEmpKppOverallTargetCount(res.data.responseData.empKppOverallTargetCount)
+                        setViewEmpKpps(res.data.responseData.kppResponses.content);
+                    }
+                    else {
 
-            KeyParameterService.viewKPPDetailsForAssignKppByPaging().then((res) => {
-                if (res.data.success) {
-                    setIsSuccess(true);
-                    setEmpKppOverallTargetCount(res.data.responseData.empKppOverallTargetCount)
-                    setViewEmpKpps(res.data.responseData.kppResponses.content);
-                }
-                else {
-                 
-                    setIsSuccess(false);
-                }
-               
-            });
-          
+                        setIsSuccess(false);
+                    }
 
-            alert("Employee Kpp deleted");
+                });
+            }
+            );
+        } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
         }
-        );
-        // window.location.reload(); 
     }
 
 
@@ -248,11 +250,18 @@ setKppObjectiveNo(e.target.value)
                         </div>
 
                         <div className="form-group">
-                        <label className="control-label col-sm-2"  >Role :</label>
+                        <label className="control-label col-sm-2"  >Employee Id :</label>
                         <div className="col-sm-5">
-                            {roleName}
+                            {empEId}
                         </div>
                     </div>
+
+                        <div className="form-group">
+                            <label className="control-label col-sm-2"  >Role :</label>
+                            <div className="col-sm-5">
+                                {roleName}
+                            </div>
+                        </div>
 
                         <div className="form-group">
                             <label className="control-label col-sm-2"  >Department :</label>
@@ -267,7 +276,7 @@ setKppObjectiveNo(e.target.value)
                                 {desigName}
                             </div>
                         </div>
-                      
+
 
 
 
@@ -279,80 +288,80 @@ setKppObjectiveNo(e.target.value)
 
 
                 <div className="col-md-10">
-                <div className="col-sm-5">
-                <div className="form-group">
-                    <form className="form-horizontal">
-                        <label className="control-label col-sm-5" htmlFor="kppObjectiveSearch">Enter KPP Objective No:</label>
-                        <div className="col-sm-4">
-                            <input type="text" className="form-control" id="kppObjectiveNo" placeholder="Enter Objective No" value={kppObjectiveNo} onChange={(e) => advanceSearchEmployeeKpp(e)} />
-                        </div>
-                    </form>
-                  
+                    <div className="col-sm-5">
+                        <div className="form-group">
+                            <form className="form-horizontal">
+                                <label className="control-label col-sm-5" htmlFor="kppObjectiveSearch">Enter KPP Objective No:</label>
+                                <div className="col-sm-4">
+                                    <input type="text" className="form-control" id="kppObjectiveNo" placeholder="Enter Objective No" value={kppObjectiveNo} onChange={(e) => advanceSearchEmployeeKpp(e)} />
+                                </div>
+                            </form>
 
-                </div>
-            </div>
-                   <div className="col-sm-2"><h4 className="text-center">Key Parameter List</h4></div> 
-<div> 
-<button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#advanceSearchKPP">Advance Search</button>
-<button type="button" className="btn btn-primary col-sm-offset-1" onClick={(e)=>clearSearchAssignKpp(e)}>Clear Search</button>
-</div>
+
+                        </div>
+                    </div>
+                    <div className="col-sm-2"><h4 className="text-center">Key Parameter List</h4></div>
+                    <div>
+                        <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#advanceSearchKPP">Advance Search</button>
+                        <button type="button" className="btn btn-primary col-sm-offset-1" onClick={(e) => clearSearchAssignKpp(e)}>Clear Search</button>
+                    </div>
 
                     {kppIsSuccess ?
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Sr No</th>
-                                <th>Action</th>
-                                <th>Overall Target</th>
-                                <th>Overall Weightage</th>
-                                <th>KPP Objective No</th>
-                                <th>KPP Objective</th>
-                                <th>Performance Indicator</th>
+                        <table className="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Sr No</th>
+                                    <th>Action</th>
+                                    <th>Overall Target</th>
+                                    <th>Overall Weightage</th>
+                                    <th>KPP Objective No</th>
+                                    <th>KPP Objective</th>
+                                    <th>Performance Indicator</th>
 
-                               
-                                <th>Target Period</th>
-                                <th>UOM</th>
-                               
-                                <th className="text-center">Rating 5</th>
-                                <th className="text-center">Rating 4</th>
-                                <th className="text-center">Rating 3</th>
-                                <th className="text-center">Rating 2</th>
-                                <th className="text-center">Rating 1</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                kpps.map(
-                                    (kpp, index) =>   //index is inbuilt variable of map started with 0
-                                        <tr key={kpp.kppId}>
-                                            <td className="text-center">{index + 1}</td>
-                                            <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => saveKPPDetailsForEmployee(e, kpp.kppId)}>Assign</button></td>
-                                            <td className="text-center">
-                                            
-                                            <input type="number" className="form-control" defaultValue={0} max={100} min={0} onChange={(e)=>setOverallTarget(e.target.value)  }/>
-                                            </td>
-                                            <td className="text-center">
-                                            <input type="number" className="form-control" defaultValue={0} max={100} min={0} onChange={(e)=>setOverallWeightage(e.target.value)} />
-                                            </td>
-                                            <td className="text-justify">{kpp.kppObjectiveNo}</td>
-                                            <td className="text-justify">{kpp.kppObjective}</td>
-                                            <td className="text-justify">{kpp.kppPerformanceIndi}</td>
-                                            <td className="text-center">{kpp.kppTargetPeriod}</td>
-                                            
-                                            <td className="text-center">{kpp.kppUoM}</td>
-                                            
-                                            <td className="text-center">{kpp.kppRating1}</td>
-                                            <td className="text-center">{kpp.kppRating2}</td>
-                                            <td className="text-center">{kpp.kppRating3}</td>
-                                            <td className="text-center">{kpp.kppRating4}</td>
-                                            <td className="text-center">{kpp.kppRating5}</td>
-                                        </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
-                    : <h3>All Kpp Set to Employee</h3>}
+                                    <th>Target Period</th>
+                                    <th>UOM</th>
+
+                                    <th className="text-center">Rating 5</th>
+                                    <th className="text-center">Rating 4</th>
+                                    <th className="text-center">Rating 3</th>
+                                    <th className="text-center">Rating 2</th>
+                                    <th className="text-center">Rating 1</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    kpps.map(
+                                        (kpp, index) =>   //index is inbuilt variable of map started with 0
+                                            <tr key={kpp.kppId}>
+                                                <td className="text-center">{index + 1}</td>
+                                                <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => saveKPPDetailsForEmployee(e, kpp.kppId)}>Assign</button></td>
+                                                <td className="text-center">
+
+                                                    <input type="number" className="form-control" defaultValue={0} max={100} min={0} onChange={(e) => setOverallTarget(e.target.value)} />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input type="number" className="form-control" defaultValue={0} max={100} min={0} onChange={(e) => setOverallWeightage(e.target.value)} />
+                                                </td>
+                                                <td className="text-justify">{kpp.kppObjectiveNo}</td>
+                                                <td className="text-justify">{kpp.kppObjective}</td>
+                                                <td className="text-justify">{kpp.kppPerformanceIndi}</td>
+                                                <td className="text-center">{kpp.kppTargetPeriod}</td>
+
+                                                <td className="text-center">{kpp.kppUoM}</td>
+
+                                                <td className="text-center">{kpp.kppRating1}</td>
+                                                <td className="text-center">{kpp.kppRating2}</td>
+                                                <td className="text-center">{kpp.kppRating3}</td>
+                                                <td className="text-center">{kpp.kppRating4}</td>
+                                                <td className="text-center">{kpp.kppRating5}</td>
+                                            </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                        : <h3>All Kpp Set to Employee</h3>}
                 </div>
 
             </div>
@@ -363,62 +372,62 @@ setKppObjectiveNo(e.target.value)
 
                     <h4>View Assign Employee KPP</h4>
                     {isSuccess ?
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Sr No</th>
-                                <th>Action</th>
-                                <th>KPP Objective No</th>
-                                <th>KPP Objective</th>
-                                <th>Performance Indicator</th>
+                        <table className="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Sr No</th>
+                                    <th>Action</th>
+                                    <th>KPP Objective No</th>
+                                    <th>KPP Objective</th>
+                                    <th>Performance Indicator</th>
 
-                                <th>Overall Target</th>
-                                <th>Target Period</th>
-                                <th>UOM</th>
-                                <th>Overall Weightage</th>
-                                <th className="text-center">Rating 5</th>
-                                <th className="text-center">Rating 4</th>
-                                <th className="text-center">Rating 3</th>
-                                <th className="text-center">Rating 2</th>
-                                <th className="text-center">Rating 1</th>
+                                    <th>Overall Target</th>
+                                    <th>Target Period</th>
+                                    <th>UOM</th>
+                                    <th>Overall Weightage</th>
+                                    <th className="text-center">Rating 5</th>
+                                    <th className="text-center">Rating 4</th>
+                                    <th className="text-center">Rating 3</th>
+                                    <th className="text-center">Rating 2</th>
+                                    <th className="text-center">Rating 1</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                viewEmpKpps.map(
-                                    (kpp, index) =>   //index is inbuilt variable of map started with 0
-                                        <tr key={kpp.kppId}>
-                                            <td className="text-center">{index + 1}</td>
-                                            <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => deleteKPPDetailsForEmployee(kpp.kppId)}>Remove</button></td>
-                                            <td className="text-justify">{kpp.kppObjectiveNo}</td>
-                                            <td className="text-justify">{kpp.kppObjective}</td>
-                                            <td className="text-justify">{kpp.kppPerformanceIndi}</td>
-                                            <td className="text-center">{kpp.kppOverallTarget}</td>
-                                            <td className="text-center">{kpp.kppTargetPeriod}</td>
-                                            <td className="text-center">{kpp.kppUoM}</td>
-                                            <td className="text-center">{kpp.kppOverallWeightage}</td>
-                                            <td className="text-center">{kpp.kppRating1}</td>
-                                            <td className="text-center">{kpp.kppRating2}</td>
-                                            <td className="text-center">{kpp.kppRating3}</td>
-                                            <td className="text-center">{kpp.kppRating4}</td>
-                                            <td className="text-center">{kpp.kppRating5}</td>
-                                        </tr>
-
-
-                                )
-                            }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    viewEmpKpps.map(
+                                        (kpp, index) =>   //index is inbuilt variable of map started with 0
+                                            <tr key={kpp.kppId}>
+                                                <td className="text-center">{index + 1}</td>
+                                                <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => deleteKPPDetailsForEmployee(kpp.kppId)}>Remove</button></td>
+                                                <td className="text-justify">{kpp.kppObjectiveNo}</td>
+                                                <td className="text-justify">{kpp.kppObjective}</td>
+                                                <td className="text-justify">{kpp.kppPerformanceIndi}</td>
+                                                <td className="text-center">{kpp.kppOverallTarget}</td>
+                                                <td className="text-center">{kpp.kppTargetPeriod}</td>
+                                                <td className="text-center">{kpp.kppUoM}</td>
+                                                <td className="text-center">{kpp.kppOverallWeightage}</td>
+                                                <td className="text-center">{kpp.kppRating1}</td>
+                                                <td className="text-center">{kpp.kppRating2}</td>
+                                                <td className="text-center">{kpp.kppRating3}</td>
+                                                <td className="text-center">{kpp.kppRating4}</td>
+                                                <td className="text-center">{kpp.kppRating5}</td>
+                                            </tr>
 
 
-                        </tbody>
-                    </table>
-                    : <h3>No KPP Set to Employee</h3>}
+                                    )
+                                }
+
+
+                            </tbody>
+                        </table>
+                        : <h3>No KPP Set to Employee</h3>}
                     <h3>Total Kpp Target assign : {empKppOverallTargetCount}</h3>
                 </div>
 
             </div>
 
-            
+
             {/* Modal for Advance search for employee details */}
             <div className="modal fade" id="advanceSearchKPP" role="dialog">
                 <form className="form-horizontal">
@@ -435,33 +444,33 @@ setKppObjectiveNo(e.target.value)
                                         <label className="control-label col-sm-3" htmlFor="regionName">Objevtive No :</label>
                                         <div className="col-sm-3">
                                             <div className="form-group">
-                                            <input type="text" className="form-control" id="kppObjectiveNo" placeholder="Enter Objective No" value={kppObjectiveNo} onChange={(e) => setKppObjectiveNo(e.target.value)} />
+                                                <input type="text" className="form-control" id="kppObjectiveNo" placeholder="Enter Objective No" value={kppObjectiveNo} onChange={(e) => setKppObjectiveNo(e.target.value)} />
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="row">
-                                    <label className="control-label col-sm-3" htmlFor="regionName">Objevtive Name :</label>
-                                    <div className="col-sm-8">
-                                        <div className="form-group">
-                                        <input type="text" className="form-control" id="kppObjective" placeholder="Enter Objective No" value={kppObjective} onChange={(e) => setKppObjective(e.target.value)} />
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Objevtive Name :</label>
+                                        <div className="col-sm-8">
+                                            <div className="form-group">
+                                                <input type="text" className="form-control" id="kppObjective" placeholder="Enter Objective No" value={kppObjective} onChange={(e) => setKppObjective(e.target.value)} />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className="row">
-                                <label className="control-label col-sm-3" htmlFor="regionName">Objevtive Indicator :</label>
-                                <div className="col-sm-8">
-                                    <div className="form-group">
-                                    <input type="text" className="form-control" id="kppPerformanceIndica" placeholder="Enter Objective No" value={kppPerformanceIndica} onChange={(e) => setKppPerformanceIndica(e.target.value)} />
+                                    <div className="row">
+                                        <label className="control-label col-sm-3" htmlFor="regionName">Objevtive Indicator :</label>
+                                        <div className="col-sm-8">
+                                            <div className="form-group">
+                                                <input type="text" className="form-control" id="kppPerformanceIndica" placeholder="Enter Objective No" value={kppPerformanceIndica} onChange={(e) => setKppPerformanceIndica(e.target.value)} />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            </div>
+                                </div>
                             </div>
                             <div className="modal-footer">
-                                
+
                                 <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e) => advanceSearchEmployeeKpp(e)}>Search</button>
                                 <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>

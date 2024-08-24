@@ -39,14 +39,6 @@ export default function SiteComponent() {
         setRegionId(regionId);
     };
 
-    //search department by it's name
-    /*const searchDeptName = (e) => {
-        DepartmentService.getDepartmentDetailsByDeptNamePaging(e).then((res) => {
-            setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 1));
-            console.log(res.data)
-        });
-    }*/
-
     const saveSite = (e) => {
         e.preventDefault()
         let statusCd = 'A';
@@ -78,6 +70,8 @@ export default function SiteComponent() {
 
 
     const deleteSiteById = (e) => {
+        
+ if (window.confirm("Do you want to delete this Site Name ?")) {
         SiteService.getSiteById(e).then(res => {
             let site = res.data;
             let siteId = site.siteId;
@@ -96,7 +90,11 @@ export default function SiteComponent() {
             }
             );
         }
-        );
+        );} else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
+        }
+        
     }
 
     const updateDepartment = (e) => {

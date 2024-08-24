@@ -104,7 +104,7 @@ function App() {
           <li><Link to="/othersResolveComplaint">Other's Resolve Complaint</Link></li>
         </ul>
       </li>
-
+      <li><Link to="/meetingMaster">Meeting Master</Link></li>
           
         <li className="dropdown">
         <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
@@ -123,7 +123,7 @@ function App() {
     
         </ul>
       </li>
-      <li><Link to="/meetingMaster">Meeting Master</Link></li>
+     
           </ul>
           <ul className="nav navbar-nav navbar-right">
             <li><a href="#">Welcome: {Cookies.get('empEId')}</a></li>

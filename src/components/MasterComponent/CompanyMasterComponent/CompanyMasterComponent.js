@@ -108,6 +108,7 @@ const[companyFinYear, setCompanyFinYear] = useState('')
     const updateComapnyDetails = (e) => {
         e.preventDefault()
        
+       
         CompanyMasterService.getCompanyById(e).then(res => {
             let company = res.data;
             let companyId = company.companyId;
@@ -138,13 +139,13 @@ const[companyFinYear, setCompanyFinYear] = useState('')
         }
         );
        
-
-
+    
     }
 
     const deleteCompanyById = (e) => {
 
-
+        if (window.confirm("Do you want to delete this Company ?")) {
+      
         CompanyMasterService.getCompanyById(e).then(res => {
             let company = res.data;
             let companyId = company.companyId;
@@ -169,11 +170,15 @@ const[companyFinYear, setCompanyFinYear] = useState('')
                     console.log(res.data)
                 });
     
-                console.log("Company deleted");
+               
             }
             );
         }
-        );
+        ); } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
+        }
+    
        
     }
 

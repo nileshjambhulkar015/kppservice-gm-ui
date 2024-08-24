@@ -89,7 +89,7 @@ export default function DesignationComponent() {
 
     const deleteDesignationById = (e) => {
 
-
+        if (window.confirm("Do you want to delete this Designation Name ?")) {
         DesignationService.getDesignationById(e).then(res => {
             let designation = res.data;
             let desigId = designation.desigId;
@@ -112,7 +112,12 @@ export default function DesignationComponent() {
             );
         }
         );
-        // window.location.reload(); 
+        
+ 
+ } else {
+    // User clicked Cancel
+    console.log("User canceled the action.");
+}
     }
 
     

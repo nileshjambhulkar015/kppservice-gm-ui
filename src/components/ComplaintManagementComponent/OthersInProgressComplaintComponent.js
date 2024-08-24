@@ -155,7 +155,7 @@ export default function OthersInProgressComplaintComponent() {
     };
 
     const updateComplaint = (e) => {
-
+        if (window.confirm("Do you want to resolve this complaint ?")) {
         e.preventDefault()
 
         let compResolveEmpId = Cookies.get('empId');
@@ -172,7 +172,10 @@ export default function OthersInProgressComplaintComponent() {
             console.log("Complaint added");
         }
         );
-
+    } else {
+        // User clicked Cancel
+        console.log("User canceled the action.");
+    }
     }
 
 

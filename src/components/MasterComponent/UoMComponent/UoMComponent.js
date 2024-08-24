@@ -52,6 +52,7 @@ export default function UoMComponent() {
 
 
     const deleteRegionById = (e) => {
+        if (window.confirm("Do you want to delete this Region name ?")) {
         UoMService.getUoMById(e).then(res => {
 
             let uomId = res.data.responseData.uomId;
@@ -69,7 +70,10 @@ export default function UoMComponent() {
             }
             );
         }
-        );
+        ); } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
+        }
     }
 
     const updateRegion = (e) => {

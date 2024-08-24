@@ -3,17 +3,17 @@ import React, { useEffect, useState } from "react";
 import EmployeeTypeService from '../../../services/MasterService/EmployeeTypeService';
 
 export default function EmployeeTypeComponent() {
-   
-   
+
+
     const [empTypeId, setEmpTypeId] = useState('');
     const [empTypeName, setEmpTypeName] = useState('');
     const [remark, setRemark] = useState('');
 
     const [deptNameSearch, setDeptNameSearch] = useState('');
-    
+
     const [empTypes, setEmpTypes] = useState([])
 
-    
+
 
     //loading all department and roles while page loading at first time
     useEffect(() => {
@@ -23,7 +23,7 @@ export default function EmployeeTypeComponent() {
         });
     }, []);
 
- 
+
 
     //search department by it's name
     const searchDeptName = (e) => {
@@ -37,7 +37,7 @@ export default function EmployeeTypeComponent() {
         e.preventDefault()
         let statusCd = 'A';
         let employeeId = Cookies.get('empId')
-        let employeeTypes = { empTypeName, remark, statusCd,employeeId };
+        let employeeTypes = { empTypeName, remark, statusCd, employeeId };
 
         EmployeeTypeService.saveEmployeeTypeDetails(employeeTypes).then(res => {
             console.log("res=", res.data)
@@ -60,7 +60,7 @@ export default function EmployeeTypeComponent() {
             setEmpTypeName(employeeType.empTypeName)
             setRemark(employeeType.remark)
 
-            
+
         }
         );
         // window.location.reload(); 
@@ -68,26 +68,33 @@ export default function EmployeeTypeComponent() {
 
 
     const deleteEmployeeTypeById = (e) => {
-        EmployeeTypeService.getEmployeeTypeById(e).then(res => {
-            let employeeType = res.data;
-          
-            let empTypeId = employeeType.empTypeId;
-            let empTypeName = employeeType.empTypeName;
-            let remark = employeeType.remark;
-            let statusCd = 'I';
-            let updateEmployeeType = { empTypeId, empTypeName, remark, statusCd };
 
-            EmployeeTypeService.updateEmployeeTypeDetails(updateEmployeeType).then(res => {
-                EmployeeTypeService.getEmployeeTypeDetailsByPaging(e).then((res) => {
-                    setEmpTypes(res.data.responseData);
-                    console.log(res.data)
-                });
-             
-                console.log("Employee Type deleted");
+        if (window.confirm("Do you want to delete this Employee Type ?")) {
+
+            EmployeeTypeService.getEmployeeTypeById(e).then(res => {
+                let employeeType = res.data;
+
+                let empTypeId = employeeType.empTypeId;
+                let empTypeName = employeeType.empTypeName;
+                let remark = employeeType.remark;
+                let statusCd = 'I';
+                let updateEmployeeType = { empTypeId, empTypeName, remark, statusCd };
+
+                EmployeeTypeService.updateEmployeeTypeDetails(updateEmployeeType).then(res => {
+                    EmployeeTypeService.getEmployeeTypeDetailsByPaging(e).then((res) => {
+                        setEmpTypes(res.data.responseData);
+                        console.log(res.data)
+                    });
+
+                    console.log("Employee Type deleted");
+                }
+                );
             }
             );
+        } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
         }
-        );
     }
 
     const updateEmployeeType = (e) => {
@@ -136,7 +143,7 @@ export default function EmployeeTypeComponent() {
                                 <tr>
                                     <th className="text-center">Sr No</th>
                                     <th className="text-center">Employee Type Name</th>
-                                  
+
                                     <th className="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -147,7 +154,7 @@ export default function EmployeeTypeComponent() {
                                             <tr key={employeeType.empTypeId}>
                                                 <td className="text-center">{index + 1}</td>
                                                 <td>{employeeType.empTypeName}</td>
-                                               
+
 
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateEmployeeType" onClick={() => showEmployeeTypeById(employeeType.empTypeId)}>Update</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteEmployeeTypeById(employeeType.empTypeId)}>Delete</button>
@@ -177,7 +184,7 @@ export default function EmployeeTypeComponent() {
                         </div>
                         <div className="modal-body">
                             <form className="form-horizontal">
-            
+
                                 <div> <input type="hidden" id="deptId" name="empTypeId" value={empTypeId} /></div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="empTypeName">Enter Employee Type Name:</label>
@@ -250,8 +257,8 @@ export default function EmployeeTypeComponent() {
                         </div>
                         <div className="modal-body">
                             <form className="form-horizontal">
- 
-           
+
+
                                 <div> <input type="hidden" id="deptId" name="empTypeId" value={empTypeId} /></div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="empTypeName" >Employee Type Name:</label>

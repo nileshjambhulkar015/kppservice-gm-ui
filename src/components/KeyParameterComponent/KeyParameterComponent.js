@@ -133,6 +133,7 @@ export default function KeyParameterComponent() {
 
 
     const deleteKppById = (e) => {
+        if (window.confirm("Do you want to delete this KPP ?")) {
         KeyParameterService.getKppById(e).then(res => {
             let kpp = res.data;
             console.log(kpp)
@@ -165,6 +166,10 @@ export default function KeyParameterComponent() {
             );
         }
         );
+    } else {
+        // User clicked Cancel
+        console.log("User canceled the action.");
+    }
     }
 
     const updateKppDetails = (e) => {

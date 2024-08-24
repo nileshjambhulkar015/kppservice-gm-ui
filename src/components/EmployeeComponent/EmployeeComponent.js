@@ -41,7 +41,7 @@ export default function EmployeeComponent() {
     const [remark, setRemark] = useState('');
     const [empTypeId, setEmpTypeId] = useState('');
     const [reportingHODName, setReportingHODName] = useState('');
-const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
+    const [empFirstNameSearch, setEmpFirstNameSearch] = useState();
     const [compnays, setCompanys] = useState([])
     const [regions, setRegions] = useState([])
     const [sites, setSites] = useState([])
@@ -76,7 +76,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
             else {
                 setIsSuccess(false);
             }
-          
+
         });
 
         RoleService.getRoles().then((res) => {
@@ -106,11 +106,11 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
 
     }, []);;
 
-    
+
     //for role , department and designation
     const handleRoleIdChange = (value) => {
-        if(value=="Select Role"){
-            value=null;
+        if (value == "Select Role") {
+            value = null;
         }
         setRoleId(value)
     }
@@ -118,60 +118,60 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
     //Employee advance search
 
     const handleEmployeeTypeChange = (value) => {
-        if(value=="Select Employee Type"){
-            value=null;
+        if (value == "Select Employee Type") {
+            value = null;
         }
         setEmpTypeId(value)
     }
 
     const handleDepartmentChange = (value) => {
-        if(value=="Select Department"){
-            value=null;
+        if (value == "Select Department") {
+            value = null;
         }
         setDeptId(value)
     }
 
     //for role change
     const onRegionChangeHandler = (value) => {
-        if(value=="Select Region"){
-            value=null;
+        if (value == "Select Region") {
+            value = null;
         }
         setRegionId(value);
     };
 
-      //for site change
-      const onSiteChangeHandler = (value) => {
-        if(value=="Select Site"){
-            value=null;
+    //for site change
+    const onSiteChangeHandler = (value) => {
+        if (value == "Select Site") {
+            value = null;
         }
         setSiteId(value);
     };
 
-         //for Company change
-         const onCompanyChangeHandler = (value) => {
-            if(value=="Select Company"){
-                value=null;
-            }
-            setCompanyId(value);
-        };
+    //for Company change
+    const onCompanyChangeHandler = (value) => {
+        if (value == "Select Company") {
+            value = null;
+        }
+        setCompanyId(value);
+    };
 
     // Advance search employee
     const searchEmployeeDetails = (e) => {
 
         e.preventDefault()
-        let advEmployeeSearch = { roleId, deptId, regionId,siteId,companyId,empTypeId };
-      
+        let advEmployeeSearch = { roleId, deptId, regionId, siteId, companyId, empTypeId };
+
         EmployeeService.advanceSearchEmployee(advEmployeeSearch).then(res => {
             setEmployees(res.data.responseData.content);
             console.log("Site added");
         }
         );
     }
-   
+
 
     const searchEmployeeEId = (e) => {
         setEmpEIdSearch(e.target.value)
-    
+
         EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e.target.value).then((res) => {
 
             if (res.data.success) {
@@ -229,7 +229,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
             setPermAddress(employee.permAddress)
             setEmpGender(employee.empGender)
             setEmpBloodgroup(employee.empBloodgroup)
-            
+
             setRemark(employee.remark)
         }
         );
@@ -237,51 +237,57 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
     }
 
     const deleteEmployeeById = (e) => {
-        EmployeeService.getEmployeeById(e).then(res => {
-            let employee = res.data;
-            console.log(employee)
-            setEmpEId(employee.empEId)
-            setRoleId(employee.roleId)
-            setEmpId(employee.empId)
-            setDeptId(employee.deptId)
-            setDeptName(employee.deptName)
-            setDesigId(employee.desigId)
-            setDesigName(employee.desigName)
-            setReportingEmpId(employee.reportingEmpId)
-            setRegionId(employee.regionId)
-            setRegionName(employee.regionName)
-            setSiteId(employee.siteId)
-            setSiteName(employee.siteName)
-            setEmpFirstName(employee.empFirstName)
-            setEmpMiddleName(employee.empMiddleName)
-            setEmpLastName(employee.empLastName)
-            setEmpDob(employee.empDob)
-            setEmpPhoto(employee.empPhoto || '')
-            setEmpMobileNo(employee.empMobileNo)
-            setEmpEmerMobileNo(employee.empEmerMobileNo)
-            setEmailId(employee.emailId)
-            setTempAddress(employee.tempAddress)
-            setPermAddress(employee.permAddress)
-            setEmpGender(employee.empGender)
-            setEmpBloodgroup(employee.empBloodgroup)
-            setRemark(employee.remark)
+        if (window.confirm("Do you want to delete this Employee ?")) {
+            EmployeeService.getEmployeeById(e).then(res => {
+                let employee = res.data;
+                console.log(employee)
+                setEmpEId(employee.empEId)
+                setRoleId(employee.roleId)
+                setEmpId(employee.empId)
+                setDeptId(employee.deptId)
+                setDeptName(employee.deptName)
+                setDesigId(employee.desigId)
+                setDesigName(employee.desigName)
+                setReportingEmpId(employee.reportingEmpId)
+                setRegionId(employee.regionId)
+                setRegionName(employee.regionName)
+                setSiteId(employee.siteId)
+                setSiteName(employee.siteName)
+                setEmpFirstName(employee.empFirstName)
+                setEmpMiddleName(employee.empMiddleName)
+                setEmpLastName(employee.empLastName)
+                setEmpDob(employee.empDob)
+                setEmpPhoto(employee.empPhoto || '')
+                setEmpMobileNo(employee.empMobileNo)
+                setEmpEmerMobileNo(employee.empEmerMobileNo)
+                setEmailId(employee.emailId)
+                setTempAddress(employee.tempAddress)
+                setPermAddress(employee.permAddress)
+                setEmpGender(employee.empGender)
+                setEmpBloodgroup(employee.empBloodgroup)
+                setRemark(employee.remark)
 
-            let statusCd = 'I';
+                let statusCd = 'I';
 
-            let employeeData = { empId, empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
-            EmployeeService.updateEmployeeDetails(employeeData).then(res => {
-                if(res.data.success){
-                EmployeeService.getEmployeeDetailsByPaging().then((res) => {
-                    setEmployees(res.data.responseData.content);
-                });}
-               else{
-                alert(res.data.responseMessage)
-               }
-                console.log("Employee deleted");
+                let employeeData = { empId, empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
+                EmployeeService.updateEmployeeDetails(employeeData).then(res => {
+                    if (res.data.success) {
+                        EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+                            setEmployees(res.data.responseData.content);
+                        });
+                    }
+                    else {
+                        alert(res.data.responseMessage)
+                    }
+                    console.log("Employee deleted");
+                }
+                );
             }
             );
+        } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
         }
-        );
     }
 
     const updateEmployeeDetails = (e) => {
@@ -306,7 +312,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
     const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        fetch(BASE_URL_API+'/employee/upload-employee', {
+        fetch(BASE_URL_API + '/employee/upload-employee', {
             method: 'POST',
             body: formData
         })
@@ -317,7 +323,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                 EmployeeService.getEmployeeDetailsByPaging().then((res) => {
                     setEmployees(res.data.responseData.content);
                 });
-               
+
             })
             .catch(error => {
                 // Handle error
@@ -332,7 +338,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
 
         <div className="row">
             <h2 className="text-center">Employee List</h2>
-            
+
             <div className="col-md-12">
                 <div className="row">
                     <div className="col-sm-6">
@@ -353,51 +359,51 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                     </div>
                 </div>
                 <div className="row">
-                {isSuccess?
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th className="text-center">Sr No</th>
-                                <th className="text-center">Employee Name</th>
-                                <th className="text-center">Employee Id</th>
+                    {isSuccess ?
+                        <table className="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th className="text-center">Sr No</th>
+                                    <th className="text-center">Employee Name</th>
+                                    <th className="text-center">Employee Id</th>
 
-                                <th className="text-center">Department Name</th>
-                                <th className="text-center">Designation Name</th>
-                                <th className="text-center">Role Name</th>
-                                <th className="text-center">Mobile No</th>
-                                <th className="text-center">Reporting To</th>
-                                <th className="text-center">Reporting ID</th>
-                                <th className="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                employees.map(
-                                    (employee, index) =>   //index is inbuilt variable of map started with 0
-                                        <tr key={employee.empId}>
-                                            <td className="text-center">{index + 1}</td>
-                                            <td className="text-justify">{employee.empFirstName + ' ' + employee.empMiddleName + ' ' + employee.empLastName}</td>
-                                            <td className="text-center">{employee.empEId}</td>
+                                    <th className="text-center">Department Name</th>
+                                    <th className="text-center">Designation Name</th>
+                                    <th className="text-center">Role Name</th>
+                                    <th className="text-center">Mobile No</th>
+                                    <th className="text-center">Reporting To</th>
+                                    <th className="text-center">Reporting ID</th>
+                                    <th className="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    employees.map(
+                                        (employee, index) =>   //index is inbuilt variable of map started with 0
+                                            <tr key={employee.empId}>
+                                                <td className="text-center">{index + 1}</td>
+                                                <td className="text-justify">{employee.empFirstName + ' ' + employee.empMiddleName + ' ' + employee.empLastName}</td>
+                                                <td className="text-center">{employee.empEId}</td>
 
-                                            <td className="text-center">{employee.deptName}</td>
-                                            <td className="text-center">{employee.desigName}</td>
-                                            <td className="text-center">{employee.roleName}</td>
-                                            <td className="text-center">{employee.empMobileNo}</td>
-                                            <td className="text-center">{employee.reportingHODName}</td>
-                                            <td className="text-center">{employee.reportingHODEId}</td>
-                                            <td className="col-sm-3 text-center"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateEmployee" onClick={() => showEmployeeById(employee.empId)}>Update</button>
-                                                <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteEmployeeById(employee.empId)}>Delete</button>
-                                                <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showEmployee" onClick={() => showEmployeeById(employee.empId)}>View</button></td>
-                                        </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
-                    :<h4>Employee Id is not available</h4>}
+                                                <td className="text-center">{employee.deptName}</td>
+                                                <td className="text-center">{employee.desigName}</td>
+                                                <td className="text-center">{employee.roleName}</td>
+                                                <td className="text-center">{employee.empMobileNo}</td>
+                                                <td className="text-center">{employee.reportingHODName}</td>
+                                                <td className="text-center">{employee.reportingHODEId}</td>
+                                                <td className="col-sm-3 text-center"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateEmployee" onClick={() => showEmployeeById(employee.empId)}>Update</button>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteEmployeeById(employee.empId)}>Delete</button>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showEmployee" onClick={() => showEmployeeById(employee.empId)}>View</button></td>
+                                            </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                        : <h4>Employee Id is not available</h4>}
                 </div>
 
             </div>
-            
+
 
             {/* Modal for upload excel of employee details */}
             <div className="modal fade" id="uploadExcelEmployee" role="dialog">
@@ -409,18 +415,18 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                 <h4 className="modal-title">Upload Employee</h4>
                             </div>
                             <div className="modal-body">
-                                
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="file">Select file:</label>
                                     <div className="col-sm-8">
-                                        <input type="file" id="file" name="file"/>
+                                        <input type="file" id="file" name="file" />
                                     </div>
                                 </div>
 
 
                             </div>
                             <div className="modal-footer">
-                                <input type="submit"  value={"Upload"} className="btn btn-primary" />
+                                <input type="submit" value={"Upload"} className="btn btn-primary" />
                                 <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -447,10 +453,10 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                         <div className="col-sm-3">
                                             <div className="form-group">
                                                 <select className="form-control" id="empTypeId" defaultValue={null} onChange={(e) => handleEmployeeTypeChange(e.target.value)}>
-                                                <option>Select Employee Type</option>
-                                                
+                                                    <option>Select Employee Type</option>
+
                                                     {
-                                                     
+
                                                         empTypes.map(
                                                             empType =>
                                                                 <option key={empType.empTypeId} value={empType.empTypeId}>{empType.empTypeName}</option>
@@ -466,9 +472,9 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                         <label className="control-label col-sm-3" htmlFor="regionName">Role :</label>
                                         <div className="col-sm-3">
                                             <div className="form-group">
-                                                <select className="form-control" id="roleId" defaultValue={null}  onChange={(e) => handleRoleIdChange(e.target.value)}>
-                                                <option>Select Role</option>    
-                                                {
+                                                <select className="form-control" id="roleId" defaultValue={null} onChange={(e) => handleRoleIdChange(e.target.value)}>
+                                                    <option>Select Role</option>
+                                                    {
                                                         roles.map(
                                                             role =>
                                                                 <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
@@ -484,7 +490,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                         <div className="col-sm-3">
                                             <div className="form-group">
                                                 <select className="form-control" id="deptId" defaultValue={null} onChange={(e) => handleDepartmentChange(e.target.value)}>
-                                                <option>Select Department</option>
+                                                    <option>Select Department</option>
                                                     {
                                                         departments.map(
                                                             department =>
@@ -503,8 +509,8 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                         <div className="col-sm-3">
                                             <div className="form-group">
                                                 <select className="form-control" id="regionId" defaultValue={null} onChange={(e) => onRegionChangeHandler(e.target.value)}>
-                                                <option>Select Region</option>   
-                                                {
+                                                    <option>Select Region</option>
+                                                    {
                                                         regions.map(
                                                             region =>
                                                                 <option key={region.regionId} value={region.regionId}>{region.regionName}</option>
@@ -518,16 +524,16 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                         <label className="control-label col-sm-2" htmlFor="siteName">Site:</label>
                                         <div className="col-sm-3">
                                             <div className="form-group">
-                                            <select className="form-control" id="regionId" defaultValue={null} onChange={(e) => onSiteChangeHandler(e.target.value)}>
-                                            <option>Select Site</option>
-                                            {
-                                                sites.map(
-                                                    site =>
-                                                        <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
-                                                )
-                                            };
+                                                <select className="form-control" id="regionId" defaultValue={null} onChange={(e) => onSiteChangeHandler(e.target.value)}>
+                                                    <option>Select Site</option>
+                                                    {
+                                                        sites.map(
+                                                            site =>
+                                                                <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
+                                                        )
+                                                    };
 
-                                        </select>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -537,16 +543,16 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                         <label className="control-label col-sm-3" htmlFor="companyName">Company Name:</label>
                                         <div className="col-sm-5">
                                             <div className="form-group">
-                                            <select className="form-control" id="companyId" defaultValue={null} onChange={(e) => onCompanyChangeHandler(e.target.value)}>
-                                            <option>Select Company</option>
-                                            {
-                                                compnays.map(
-                                                    company =>
-                                                        <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
-                                                )
-                                            };
+                                                <select className="form-control" id="companyId" defaultValue={null} onChange={(e) => onCompanyChangeHandler(e.target.value)}>
+                                                    <option>Select Company</option>
+                                                    {
+                                                        compnays.map(
+                                                            company =>
+                                                                <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
+                                                        )
+                                                    };
 
-                                        </select>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -556,7 +562,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
 
                             </div>
                             <div className="modal-footer">
-                                
+
                                 <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e) => searchEmployeeDetails(e)}>Search</button>
                                 <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>
@@ -848,7 +854,7 @@ const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
                                     </div>
                                 </div>
 
-                               
+
 
 
                                 <div className="form-group">

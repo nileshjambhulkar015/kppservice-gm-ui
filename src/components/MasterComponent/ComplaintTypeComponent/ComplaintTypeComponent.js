@@ -67,6 +67,7 @@ export default function ComplaintTypeComponent() {
 
 
     const deleteComplaintTypeById = (e) => {
+        if (window.confirm("Do you want to delete this Complaint Type ?")) {
         ComplaintTypeService.getComplaintTypeById(e).then(res => {
             let complaintType = res.data;
           
@@ -86,6 +87,11 @@ export default function ComplaintTypeComponent() {
             );
         }
         );
+        
+ } else {
+    // User clicked Cancel
+    console.log("User canceled the action.");
+}
     }
 
     const updateComplaintType = (e) => {

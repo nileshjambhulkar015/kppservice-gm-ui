@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import DepartmentService from "../../../services/DepartmentService";
 import { BASE_URL_API } from '../../../services/URLConstants';
 export default function DepartmentComponent() {
-   
-   
+
+
     const [deptId, setDeptId] = useState('');
     const [deptName, setDeptName] = useState('');
     const [remark, setRemark] = useState('');
@@ -26,7 +26,7 @@ export default function DepartmentComponent() {
         });
     }, []);
 
- 
+
 
     //search department by it's name
     const searchDeptName = (e) => {
@@ -40,7 +40,7 @@ export default function DepartmentComponent() {
         e.preventDefault()
         let statusCd = 'A';
         let employeeId = Cookies.get('empId')
-        let department = { deptName, remark, statusCd,employeeId };
+        let department = { deptName, remark, statusCd, employeeId };
 
         DepartmentService.saveDepartmentDetails(department).then(res => {
             console.log("res=", res.data)
@@ -70,25 +70,30 @@ export default function DepartmentComponent() {
 
 
     const deleteDepartmentById = (e) => {
-        DepartmentService.getDepartmentById(e).then(res => {
-            let department = res.data;
-          
-            let deptId = department.deptId;
-            let deptName = department.deptName;
-            let remark = department.remark;
-            let statusCd = 'I';
-            let updateDepartment = { deptId, deptName, remark, statusCd };
+        if (window.confirm("Do you want to delete this Department name ?")) {
+            DepartmentService.getDepartmentById(e).then(res => {
+                let department = res.data;
 
-            DepartmentService.updateDepartmentDetails(updateDepartment).then(res => {
-                DepartmentService.getDepartmentDetailsByPaging().then((res) => {
-                    setDepartments(res.data.responseData.content);
-                    console.log(res.data.responseData.content)
-                });
-                console.log("Department deleted");
+                let deptId = department.deptId;
+                let deptName = department.deptName;
+                let remark = department.remark;
+                let statusCd = 'I';
+                let updateDepartment = { deptId, deptName, remark, statusCd };
+
+                DepartmentService.updateDepartmentDetails(updateDepartment).then(res => {
+                    DepartmentService.getDepartmentDetailsByPaging().then((res) => {
+                        setDepartments(res.data.responseData.content);
+                        console.log(res.data.responseData.content)
+                    });
+                }
+                );
             }
             );
+
+        } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
         }
-        );
     }
 
     const updateDepartment = (e) => {
@@ -100,7 +105,7 @@ export default function DepartmentComponent() {
         DepartmentService.updateDepartmentDetails(department).then(res => {
             DepartmentService.getDepartmentDetailsByPaging().then((res) => {
                 setDepartments(res.data.responseData.content);
-                
+
             });
             console.log("Department added");
         }
@@ -112,7 +117,7 @@ export default function DepartmentComponent() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        fetch(BASE_URL_API+'/department/upload-department', {
+        fetch(BASE_URL_API + '/department/upload-department', {
             method: 'POST',
             body: formData
         })
@@ -121,7 +126,7 @@ export default function DepartmentComponent() {
                 alert("Department uploaded successfully")
                 DepartmentService.getDepartmentDetailsByPaging().then((res) => {
                     setDepartments(res.data.responseData.content);
-                   
+
                 });
             })
             .catch(error => {
@@ -161,7 +166,7 @@ export default function DepartmentComponent() {
                                 <tr>
                                     <th className="text-center">Sr No</th>
                                     <th className="text-center">Department Name</th>
-                                  
+
                                     <th className="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -172,7 +177,7 @@ export default function DepartmentComponent() {
                                             <tr key={department.deptId}>
                                                 <td className="text-center">{index + 1}</td>
                                                 <td>{department.deptName}</td>
-                                               
+
 
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDepartment" onClick={() => showDepartmentById(department.deptId)}>Update</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteDepartmentById(department.deptId)}>Delete</button>
@@ -232,7 +237,7 @@ export default function DepartmentComponent() {
                         </div>
                         <div className="modal-body">
                             <form className="form-horizontal">
-            
+
                                 <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="deptName">Enter Department Name:</label>
@@ -305,8 +310,8 @@ export default function DepartmentComponent() {
                         </div>
                         <div className="modal-body">
                             <form className="form-horizontal">
- 
-           
+
+
                                 <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="deptName" >Department Name:</label>

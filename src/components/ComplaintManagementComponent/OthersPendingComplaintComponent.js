@@ -167,7 +167,7 @@ export default function OthersPendingComplaintComponent() {
 
 
     const updateComplaint = (e) => {
-
+        if (window.confirm("Do you want to assign this complaint ?")) {
         e.preventDefault()
         let compStatus = "In Progress";
         let compResolveEmpId = Cookies.get('empId');
@@ -184,6 +184,10 @@ export default function OthersPendingComplaintComponent() {
             console.log("Complaint added");
         }
         );
+    } else {
+        // User clicked Cancel
+        console.log("User canceled the action.");
+    }
 
     }
 
