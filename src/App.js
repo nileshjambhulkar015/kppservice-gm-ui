@@ -32,6 +32,9 @@ import OthersPendingComplaintComponent from './components/ComplaintManagementCom
 import OthersResolveComplaintComponent from './components/ComplaintManagementComponent/OthersResolveComplaintComponent';
 import OthersInProgressComplaintComponent from './components/ComplaintManagementComponent/OthersInProgressComplaintComponent';
 import MeetingMasterComponent from "./components/MeetingMasterComponent/MeetingMasterComponent";
+import AnnouncementTypeComponent from "./components/MasterComponent/AnnouncementTypeComponent/AnnouncementTypeComponent";
+import AnnouncementComponent from "./components/AnnouncementComponent/AnnouncementComponent";
+
 
 
 function App() {
@@ -105,6 +108,8 @@ function App() {
         </ul>
       </li>
       <li><Link to="/meetingMaster">Meeting Master</Link></li>
+      <li><Link to="/announcement">Announcement Master</Link></li>
+      
           
         <li className="dropdown">
         <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
@@ -116,6 +121,7 @@ function App() {
         <li><Link to="/uomMaster">UoM Master</Link></li>
         <li><Link to="/empTypeMaster">Employee Type Master</Link></li>
         <li><Link to="/complaintTypeMaster">Complaint Type Master</Link></li>
+        <li><Link to="/announcementType">Announcement Type Master</Link></li>
         <li><Link to="/regionMaster">Region Master</Link></li>
         <li><Link to="/siteMaster">Sites Master</Link></li>
         <li><Link to="/companyMaster">Company Master</Link></li>
@@ -167,6 +173,9 @@ function App() {
         <Route exact path="/othersResolveComplaint" element={<OthersResolveComplaintComponent />}></Route>
 
         <Route exact path="/meetingMaster" element={<MeetingMasterComponent />}></Route>
+        <Route exact path="/announcementType" element={<AnnouncementTypeComponent />}></Route>
+        <Route exact path="/announcement" element={<AnnouncementComponent />}></Route>
+        
         
       </Routes>
     </BrowserRouter>
