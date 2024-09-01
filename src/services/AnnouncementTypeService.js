@@ -38,20 +38,22 @@ getAnnouncementTypeById(announTypeId) {
 
 }
 
+updateAnnouncementType(announType) {
+    if (null != Cookies.get('empId')) {
+        return axios.put(BASE_URL, announType)
+    } else {
+        alert("You need to login first")
+        window.location.replace(LOGIN_UI_BASE_URL);
+    }
+
+}
+
     //////
     
     //when click on view button of UI
     
 
-    updateDepartmentDetails(department) {
-        if (null != Cookies.get('empId')) {
-            return axios.put(BASE_URL, department)
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }
-
-    }
+    
 
 
     
@@ -80,14 +82,16 @@ getAnnouncementTypeById(announTypeId) {
         
     }
 
-    getAllDepartmentExceptGM() {
+    getAllAnnouncementType() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API +"/department/all-dd-dept-except-gm")
+            return axios.get(BASE_URL_API +"/announcement-type")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
         }       
     }
+
+     
 
 }
 

@@ -73,17 +73,18 @@ export default function AnnouncementComponent() {
 
     const deleteAnnouncementTypeById = (e) => {
         if (window.confirm("Do you want to delete this Announcement Type name ?")) {
-            AnnouncementTypeService.getDepartmentById(e).then(res => {
-                let department = res.data;
+            AnnouncementTypeService.getAnnouncementTypeById(e).then(res => {
+                let announcementType = res.data;
 
-                let annonTypeId = department.annonTypeId;
-                let annonTypeName = department.annonTypeName;
-                let remark = department.remark;
+                let annonTypeId = announcementType.annonTypeId;
+                let annonTypeName = announcementType.annonTypeName;
+                let remark = announcementType.remark;
                 let statusCd = 'I';
-                let updateDepartment = { annonTypeId, annonTypeName, remark, statusCd };
+                let updateAnnouncementType = { annonTypeId, annonTypeName, remark, statusCd };
 
-                AnnouncementTypeService.updateDepartmentDetails(updateDepartment).then(res => {
-                    AnnouncementTypeService.getDepartmentDetailsByPaging().then((res) => {
+                AnnouncementTypeService.updateAnnouncementType(updateAnnouncementType).then(res => {
+                    AnnouncementTypeService.getAnnouncementTypeDetailsByPaging().then((res) => {
+    
                         setAnnonTypes(res.data.responseData.content);
                         console.log(res.data.responseData.content)
                     });

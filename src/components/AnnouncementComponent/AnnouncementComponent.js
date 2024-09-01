@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import DepartmentService from "../../services/DepartmentService";
 import { BASE_URL_API } from '../../services/URLConstants';
 import AnnouncementService from '../../services/AnnouncementService';
+import AnnouncementTypeService from '../../services/AnnouncementTypeService';
 export default function AnnouncementComponent() {
 
     const [announId, setAnnounId] = useState('');
@@ -22,26 +23,101 @@ export default function AnnouncementComponent() {
     const [announTitle, setAnnounTitle] = useState('');
     const [announDescription, setAnnounDescription] = useState('');
     const [announStatus, setAnnounStatus] = useState('');
+
+    const [announTypeId, setAnnounTypeId] = useState('');
+    const [announTypeName, setAnnounTypeName] = useState('');
+    const [announTypes, setAnnounTypes] = useState([])
+
+    const [asAnnounTypeId, setAsAnnounTypeId] = useState('');
+    const [asAnnounStatus, setAsAnnounStatus] = useState('');
+
+    const [asAnnounFromDate, setAsAnnounFromDate] = useState('');
+    const [asAnnounToDate, setAsAnnounToDate] = useState('');
+    const [asAnnounTypes, setAsAnnounTypes] = useState([])
+    const [isSuccess, setIsSuccess] = useState(true)
     const [remark, setRemark] = useState('');
 
 
 
     const [announcements, setAnnouncements] = useState([])
-    
+
 
     //loading all department and roles while page loading at first time
     useEffect(() => {
         AnnouncementService.getAnnouncementByPaging().then((res) => {
-            setAnnouncements(res.data.responseData.content);
-            console.log(res.data.responseData.content)
+            if (res.data.success) {
+                setIsSuccess(true);
+                setAnnouncements(res.data.responseData.content);
+                console.log(res.data.responseData.content)
+            }
+            else {
+                setIsSuccess(false);
+            }
         });
+
+        AnnouncementTypeService.getAllAnnouncementType().then((res) => {
+            setAnnounTypes(res.data);
+            setAnnounTypeId(res.data?.[0].announTypeId)
+        });
+
+        AnnouncementService.getAllAnnouncementTypeFromAnnoun().then((res) => {
+            setAsAnnounTypes(res.data);
+            setAsAnnounTypeId(res.data?.[0].announTypeId)
+        });
+
+
     }, []);
+
+
+    // Advance search employee
+    const advSearchAnnouncement = (e) => {
+
+        e.preventDefault()
+        let statusCd = 'A'
+        let advComplaintSearch = { asAnnounFromDate, asAnnounToDate, asAnnounStatus, asAnnounTypeId, statusCd };
+
+        console.log(advComplaintSearch)
+        AnnouncementService.advanceSearchAnnouncementDetails(advComplaintSearch).then(res => {
+            if (res.data.success) {
+                setIsSuccess(true);
+                setAnnouncements(res.data.responseData.content);
+                console.log(res.data.responseData.content)
+                //setAsAnnounTypes(res.data.responseData.content);
+            }
+            else {
+                setIsSuccess(false);
+            }
+        }
+        );
+    }
+
+    const handleAnnouncementTypeChange = (value) => {
+        if (value == "Select Announcement") {
+            value = null;
+        }
+        setAnnounTypeId(value)
+    }
+
+    const handleAsAnnouncementTypeChange = (value) => {
+        if (value == "Select Announcement") {
+            value = null;
+        }
+        setAsAnnounTypeId(value)
+    }
+
+
+    const onAsAnnouncementStatusChangeHandler = (event) => {
+
+        setAsAnnounStatus(event);
+    };
 
     const showAnnouncementById = (e) => {
 
         AnnouncementService.getAnnouncementById(e).then(res => {
             let announcement = res.data;
             setAnnounId(announcement.announId)
+            setAnnounTypeId(announTypeId)
+            setAnnounTypeName(announTypeName)
             setAnnounStartDate(announcement.announStartDate)
             setAnnounEndDate(announcement.announEndDate)
             setAnnounCreatedByEmpId(announcement.announCreatedByEmpId)
@@ -57,7 +133,7 @@ export default function AnnouncementComponent() {
             setAnnounTitle(announcement.announTitle)
             setAnnounDescription(announcement.announDescription)
             setAnnounStatus(announcement.announStatus)
-            
+
 
         }
         );
@@ -67,66 +143,78 @@ export default function AnnouncementComponent() {
 
         if (window.confirm("Do you want to cancel this Announcement ?")) {
             AnnouncementService.getAnnouncementById(e).then(res => {
-            
+
                 let exsitingAnnouncement = res.data;
-              
+
                 let announId = exsitingAnnouncement.announId;
-               
-           
-            
-            let announStatus='Cancel'
-            let statusCd = 'I';
-            let announcement = { announId, announStatus,statusCd};
-    
-            AnnouncementService.cancelAnnouncement(announcement).then(res => {
-                AnnouncementService.getAnnouncementByPaging().then((res) => {
-                    setAnnouncements(res.data.responseData.content);
-                    console.log(res.data.responseData.content)
-                });
-                console.log("Announcement cancel");
-            }
-            );
-        });
-    
+
+
+
+                let announStatus = 'Cancel'
+                let statusCd = 'I';
+                let announcement = { announId, announStatus, statusCd };
+
+                AnnouncementService.cancelAnnouncement(announcement).then(res => {
+                    AnnouncementService.getAnnouncementByPaging().then((res) => {
+                        setAnnouncements(res.data.responseData.content);
+                        console.log(res.data.responseData.content)
+                    });
+                    console.log("Announcement cancel");
+                }
+                );
+            });
+
         } else {
             // User clicked Cancel
             console.log("User canceled the action.");
         }
-       
+
     }
 
 
     const saveAnnouncement = (e) => {
         e.preventDefault()
         let statusCd = 'A';
-        let announStatus='Pending'
-        let employeeId= Cookies.get('empId');
+        let announStatus = 'Pending'
+        let employeeId = Cookies.get('empId');
 
-         let announCreatedByEmpId = Cookies.get('empId')
-         let announCreatedByEmpEId = Cookies.get('empEId')
-         let announCreatedByEmpName = Cookies.get('empFirstName') +' '+Cookies.get('empMiddleName')+' '+Cookies.get('empLastName')
-         let announCreatedByRoleId = Cookies.get('roleId')
-         let announCreatedByRoleName = Cookies.get('roleName')
-         let announCreatedByDeptId =Cookies.get('deptId')
-         let announCreatedByDeptName = Cookies.get('deptName')
-         let announCreatedByDesigId =  Cookies.get('desigId')
-         let announCreatedByDesigName =  Cookies.get('desigName')
-         
-         let announcement = { announStartDate, announEndDate,announCreatedByEmpId,announCreatedByEmpEId,announCreatedByEmpName,announCreatedByRoleId,announCreatedByRoleName,announCreatedByDeptId,announCreatedByDeptName,announCreatedByDesigId,announCreatedByDesigName,announVenue,announTitle,announDescription,announStatus, remark, statusCd,employeeId };
-        console.log("Meting", announcement)
+        let announCreatedByEmpId = Cookies.get('empId')
+        let announCreatedByEmpEId = Cookies.get('empEId')
+        let announCreatedByEmpName = Cookies.get('empFirstName') + ' ' + Cookies.get('empMiddleName') + ' ' + Cookies.get('empLastName')
+        let announCreatedByRoleId = Cookies.get('roleId')
+        let announCreatedByRoleName = Cookies.get('roleName')
+        let announCreatedByDeptId = Cookies.get('deptId')
+        let announCreatedByDeptName = Cookies.get('deptName')
+        let announCreatedByDesigId = Cookies.get('desigId')
+        let announCreatedByDesigName = Cookies.get('desigName')
+
+        let announcement = { announTypeId, announStartDate, announEndDate, announCreatedByEmpId, announCreatedByEmpEId, announCreatedByEmpName, announCreatedByRoleId, announCreatedByRoleName, announCreatedByDeptId, announCreatedByDeptName, announCreatedByDesigId, announCreatedByDesigName, announVenue, announTitle, announDescription, announStatus, remark, statusCd, employeeId };
+        console.log("announcement :", announcement)
         AnnouncementService.saveAnnouncementDetails(announcement).then(res => {
-            
+
             AnnouncementService.getAnnouncementByPaging().then((res) => {
                 setAnnouncements(res.data.responseData.content);
             });
-
-            
-            
         }
         );
-        
+
     }
 
+
+    const clearSearchData = () => {
+
+        AnnouncementService.getAnnouncementByPaging().then((res) => {
+            if (res.data.success) {
+                setIsSuccess(true);
+                setAnnouncements(res.data.responseData.content);
+            }
+            else {
+                setIsSuccess(false);
+            }
+
+        });
+
+    }
     return (
 
         <div>
@@ -137,58 +225,153 @@ export default function AnnouncementComponent() {
                     <div className="row">
                         <div className="col-sm-11" align="right">
                             <button type="button" className="btn btn-primary " data-toggle="modal" data-target="#saveAnnouncement">Add Announcement</button>
+                            <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#advanceSearchEmployee">Advance Search</button>
+                            <button type="button" className="btn btn-primary col-sm-offset-1" onClick={() => clearSearchData()}>Clear Search</button>
 
                         </div>
                     </div>
                     <div className="row">
+                    {isSuccess ?
+                            <table className="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th className="text-center">Sr No</th>
+                                        <th className="text-center">Announcement Type</th>
+                                        <th className="text-center">Organiser Name</th>
+                                        <th className="text-center">Organiser Department</th>
+                                        <th className="text-center">Organiser Designation</th>
 
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th className="text-center">Sr No</th>
-                                    <th className="text-center">Organiser Name</th>
-                                    <th className="text-center">Organiser Department</th>
-                                    <th className="text-center">Organiser Designation</th>
+                                        <th className="text-center">Start DateTime</th>
+                                        <th className="text-center">End DateTime</th>
+                                        <th className="text-center">Announcement Venue</th>
+                                        <th className="text-center">Announcement Title</th>
 
-                                    <th className="text-center">Start DateTime</th>
-                                    <th className="text-center">End DateTime</th>
-                                    <th className="text-center">Announcement Venue</th>
-                                    <th className="text-center">Announcement Title</th>
-                                    <th className="text-center">Status</th>
 
-                                    <th className="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    announcements.map(
-                                        (announcement, index) =>   //index is inbuilt variable of map started with 0
-                                            <tr key={announcement.announId}>
-                                                <td className="text-center">{index + 1}</td>
-                                                <td>{announcement.announCreatedByEmpName}</td>
-                                                <td>{announcement.announCreatedByDeptName}</td>
-                                                <td>{announcement.announCreatedByDesigName}</td>
+                                        <th className="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        announcements.map(
+                                            (announcement, index) =>   //index is inbuilt variable of map started with 0
+                                                <tr key={announcement.announId}>
+                                                    <td className="text-center">{index + 1}</td>
+                                                    <td>{announcement.announTypeName}</td>
+                                                    <td>{announcement.announCreatedByEmpName}</td>
+                                                    <td>{announcement.announCreatedByDeptName}</td>
+                                                    <td>{announcement.announCreatedByDesigName}</td>
 
-                                                <td>{announcement.announStartDate}</td>
-                                                <td>{announcement.announEndDate}</td>
-                                                <td>{announcement.announVenue}</td>
-                                                <td>{announcement.announTitle}</td>
-                                                <td>{announcement.announStatus}</td>
-                                                <td>
-                                                
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => showAnnouncementById(announcement.announId)}>View</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" disabled={announcement?.announStatus === "Cancel"} onClick={() => cancelAnnouncement(announcement.announId)}>Cancel</button></td>
-                                            </tr>
-                                    )
-                                }
-                            </tbody>
-                        </table>
+                                                    <td>{announcement.announStartDate}</td>
+                                                    <td>{announcement.announEndDate}</td>
+                                                    <td>{announcement.announVenue}</td>
+                                                    <td>{announcement.announTitle}</td>
+
+                                                    <td>
+
+                                                        <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => showAnnouncementById(announcement.announId)}>View</button>
+                                                        <button type="submit" className="btn col-sm-offset-1 btn-danger" disabled={announcement?.announStatus === "Cancel"} onClick={() => cancelAnnouncement(announcement.announId)}>Cancel</button></td>
+                                                </tr>
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+                            : <h1>No Data Found</h1>}
                     </div>
 
                 </div>
 
 
-                {/* Modal for save department details */}
+
+                {/* Modal for Advance search for employe comlaint details */}
+                <div className="modal fade" id="advanceSearchEmployee" role="dialog">
+                    <form className="form-horizontal">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                    <h4 className="modal-title">Advance Search Complaint</h4>
+                                </div>
+                                <div className="modal-body">
+
+                                    <div className="form-group">
+
+                                        <div className="row">
+                                            <label className="control-label col-sm-4" htmlFor="asAnnounFromDate">Announcement Statrt Date:</label>
+                                            <div className="col-sm-5">
+                                                <div className="form-group">
+                                                    <input type="date" className="form-control" id="asAnnounFromDate" defaultValue={asAnnounFromDate} name="asAnnounFromDate" onChange={(e) => setAsAnnounFromDate(e.target.value)} />                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="row">
+                                            <label className="control-label col-sm-4" htmlFor="asAnnounToDate">Announcement End Date:</label>
+                                            <div className="col-sm-5">
+                                                <div className="form-group">
+                                                    <input type="date" className="form-control" id="asAnnounToDate" defaultValue={asAnnounToDate} name="asAnnounToDate" onChange={(e) => setAsAnnounToDate(e.target.value)} />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                        <div className="row">
+                                            <label className="control-label col-sm-4" htmlFor="regionName">Announcement Type Name:</label>
+                                            <div className="col-sm-5">
+                                                <div className="form-group">
+                                                    <select className="form-control" id="asDeptId" onChange={(e) => setAsAnnounTypeId(e.target.value)}>
+                                                        <option>Select Announcement Type</option>
+                                                        {
+                                                            asAnnounTypes.map(
+                                                                announType =>
+                                                                    <option key={announType.announTypeId} value={announType.announTypeId}>{announType.announTypeName}</option>
+                                                            )
+                                                        };
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div className="row">
+                                            <label className="control-label col-sm-4" htmlFor="companyName">Announcement Status:</label>
+                                            <div className="col-sm-5">
+                                                <div className="form-group">
+                                                    <select className="form-control" id="asAnnounStatus" onChange={(e) => onAsAnnouncementStatusChangeHandler(e.target.value)} defaultValue={asAnnounStatus}>
+                                                        <option>Select Announcement Status</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Cancel">Cancel</option>
+                                                        <option value="Resolved">Resolved</option>
+                                                        <option value="Reject">Reject</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <div className="modal-footer">
+
+                                    <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e) => advSearchAnnouncement(e)}>Search</button>
+
+
+
+                                    <button type="button" className="btn btn-danger  col-sm-offset-1" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+
+                {/* Modal for save Announcement details */}
                 <div className="modal fade" id="saveAnnouncement" role="dialog">
                     <div className="modal-dialog modal-lg">
                         <div className="modal-content">
@@ -199,6 +382,21 @@ export default function AnnouncementComponent() {
                             <div className="modal-body">
                                 <form className="form-horizontal">
 
+                                    <div className="form-group">
+                                        <label className="control-label col-sm-4" htmlFor="deptName">Select Announcement Type:</label>
+                                        <div className="col-sm-4">
+                                            <select className="form-control" id="announTypeId" onChange={(e) => setAnnounTypeId(e.target.value)}>
+
+                                                {
+                                                    announTypes.map(
+                                                        announType =>
+                                                            <option key={announType.announTypeId} value={announType.announTypeId}>{announType.announTypeName}</option>
+                                                    )
+                                                };
+
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div className="form-group">
                                         <label className="control-label col-sm-4" htmlFor="deptName">Announcement Start Date Time:</label>

@@ -50,6 +50,30 @@ class AnnouncementService {
 
     }
 
+    //advance search of employee
+    advanceSearchAnnouncementDetails(advSearchAnnouncement) {
+        if (null != Cookies.get('empId')) {
+            return axios.post(BASE_URL+"/announ-adv-search?page=0&size=200", advSearchAnnouncement)
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+
+    }
+
+    
+    getAllAnnouncementTypeFromAnnoun() {
+        if (null != Cookies.get('empId')) {
+            return axios.get(BASE_URL +"/dd-announ-all?statusCd=A")
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }       
+    }
+
+    //announcement type from 
+    
+
 }
 
 export default new AnnouncementService()

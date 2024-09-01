@@ -107,7 +107,7 @@ function App() {
           <li><Link to="/othersResolveComplaint">Other's Resolve Complaint</Link></li>
         </ul>
       </li>
-      <li><Link to="/meetingMaster">Meeting Master</Link></li>
+      
       <li><Link to="/announcement">Announcement Master</Link></li>
       
           
@@ -172,7 +172,7 @@ function App() {
         <Route exact path="/othersInProgressComplaint" element={<OthersInProgressComplaintComponent />}></Route>
         <Route exact path="/othersResolveComplaint" element={<OthersResolveComplaintComponent />}></Route>
 
-        <Route exact path="/meetingMaster" element={<MeetingMasterComponent />}></Route>
+        
         <Route exact path="/announcementType" element={<AnnouncementTypeComponent />}></Route>
         <Route exact path="/announcement" element={<AnnouncementComponent />}></Route>
         
