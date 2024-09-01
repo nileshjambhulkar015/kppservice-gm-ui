@@ -74,6 +74,14 @@ export default function AnnouncementComponent() {
 
         e.preventDefault()
         let statusCd = 'A'
+        if(asAnnounTypeId=="Select Announcement Type"){
+            asAnnounTypeId=null;
+        } 
+
+        if(asAnnounStatus=="Select Announcement Status")
+        {
+            asAnnounStatus='null';
+        }
         let advComplaintSearch = { asAnnounFromDate, asAnnounToDate, asAnnounStatus, asAnnounTypeId, statusCd };
 
         console.log(advComplaintSearch)
