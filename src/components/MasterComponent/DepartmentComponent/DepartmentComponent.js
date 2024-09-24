@@ -7,6 +7,7 @@ export default function DepartmentComponent() {
 
     const [deptId, setDeptId] = useState('');
     const [deptName, setDeptName] = useState('');
+    const [deptMailId, setDeptMailId] = useState('');
     const [remark, setRemark] = useState('');
 
     const [deptNameSearch, setDeptNameSearch] = useState('');
@@ -40,7 +41,7 @@ export default function DepartmentComponent() {
         e.preventDefault()
         let statusCd = 'A';
         let employeeId = Cookies.get('empId')
-        let department = { deptName, remark, statusCd, employeeId };
+        let department = { deptName,deptMailId, remark, statusCd, employeeId };
 
         DepartmentService.saveDepartmentDetails(department).then(res => {
             console.log("res=", res.data)
@@ -76,9 +77,10 @@ export default function DepartmentComponent() {
 
                 let deptId = department.deptId;
                 let deptName = department.deptName;
+                let deptMailId=department.deptMailId;
                 let remark = department.remark;
                 let statusCd = 'I';
-                let updateDepartment = { deptId, deptName, remark, statusCd };
+                let updateDepartment = { deptId, deptName, deptMailId, remark, statusCd };
 
                 DepartmentService.updateDepartmentDetails(updateDepartment).then(res => {
                     DepartmentService.getDepartmentDetailsByPaging().then((res) => {
@@ -100,7 +102,7 @@ export default function DepartmentComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let department = { deptId, deptName, remark, statusCd };
+        let department = { deptId, deptName,deptMailId, remark, statusCd };
 
         DepartmentService.updateDepartmentDetails(department).then(res => {
             DepartmentService.getDepartmentDetailsByPaging().then((res) => {
@@ -166,7 +168,7 @@ export default function DepartmentComponent() {
                                 <tr>
                                     <th className="text-center">Sr No</th>
                                     <th className="text-center">Department Name</th>
-
+                                    <th className="text-center">Department Mail Id</th>
                                     <th className="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -177,6 +179,7 @@ export default function DepartmentComponent() {
                                             <tr key={department.deptId}>
                                                 <td className="text-center">{index + 1}</td>
                                                 <td>{department.deptName}</td>
+                                                <td>{department.deptMailId}</td>
 
 
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDepartment" onClick={() => showDepartmentById(department.deptId)}>Update</button>
@@ -245,6 +248,14 @@ export default function DepartmentComponent() {
                                         <input type="text" className="form-control" id="deptName" placeholder="Enter Department Name here" value={deptName} onChange={(e) => setDeptName(e.target.value)} />
                                     </div>
                                 </div>
+                              
+                                <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="deptMailId">Enter Department Mail Id:</label>
+                                <div className="col-sm-8">
+                                    <input type="text" className="form-control" id="deptMailId" placeholder="Enter Department Mail id here" value={deptMailId} onChange={(e) => setDeptMailId(e.target.value)} />
+                                </div>
+                            </div>
+                          
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="reamrk">Enter Remark:</label>
                                     <div className="col-sm-8">
@@ -280,6 +291,14 @@ export default function DepartmentComponent() {
                                         <input type="text" className="form-control" id="deptName" placeholder="Enter Department Name here" value={deptName} onChange={(e) => setDeptName(e.target.value)} />
                                     </div>
                                 </div>
+                                <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="deptMailId">Enter Department Mail Id:</label>
+                                <div className="col-sm-8">
+                                    <input type="text" className="form-control" id="deptMailId" placeholder="Enter Department Name here" value={deptMailId} onChange={(e) => setDeptMailId(e.target.value)} />
+                                </div>
+                            </div>
+                           
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="reamrk">Enter Remark:</label>
                                     <div className="col-sm-8">
@@ -319,6 +338,14 @@ export default function DepartmentComponent() {
                                         {deptName}
                                     </div>
                                 </div>
+
+                                <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="deptName" >Department Mail Id:</label>
+                                <div className="col-sm-8">
+                                    {deptMailId}
+                                </div>
+                            </div>
+
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="reamrk" >Remark :</label>
                                     <div className="col-sm-8">
