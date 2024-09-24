@@ -185,11 +185,11 @@ const HODUpdateKppRatingsComponent = () => {
                                         <tr className="text-center">
                                             <th className="text-center">OVERALL WEIGHTAGE IN % </th>
                                             <th className="text-center">ACHIEVED WEIGHTAGE IN % </th>                                           
-                                            <th className="text-center">Rating 1</th>
-                                            <th className="text-center">Rating 2</th>
-                                            <th className="text-center">Rating 3</th>
-                                            <th className="text-center">Rating 4</th>
                                             <th className="text-center">Rating 5</th>
+                                            <th className="text-center">Rating 4</th>
+                                            <th className="text-center">Rating 3</th>
+                                            <th className="text-center">Rating 2</th>
+                                            <th className="text-center">Rating 1</th>
                                         </tr>
                                     
                                     </thead>
@@ -293,7 +293,7 @@ const HODUpdateKppRatingsComponent = () => {
                                     <button type="button" className="btn btn-success col-sm-offset-1 " disabled={kppMasterResponses?.empKppStatus === "Pending"}   
                                    > Download</button></a>
 
-                                    <button type="submit" className="btn col-sm-offset-1 btn-success"   onClick={() => completeEmpKpp(empId)} >Finish</button>
+                                  
 
                                     <button type="button" className="btn btn-success col-sm-offset-1 " disabled={kppMasterResponses?.empKppStatus === "Pending"}   
                                     onClick={() => { navigateBack()}}> Back</button>
