@@ -50,13 +50,15 @@ const HODUpdateKppRatingsComponent = () => {
 
     const sumGmOverallAchieve = (empKpps) => {
         const sum = empKpps.reduce((accumulator, currentValue) => accumulator + parseInt(currentValue.gmOverallAchieve), 0);
-        setTotalOverAllAchive(sum);
-        return sum;
+        const totalKpps=kppDetailsResponses?.length || 1;
+        setTotalOverAllAchive((sum/totalKpps).toFixed(1))
+        return (sum/totalKpps).toFixed(1);
     }
     const sumGmOverallTaskComp = (empKpps) => {
         const sum = empKpps.reduce((accumulator, currentValue) => accumulator + parseFloat(currentValue.gmOverallTaskComp), 0);
-        setTotalOverallTaskComp(sum)
-        return sum;
+        const totalKpps=kppDetailsResponses?.length || 1;
+        setTotalOverallTaskComp((sum/totalKpps).toFixed(1))
+        return (sum/totalKpps).toFixed(1);
     }
     useEffect(() => {
         EmployeeKppsService.getHodKPPDetailsForGmApproval().then((res) => {
