@@ -34,7 +34,7 @@ class AllHodKppService {
      
     completeEmpKppGM(empId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/gm-approval/report?empId=${empId}&statusCd=A`)
+            return axios.get(BASE_URL_API+`/gm-approval/finish?empId=${empId}&statusCd=A`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
