@@ -8,7 +8,7 @@ import RoleService from "../../services/RoleService";
 import SiteService from "../../services/MasterService/SiteService";
 import CompanyMasterService from "../../services/MasterService/CompanyMasterService";
 import { BASE_URL_API } from "../../services/URLConstants";
-export default function EmployeeComponent() {
+export default function MainEmployeeComponent() {
     const navigate = useNavigate();
 
 
@@ -349,7 +349,7 @@ export default function EmployeeComponent() {
                                     <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter First Name" value={empFirstNameSearch} onChange={(e) => searchEmployeeEId(e)} />
                                 </div>
                             </form>
-                            <button type="submit" className="btn btn-primary" onClick={() => searchEmployeeFirstName(empFirstNameSearch)}>Search</button>
+                           
                         </div>
                     </div>
                     <div className="col-sm-5">

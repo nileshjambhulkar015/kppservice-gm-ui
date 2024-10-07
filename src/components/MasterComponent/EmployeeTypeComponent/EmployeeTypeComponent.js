@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
 import EmployeeTypeService from '../../../services/MasterService/EmployeeTypeService';
+import AlertboxComponent from '../../AlertboxComponent/AlertboxComponent';
 
 export default function EmployeeTypeComponent() {
 
@@ -13,7 +14,18 @@ export default function EmployeeTypeComponent() {
 
     const [empTypes, setEmpTypes] = useState([])
 
+    const [saveEmployeeTypeAlert, setSaveEmployeeTypeAlert] = useState(false);
+    const [deleteEmployeeTypeAlert, setDeleteEmployeeTypeAlert] = useState(false);
+    const [updatEmployeeTypeAlert, setUpdateEmployeeTypeAlert] = useState(false);
 
+    const handleClose = () => {
+
+        setSaveEmployeeTypeAlert(false);
+        setDeleteEmployeeTypeAlert(false)
+        setUpdateEmployeeTypeAlert(false)
+        setEmpTypeName('');
+        setRemark('');
+    };
 
     //loading all department and roles while page loading at first time
     useEffect(() => {
@@ -43,12 +55,12 @@ export default function EmployeeTypeComponent() {
             console.log("res=", res.data)
             EmployeeTypeService.getEmployeeTypeDetailsByPaging(e).then((res) => {
                 setEmpTypes(res.data.responseData);
-                console.log(res.data)
+                setEmpTypeName('');
+                setRemark('');
             });
-            console.log("Employee Type added");
         }
         );
-        // window.location.reload(); 
+        setSaveEmployeeTypeAlert(false)
     }
 
     const showEmployeeTypeById = (e) => {
@@ -95,6 +107,7 @@ export default function EmployeeTypeComponent() {
             // User clicked Cancel
             console.log("User canceled the action.");
         }
+        setDeleteEmployeeTypeAlert(false)
     }
 
     const updateEmployeeType = (e) => {
@@ -108,13 +121,13 @@ export default function EmployeeTypeComponent() {
                 setEmpTypes(res.data.responseData);
                 console.log(res.data)
             });
-            console.log("Employee Type added");
+            
         }
         );
-
+        setUpdateEmployeeTypeAlert(false)
     }
     return (
-
+        <React.Fragment>
         <div>
             <div className="row">
                 <h2 className="text-center">Employee Type List</h2>
@@ -202,7 +215,7 @@ export default function EmployeeTypeComponent() {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => saveEmployeeType(e)} > Submit</button>
+                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => setSaveEmployeeTypeAlert(true)} > Submit</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -284,5 +297,39 @@ export default function EmployeeTypeComponent() {
                 </div>
             </div>
         </div>
+
+        {saveEmployeeTypeAlert && (
+            <AlertboxComponent
+                show={saveEmployeeTypeAlert}
+                title="danger"
+                message="Do you want to save Employee Type"
+                onOk={saveEmployeeType}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+
+        {updatEmployeeTypeAlert && (
+            <AlertboxComponent
+                show={updatEmployeeTypeAlert}
+                title="danger"
+                message="Do you want to update Employee Type"
+                onOk={updateEmployeeType}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+
+        {deleteEmployeeTypeAlert && (
+            <AlertboxComponent
+                show={deleteEmployeeTypeAlert}
+                title="danger"
+                message="Do you want to delete Employee Type"
+                onOk={deleteEmployeeTypeById}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+    </React.Fragment>
     );
 }

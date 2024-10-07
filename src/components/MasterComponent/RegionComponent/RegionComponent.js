@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
 import RegionService from "../../../services/RegionService";
+import AlertboxComponent from '../../AlertboxComponent/AlertboxComponent';
 
 export default function RegionComponent() {
     const [regionId, setRegionId] = useState('');
@@ -9,7 +10,19 @@ export default function RegionComponent() {
     const [remark, setRemark] = useState('');
 
     const [regions, setRegions] = useState([])
+    
+    const [saveRegionAlert, setSaveRegionAlert] = useState(false);
+    const [deleteRegionAlert, setDeleteRegionAlert] = useState(false);
+    const [updatRegionAlert, setUpdateRegionAlert] = useState(false);
 
+    const handleClose = () => {
+
+        setSaveRegionAlert(false);
+        setDeleteRegionAlert(false)
+        setUpdateRegionAlert(false)
+        setRegionName('');
+        setRemark('');
+    };
 
     //loading all department and roles while page loading at first time
     useEffect(() => {
@@ -33,10 +46,10 @@ export default function RegionComponent() {
                 setRemark('');
 
             });
-            console.log("Region added");
+           
         }
         );
-        // window.location.reload(); 
+        setSaveRegionAlert(false);
     }
 
     const showRegionById = (e) => {
@@ -78,10 +91,10 @@ export default function RegionComponent() {
             // User clicked Cancel
             console.log("User canceled the action.");
         }
+       setDeleteRegionAlert(false);
     }
 
     const updateRegion = (e) => {
-        console.log("oddd added")
         e.preventDefault()
         let statusCd = 'A';
         let employeeId = Cookies.get('empId');
@@ -92,16 +105,15 @@ export default function RegionComponent() {
                 setRegions(res.data.responseData.content);
 
             });
-            console.log("Department added");
         }
         );
-
+        setUpdateRegionAlert(false);
     }
 
 
 
     return (
-
+        <React.Fragment>
         <div>
             <div className="row">
                 <h2 className="text-center">Region List</h2>
@@ -179,7 +191,7 @@ export default function RegionComponent() {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => saveRegion(e)} > Submit</button>
+                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => setSaveRegionAlert(true)} > Submit</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -262,5 +274,39 @@ export default function RegionComponent() {
                 </div>
             </div>
         </div>
+      
+        {saveRegionAlert && (
+            <AlertboxComponent
+                show={saveRegionAlert}
+                title="danger"
+                message="Do you want to update Region?"
+                onOk={saveRegion}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+
+        {updatRegionAlert && (
+            <AlertboxComponent
+                show={updatRegionAlert}
+                title="danger"
+                message="Do you want to update Region?"
+                onOk={updateRegion}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+
+        {deleteRegionAlert && (
+            <AlertboxComponent
+                show={deleteRegionAlert}
+                title="danger"
+                message="Do you want to delete Region?"
+                onOk={deleteRegionById}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+    </React.Fragment>
     );
 }

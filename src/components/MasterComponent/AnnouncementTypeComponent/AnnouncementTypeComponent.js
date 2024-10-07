@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import { BASE_URL_API } from '../../../services/URLConstants';
 import AnnouncementTypeService from '../../../services/AnnouncementTypeService';
+import AlertboxComponent from '../../AlertboxComponent/AlertboxComponent';
 export default function AnnouncementComponent() {
 
 
@@ -19,6 +20,19 @@ export default function AnnouncementComponent() {
     const [roles, setRoles] = useState([])
 
     const [message, setMessage] = useState('');
+
+    const [saveAnnTypeAlert, setSaveAnnTypeAlert] = useState(false);
+    const [deleteAnnTypeAlert, setDeleteAnnTypeAlert] = useState(false);
+    const [updatAnnTypeAlert, setUpdateAnnTypeAlert] = useState(false);
+
+    const handleClose = () => {
+
+        setSaveAnnTypeAlert(false);
+        setDeleteAnnTypeAlert(false)
+        setUpdateAnnTypeAlert(false)
+        setAnnounTypeName('');
+        setRemark('');
+    };
 
     //loading all department and roles while page loading at first time
     useEffect(() => {
@@ -54,7 +68,7 @@ export default function AnnouncementComponent() {
             
         }
         );
-        // window.location.reload(); 
+        setSaveAnnTypeAlert(false);
     }
 
     const showAnnouncementTypeById = (e) => {
@@ -97,6 +111,7 @@ export default function AnnouncementComponent() {
             // User clicked Cancel
             console.log("User canceled the action.");
         }
+        setDeleteAnnTypeAlert(false)
     }
 
     const updateAnnouncementType = (e) => {
@@ -113,12 +128,12 @@ export default function AnnouncementComponent() {
             console.log("Department added");
         }
         );
-
+     setUpdateAnnTypeAlert(false)
     }
 
 
     return (
-
+        <React.Fragment>
         <div>
             <div className="row">
                 <h2 className="text-center">Announcement Type List</h2>
@@ -199,7 +214,7 @@ export default function AnnouncementComponent() {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => saveAnnouncementType(e)} > Submit</button>
+                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => setSaveAnnTypeAlert(true)} > Submit</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -281,5 +296,39 @@ export default function AnnouncementComponent() {
                 </div>
             </div>
         </div>
+
+        {saveAnnTypeAlert && (
+            <AlertboxComponent
+                show={saveAnnTypeAlert}
+                title="danger"
+                message="Do you want to save Announcement Type"
+                onOk={saveAnnouncementType}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+
+        {updatAnnTypeAlert && (
+            <AlertboxComponent
+                show={updatAnnTypeAlert}
+                title="danger"
+                message="Do you want to update Announcement Type"
+                onOk={updateAnnouncementType}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+
+        {deleteAnnTypeAlert && (
+            <AlertboxComponent
+                show={deleteAnnTypeAlert}
+                title="danger"
+                message="Do you want to delete Announcement Type"
+                onOk={deleteAnnouncementTypeById}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+    </React.Fragment>
     );
 }

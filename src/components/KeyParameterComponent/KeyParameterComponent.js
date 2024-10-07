@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import KeyParameterService from "../../services/KeyParameterService";
 import UoMService from "../../services/UoMService";
 import { BASE_URL_API } from "../../services/URLConstants";
+import AlertboxComponent from "../AlertboxComponent/AlertboxComponent";
 
 export default function KeyParameterComponent() {
     const [kppId, setKppId] = useState('');
@@ -27,7 +28,17 @@ export default function KeyParameterComponent() {
 
     const [kppObjectiveSearch, setKppObjectiveSearch] = useState('');
 
+    const [saveKPPAlert, setSaveKPPAlert] = useState(false);
+    const [deleteKPPAlert, setDeleteKPPAlert] = useState(false);
+    const [updatKPPAlert, setUpdateKPPAlert] = useState(false);
 
+    const handleClose = () => {
+
+        setSaveKPPAlert(false);
+        setDeleteKPPAlert(false)
+        setUpdateKPPAlert(false)
+       
+    };
 
     const searchByKppObjectiveNo = (e) => {
         setKppObjectiveNoSearch(e.target.value)
@@ -113,13 +124,28 @@ export default function KeyParameterComponent() {
 
         let statusCd = 'A';
         let kpp = {kppObjectiveNo, kppObjective, kppPerformanceIndi, kppTargetPeriod, uomId, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
-        console.log(kpp)
+      
 
         KeyParameterService.saveKPPDetails(kpp).then(res => {
             if (res.data.success) {
-                alert(res.data.responseMessage)
+                
                 KeyParameterService.getKPPDetailsByPaging().then((res) => {
                     setKpps(res.data.responseData.content);
+
+                    setKppObjectiveNo('')
+                    setKppObjective('')
+                    setKppPerformanceIndi('')
+                    
+                    setKppTargetPeriod('')
+                   
+                    setUomName('')
+                    
+                    setKppRating1('')
+                    setKppRating2('')
+                    setKppRating3('')
+                    setKppRating4('')
+                    setKppRating5('')
+                    setRemark('')
                 });
             }
             else {
@@ -127,7 +153,7 @@ export default function KeyParameterComponent() {
             }
         }
         );
-        // window.location.reload(); 
+        setSaveKPPAlert(false)
     }
 
 
@@ -170,6 +196,7 @@ export default function KeyParameterComponent() {
         // User clicked Cancel
         console.log("User canceled the action.");
     }
+    setDeleteKPPAlert(false)
     }
 
     const updateKppDetails = (e) => {
@@ -185,6 +212,7 @@ export default function KeyParameterComponent() {
             console.log("KPP added");
         }
         );
+        setUpdateKPPAlert(false)
 
     }
 
@@ -211,6 +239,7 @@ export default function KeyParameterComponent() {
 
 
     return (
+        <React.Fragment>
         <div className="row">
             <h2 className="text-center">Key Parameter List</h2>
             <div className="col-md-1"></div>
@@ -224,7 +253,7 @@ export default function KeyParameterComponent() {
                                     <input type="text" className="form-control" id="kppObjectiveNoSearch" placeholder="Enter Objective No" value={kppObjectiveNoSearch} onChange={(e) => searchByKppObjectiveNo(e)} />
                                 </div>
                             </form>
-                            <button type="submit" className="btn btn-primary" onClick={() => searchKppObjective(kppObjectiveSearch)}>Search</button>
+                            
 
                         </div>
                     </div>
@@ -420,7 +449,7 @@ export default function KeyParameterComponent() {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => saveKPPDetails(e)}> Submit</button>
+                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => setSaveKPPAlert(true)}> Submit</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -637,5 +666,39 @@ export default function KeyParameterComponent() {
             </div>
 
         </div>
+
+        {saveKPPAlert && (
+            <AlertboxComponent
+                show={saveKPPAlert}
+                title="danger"
+                message="Do you want to save KPP details"
+                onOk={saveKPPDetails}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+
+        {updatKPPAlert && (
+            <AlertboxComponent
+                show={updatKPPAlert}
+                title="danger"
+                message="Do you want to update KPP details"
+                onOk={updateKppDetails}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+
+        {deleteKPPAlert && (
+            <AlertboxComponent
+                show={deleteKPPAlert}
+                title="danger"
+                message="Do you want to delete KPP details"
+                onOk={deleteKppById}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+    </React.Fragment>
     );
 }

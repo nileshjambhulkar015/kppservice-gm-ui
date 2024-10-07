@@ -195,9 +195,9 @@ export default function AssignEmployeeKppComponent() {
         }
     }
 
-    const deleteKPPDetailsForEmployee = (kppId) => {
+    const deleteKPPDetailsForEmployee = (kppId,kppOverallTarget,kppOverallWeightage) => {
         if (window.confirm("Do you want to delete this Employee KPP ?")) {
-            EmployeeKppsService.deleteEmployeeKppDetails(kppId).then(res => {
+            EmployeeKppsService.deleteEmployeeKppDetails(kppId,kppOverallTarget,kppOverallWeightage).then(res => {
                 KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
                     if (res.data.success) {
                         setKppIsSuccess(true);
@@ -399,7 +399,7 @@ export default function AssignEmployeeKppComponent() {
                                         (kpp, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={kpp.kppId}>
                                                 <td className="text-center">{index + 1}</td>
-                                                <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => deleteKPPDetailsForEmployee(kpp.kppId)}>Remove</button></td>
+                                                <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => deleteKPPDetailsForEmployee(kpp.kppId,kpp.kppOverallTarget,kpp.kppOverallWeightage)}>Remove</button></td>
                                                 <td className="text-justify">{kpp.kppObjectiveNo}</td>
                                                 <td className="text-justify">{kpp.kppObjective}</td>
                                                 <td className="text-justify">{kpp.kppPerformanceIndi}</td>

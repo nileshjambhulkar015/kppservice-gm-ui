@@ -3,6 +3,7 @@ import DepartmentService from "../../../services/DepartmentService";
 import RoleService from "../../../services/RoleService";
 import SiteService from "../../../services/MasterService/SiteService";
 import RegionService from "../../../services/RegionService";
+import AlertboxComponent from "../../AlertboxComponent/AlertboxComponent";
 
 export default function SiteComponent() {
     const [regionId, setRegionId] = useState('');
@@ -16,7 +17,19 @@ export default function SiteComponent() {
     const [sites, setSites] = useState([])
 
     const [regions, setRegions] = useState([])
+   
+    const [saveSiteAlert, setSaveSiteAlert] = useState(false);
+    const [deleteSiteAlert, setDeleteSiteAlert] = useState(false);
+    const [updatSiteAlert, setUpdateSiteAlert] = useState(false);
 
+    const handleClose = () => {
+
+        setSaveSiteAlert(false);
+        setDeleteSiteAlert(false)
+        setUpdateSiteAlert(false)
+        setSiteName('');
+        setRemark('');
+    };
 
 
     //loading all department and roles while page loading at first time
@@ -47,12 +60,13 @@ export default function SiteComponent() {
         SiteService.saveSiteDetails(site).then(res => {
             SiteService.getSiteDetailsByPaging().then((res) => {
                 setSites(res.data.responseData.content);
-                console.log(res.data.responseData.content)
+
             });
-            console.log("Site added");
+            setSiteName('');
+            setRemark('');
         }
         );
-        // window.location.reload(); 
+        setSaveSiteAlert(false);
     }
 
     const showSiteById = (e) => {
@@ -70,34 +84,36 @@ export default function SiteComponent() {
 
 
     const deleteSiteById = (e) => {
-        
- if (window.confirm("Do you want to delete this Site Name ?")) {
-        SiteService.getSiteById(e).then(res => {
-            let site = res.data;
-            let siteId = site.siteId;
-            let regionId = site.regionId;
-            let siteName = site.siteName;
-            let remark = site.remark;
-            let statusCd = 'I';
-            let updateSite = { siteId, regionId, siteName, remark, statusCd };
-            console.log("update site=", updateSite)
-            SiteService.updateSiteDetails(updateSite).then(res => {
-                SiteService.getSiteDetailsByPaging().then((res) => {
-                    setSites(res.data.responseData.content);
-                    console.log(res.data.responseData.content)
-                });
-                console.log("Site deleted");
+
+        if (window.confirm("Do you want to delete this Site Name ?")) {
+            SiteService.getSiteById(e).then(res => {
+                let site = res.data;
+                let siteId = site.siteId;
+                let regionId = site.regionId;
+                let siteName = site.siteName;
+                let remark = site.remark;
+                let statusCd = 'I';
+                let updateSite = { siteId, regionId, siteName, remark, statusCd };
+                console.log("update site=", updateSite)
+                SiteService.updateSiteDetails(updateSite).then(res => {
+                    SiteService.getSiteDetailsByPaging().then((res) => {
+                        setSites(res.data.responseData.content);
+
+                    });
+
+                }
+                );
             }
             );
-        }
-        );} else {
+        } else {
             // User clicked Cancel
             console.log("User canceled the action.");
         }
-        
+        setUpdateSiteAlert(false);
+
     }
 
-    const updateDepartment = (e) => {
+    const updateSiteDetails = (e) => {
 
         e.preventDefault()
         let statusCd = 'A';
@@ -106,16 +122,16 @@ export default function SiteComponent() {
         SiteService.updateSiteDetails(site).then(res => {
             SiteService.getSiteDetailsByPaging().then((res) => {
                 setSites(res.data.responseData.content);
-                console.log(res.data.responseData.content)
+
             });
-            console.log("Site updated");
+
         }
         );
-
+        setUpdateSiteAlert(false);
     }
 
     return (
-
+        <React.Fragment>
         <div>
             <div className="row">
                 <h2 className="text-center">Site List</h2>
@@ -214,7 +230,7 @@ export default function SiteComponent() {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => saveSite(e)} > Submit</button>
+                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => setSaveSiteAlert(true)} > Submit</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -249,7 +265,7 @@ export default function SiteComponent() {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => updateDepartment(e)} > Submit</button>
+                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => updateSiteDetails(e)} > Submit</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -302,5 +318,41 @@ export default function SiteComponent() {
                 </div>
             </div>
         </div>
+
+        {saveSiteAlert && (
+            <AlertboxComponent
+                show={saveSiteAlert}
+                title="danger"
+                message="Do you want to save Site"
+                onOk={saveSite}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+
+        
+
+        {updatSiteAlert && (
+            <AlertboxComponent
+                show={updatSiteAlert}
+                title="danger"
+                message="Do you want to update Site"
+                onOk={updateSiteDetails}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+
+        {deleteSiteAlert && (
+            <AlertboxComponent
+                show={deleteSiteAlert}
+                title="danger"
+                message="Do you want to Delete Site"
+                onOk={deleteSiteById}
+                onClose={handleClose}
+                isCancleAvailable={true}
+            />
+        )}
+    </React.Fragment>
     );
 }

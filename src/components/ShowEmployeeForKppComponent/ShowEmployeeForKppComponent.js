@@ -10,6 +10,7 @@ import EmployeeTypeService from '../../services/MasterService/EmployeeTypeServic
 import RegionService from '../../services/RegionService';
 import SiteService from '../../services/MasterService/SiteService';
 import CompanyMasterService from '../../services/MasterService/CompanyMasterService';
+import EmployeeKppsService from '../../services/EmployeeKppsService'
 export default function ShowEmployeeForKppComponent() {
 
     const navigate = useNavigate();
@@ -45,7 +46,7 @@ export default function ShowEmployeeForKppComponent() {
     const [empTypes, setEmpTypes] = useState([])
     useEffect(() => {
 
-        EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+        EmployeeKppsService.getEmployeeKPPDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content);
         });
 
@@ -78,7 +79,7 @@ export default function ShowEmployeeForKppComponent() {
     const searchEmployeeEId = (e) => {
         setEmpEIdSearch(e.target.value)
     
-        EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e.target.value).then((res) => {
+        EmployeeKppsService.getEmployeeKPPDetailsByEmpFirstNamePaging(e.target.value).then((res) => {
 
             if (res.data.success) {
                 setIsSuccess(true);
@@ -166,10 +167,11 @@ const onRegionChangeHandler = (value) => {
 
 
     return (
+        
         <div className="row">
             <h3 className="text-center">Assign KPP to  New Employee</h3>
-            <div className="col-md-1"></div>
-            <div className="col-md-10">
+            
+            <div className="col-md-11">
                 <div className="row">
                     <div className="col-sm-6">
                         <div className="form-group">
@@ -183,14 +185,14 @@ const onRegionChangeHandler = (value) => {
                         </div>
                     </div>
                     <div className="col-sm-5">
-                        <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#advanceSearchEmployee">Advance Search</button>
+                        <button type="button" className="btn btn-primary col-sm-offset-4" data-toggle="modal" data-target="#advanceSearchEmployee">Advance Search</button>
                     </div>
                 </div>
                 
             </div>
             <div className="col-md-1"></div>
 
-            <div className="col-sm-8">
+            <div className="col-sm-10">
             {isSuccess?
                 <table className="table table-bordered">
                     <thead>
@@ -202,6 +204,8 @@ const onRegionChangeHandler = (value) => {
                             <th className="text-center">Department Name</th>
                             <th className="text-center">Designation Name</th>
                             <th className="text-center">Mobile No</th>
+                            <th className="text-center">Overall Target</th>
+                            <th className="text-center">Overall Weightage</th>
                             <th className="text-center">Action</th>
                         </tr>
                     </thead>
@@ -217,6 +221,9 @@ const onRegionChangeHandler = (value) => {
                                         <td className="text-center">{employee.deptName}</td>
                                         <td className="text-center">{employee.desigName}</td>
                                         <td className="text-center">{employee.empMobileNo}</td>
+
+                                        <td className="text-center">{employee.totalOverallTarget}</td>
+                                        <td className="text-center">{employee.totalOverallWeightage}</td>
 
                                         <td className="text-center"> <button type="submit" className="btn btn-info" onClick={() =>
                                             navigateToAssignEmployee(employee.empId, employee.empEId, employee.roleId, employee.deptId, employee.desigId, employee.reportingEmpId)

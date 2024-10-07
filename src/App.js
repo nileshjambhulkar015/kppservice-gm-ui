@@ -3,12 +3,12 @@ import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import './App.css';
 import KeyParameterComponent from './components/KeyParameterComponent/KeyParameterComponent';
 
-import EmployeeComponent from './components/EmployeeComponent/EmployeeComponent';
+import MainEmployeeComponent from './components/EmployeeComponent/MainEmployeeComponent';
 
 import DesignationComponent from './components/MasterComponent/DesignationComponent/DesignationComponent';
 
 import Cookies from 'js-cookie';
-import AddNewEmployeeComponent from './components/AddNewEmployeeComponent/AddNewEmployeeComponent';
+import AddNewEmployeeComponent from './components/EmployeeComponent/AddNewEmployeeComponent';
 import AllEmployeesKppComponent from "./components/AllEmployeesKppComponent/AllEmployeesKppComponent";
 import AllHodKppStatusComponent from './components/AllHodKppStatusComponent/AllHodKppStatusComponent';
 import AssignEmployeeKppComponent from './components/AssignEmployeeKppComponent/AssignEmployeeKppComponent';
@@ -32,10 +32,10 @@ import OthersPendingComplaintComponent from './components/ComplaintManagementCom
 import OthersResolveComplaintComponent from './components/ComplaintManagementComponent/OthersResolveComplaintComponent';
 import OthersInProgressComplaintComponent from './components/ComplaintManagementComponent/OthersInProgressComplaintComponent';
 import MeetingMasterComponent from "./components/MeetingMasterComponent/MeetingMasterComponent";
+
+
 import AnnouncementTypeComponent from "./components/MasterComponent/AnnouncementTypeComponent/AnnouncementTypeComponent";
 import AnnouncementComponent from "./components/AnnouncementComponent/AnnouncementComponent";
-
-
 
 function App() {
  
@@ -65,34 +65,45 @@ function App() {
           <li><Link to="/keyparemeter">Key Indicator Master</Link></li>
                  
             
-         
-
-            <li className="dropdown">
-            <a className="dropdown-toggle" data-toggle="dropdown" href="#">KPP Rating Master
-            <span className="caret"></span></a>
-            <ul className="dropdown-menu">           
-            <li><Link to="/allHodKppStatus">HOD KPP</Link></li>
-            <li><Link to="/allEmployeeKppStatus">Employee KPP</Link></li>        
-            </ul>
-          </li>
-
           <li className="dropdown">
           <a className="dropdown-toggle" data-toggle="dropdown" href="#">Employee Master
           <span className="caret"></span></a>
           <ul className="dropdown-menu">           
           <li><Link to="/employee">Employee Master</Link></li>
-          <li><Link to="/showEmployeeForKpp">Assign Employee Kpp</Link></li>
+          
           <li><Link to="/transferemployeetohod">Transfer Employee to Other HOD</Link></li>        
           </ul>
         </li>
+
+
+        <li className="dropdown">
+        <a className="dropdown-toggle" data-toggle="dropdown" href="#">Employee KPP Master
+        <span className="caret"></span></a>
+        <ul className="dropdown-menu">           
+       
+        <li><Link to="/showEmployeeForKpp">Assign Employee Kpp</Link></li>
+            
+        </ul>
+      </li>
+
+            <li className="dropdown">
+            <a className="dropdown-toggle" data-toggle="dropdown" href="#">KPP Rating Master
+            <span className="caret"></span></a>
+            <ul className="dropdown-menu">           
+            <li><Link to="/allHodKppStatus">Add Ratings for HOD KPP</Link></li>
+            <li><Link to="/allEmployeeKppStatus">Add Ratings for Employee KPP</Link></li>        
+            </ul>
+          </li>
+
+         
 
           
           <li className="dropdown">
           <a className="dropdown-toggle" data-toggle="dropdown" href="#">Cumulative Master
           <span className="caret"></span></a>
           <ul className="dropdown-menu">
-          <li><Link to="/viewHODCumulativeKpp">View HOD Cumulative Kpp</Link></li>
-          <li><Link to="/viewEmployeeCumulativeKpp">View Employee Cumulative Kpp</Link></li>    
+          <li><Link to="/viewHODCumulativeKpp">View HOD Cumulative Ratings</Link></li>
+          <li><Link to="/viewEmployeeCumulativeKpp">View Employee Cumulative Ratings</Link></li>    
           
           </ul>
         </li>
@@ -107,9 +118,7 @@ function App() {
           <li><Link to="/othersResolveComplaint">Other's Resolve Complaint</Link></li>
         </ul>
       </li>
-      
       <li><Link to="/announcement">Announcement Master</Link></li>
-      
           
         <li className="dropdown">
         <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
@@ -151,7 +160,7 @@ function App() {
         <Route exact path="/empTypeMaster" element={<EmployeeTypeComponent />}></Route>
         <Route exact path="/complaintTypeMaster" element={<ComplaintTypeComponent />}></Route>
         <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
-        <Route exact path="/employee" element={<EmployeeComponent />}></Route>
+        <Route exact path="/employee" element={<MainEmployeeComponent />}></Route>
         <Route exact path="/showEmployeeForKpp" element={<ShowEmployeeForKppComponent / >}></Route>
       
         <Route exact path="/allHodKppStatus" element={<AllHodKppStatusComponent />}></Route>
@@ -172,11 +181,9 @@ function App() {
         <Route exact path="/othersInProgressComplaint" element={<OthersInProgressComplaintComponent />}></Route>
         <Route exact path="/othersResolveComplaint" element={<OthersResolveComplaintComponent />}></Route>
 
-        
+        <Route exact path="/meetingMaster" element={<MeetingMasterComponent />}></Route>
         <Route exact path="/announcementType" element={<AnnouncementTypeComponent />}></Route>
         <Route exact path="/announcement" element={<AnnouncementComponent />}></Route>
-        
-        
       </Routes>
     </BrowserRouter>
   );

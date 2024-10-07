@@ -67,6 +67,8 @@ export default function AddNewEmployeeComponent() {
 
     const [empFirstNameSearch, setEmpFirstNameSearch] = useState('');
 
+   
+
     //for gender selection
     const onGenderChangeHandler = (event) => {
         setEmpGender(event);
@@ -99,7 +101,7 @@ export default function AddNewEmployeeComponent() {
         ).catch((err) => {
             alert(err.response.data.details)
         });
-        // window.location.reload(); 
+      
     }
 
 
@@ -159,12 +161,6 @@ export default function AddNewEmployeeComponent() {
         });
 
 
-  
-       /* EmployeeService.ddRolesExceptEmployee().then((res) => {
-            setReportingRoles(res.data);
-            setReportingEmpRoleId(res.data?.[0].roleId)
-        });*/
-
         EmployeeService.ddRolesExceptEmployee().then((res) => {
             setReportingRoles(res.data);
             console.log("res.data?.[0].roleId = ",res.data?.[0].roleId)
@@ -187,25 +183,6 @@ export default function AddNewEmployeeComponent() {
                 });
             });
         }); 
-
-            
-       /* DesignationService.getAllDepartmentFromDesig().then((res1) => {
-            setReportingDepartments(res1.data);
-            setReportingEmpDeptId(res1.data?.[0].deptId)
-            let deptId = res1.data?.[0].deptId;
-            DesignationService.getDesignationDetailsForKpp(deptId).then((res2) => {
-                setReportingDesignations(res2.data);
-                setReportingEmpDesigId(res2.data?.[0]?.desigId)
-                let reportingEmpDesigId = res2.data?.[0]?.desigId;
-                EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res3) => {
-                    setReportingEmpId(res3.data?.[0]?.empId)
-                    setReportingEmpName(res3.data);
-                    console.log("res3.data?.[0]?.empId", res3.data?.[0]?.empId)
-                });
-
-            });
-        });*/
-
 
 
     }, []);

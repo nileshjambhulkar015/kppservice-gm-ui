@@ -1,15 +1,29 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
 import UoMService from '../../../services/UoMService'
+import AlertboxComponent from '../../AlertboxComponent/AlertboxComponent';
 
 
 export default function UoMComponent() {
     const [uomId, setUomId] = useState('');
     const [uomName, setUomName] = useState('');
-
     const [remark, setRemark] = useState('');
+    const [responseMessage, setResponseMessage] = useState('');
 
     const [uoms, setUoms] = useState([])
+
+    const [saveUOMAlert, setSaveUOMAlert] = useState(false);
+    const [deleteUOMAlert, setDeleteUOMAlert] = useState(false);
+    const [updatUOMAlert, setUpdateUOMAlert] = useState(false);
+
+    const handleClose = () => {
+
+        setSaveUOMAlert(false);
+        setDeleteUOMAlert(false)
+        setUpdateUOMAlert(false)
+        setUomName('');
+        setRemark('');
+    };
 
 
     //loading all department and roles while page loading at first time
@@ -31,10 +45,12 @@ export default function UoMComponent() {
             UoMService.getUoMByPaging().then((res) => {
                 setUoms(res.data.responseData.content); 
             });
-            console.log("UoM added");
+            
         }
         );
-        // window.location.reload(); 
+        setUomName('');
+        setRemark('');
+        setSaveUOMAlert(false);
     }
 
     const showUoMById = (e) => {
@@ -51,7 +67,7 @@ export default function UoMComponent() {
     }
 
 
-    const deleteRegionById = (e) => {
+    const deleteUOMById = (e) => {
         if (window.confirm("Do you want to delete this Region name ?")) {
         UoMService.getUoMById(e).then(res => {
 
@@ -66,7 +82,7 @@ export default function UoMComponent() {
                 UoMService.getUoMByPaging().then((res) => {
                     setUoms(res.data.responseData.content);
                 });
-                console.log("UoM deleted");
+                
             }
             );
         }
@@ -74,9 +90,10 @@ export default function UoMComponent() {
             // User clicked Cancel
             console.log("User canceled the action.");
         }
+        setDeleteUOMAlert(false);
     }
 
-    const updateRegion = (e) => {
+    const updateUOMDetails = (e) => {
         console.log("oddd added")
         e.preventDefault()
         let statusCd = 'A';
@@ -88,16 +105,18 @@ export default function UoMComponent() {
                 setUoms(res.data.responseData.content);
 
             });
-            console.log("UOM added");
+           
         }
         );
+
+        setUpdateUOMAlert(false)
 
     }
 
 
 
     return (
-
+        <React.Fragment>
         <div>
             <div className="row">
                 <h2 className="text-center">UoM List</h2>
@@ -132,7 +151,7 @@ export default function UoMComponent() {
                                                 <td>{uom.uomName}</td>
 
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDepartment" onClick={() => showUoMById(uom.uomId)}>Update</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteRegionById(uom.uomId)}>Delete</button>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteUOMById(uom.uomId)}>Delete</button>
                                                 </td>
                                             </tr>
                                     )
@@ -172,7 +191,7 @@ export default function UoMComponent() {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => saveUoM(e)} > Submit</button>
+                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => setSaveUOMAlert(true)} > Submit</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -207,7 +226,7 @@ export default function UoMComponent() {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => updateRegion(e)} > Submit</button>
+                            <button type="submit" className="btn btn-success" data-dismiss="modal" onClick={(e) => updateUOMDetails(e)} > Submit</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -215,5 +234,41 @@ export default function UoMComponent() {
                 </div>
             </div>
         </div>
+
+        
+   {saveUOMAlert && (
+    <AlertboxComponent
+        show={saveUOMAlert}
+        title="danger"
+        message="Do you want to save UOM"
+        onOk={saveUoM}
+        onClose={handleClose}
+        isCancleAvailable={true}
+    />
+)}
+
+{updatUOMAlert && (
+    <AlertboxComponent
+        show={updatUOMAlert}
+        title="danger"
+        message="Do you want to update UOM"
+        onOk={updateUOMDetails}
+        onClose={handleClose}
+        isCancleAvailable={true}
+    />
+)}
+
+{deleteUOMAlert && (
+    <AlertboxComponent
+        show={deleteUOMAlert}
+        title="danger"
+        message="Do you want to delete UOM"
+        onOk={deleteUOMById}
+        onClose={handleClose}
+        isCancleAvailable={true}
+    />
+)}
+
+</React.Fragment>
     );
 }

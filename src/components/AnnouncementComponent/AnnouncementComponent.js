@@ -89,6 +89,7 @@ export default function AnnouncementComponent() {
             if (res.data.success) {
                 setIsSuccess(true);
                 setAnnouncements(res.data.responseData.content);
+               
                 console.log(res.data.responseData.content)
                 //setAsAnnounTypes(res.data.responseData.content);
             }

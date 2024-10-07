@@ -76,7 +76,7 @@ class DepartmentService {
 
     getAllDepartmentExceptGM() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API +"/department/all-dd-dept-except-gm")
+            return axios.get(BASE_URL_API +"/designation/department-except-gm")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

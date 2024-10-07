@@ -48,6 +48,28 @@ class ComplaintTypeService {
             window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
+
+     // search department by its name
+     getComplaintTypeDetailsByDeptId(deptId) {
+        if (null != Cookies.get('empId')) {
+            return axios.get(BASE_URL_API+`/complaint-type/search?deptId=${deptId}&statusCd=A&page=0&size=1200&sort=comp.comp_type_name asc`)
+            
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+
+    }
+
+     //Get all department from complaint type table 
+     getAllComplaintTypeDepartments() {
+        if (null != Cookies.get('empId')) {
+            return axios.get(BASE_URL_API+"/complaint-type/comp-type-dd-dept")
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+    }
 }
 
 
