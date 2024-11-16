@@ -1,9 +1,10 @@
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from "react";
-import DepartmentService from "../../services/DepartmentService";
-import { BASE_URL_API } from '../../services/URLConstants';
+import DepartmentService from "../../services/MasterService/DepartmentService";
+
 import AnnouncementService from '../../services/AnnouncementService';
-import AnnouncementTypeService from '../../services/AnnouncementTypeService';
+import AnnouncementTypeService from '../../services/MasterService/AnnouncementTypeService';
+import PaginationComponent from '../PaginationComponent/PaginationComponent';
 export default function AnnouncementComponent() {
 
     const [announId, setAnnounId] = useState('');
@@ -41,18 +42,36 @@ export default function AnnouncementComponent() {
 
     const [announcements, setAnnouncements] = useState([])
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [dataPageable, setDataPageable] = useState([])
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        // Handle data fetching or any other logic here
+    };
+
+    // Handle items per page change
+    const handleItemsPerPageChange = (newItemsPerPage) => {
+        setItemsPerPage(newItemsPerPage);
+        setCurrentPage(1); // Reset to first page when items per page changes
+    };
     //loading all department and roles while page loading at first time
     useEffect(() => {
-        AnnouncementService.getAnnouncementByPaging().then((res) => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        AnnouncementService.getAnnouncementByPaging(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setAnnouncements(res.data.responseData.content);
-                console.log(res.data.responseData.content)
+                setDataPageable(res.data.responseData);
             }
             else {
                 setIsSuccess(false);
             }
+
         });
 
         AnnouncementTypeService.getAllAnnouncementType().then((res) => {
@@ -66,7 +85,7 @@ export default function AnnouncementComponent() {
         });
 
 
-    }, []);
+    }, [currentPage, itemsPerPage]);
 
 
     // Advance search employee
@@ -74,23 +93,22 @@ export default function AnnouncementComponent() {
 
         e.preventDefault()
         let statusCd = 'A'
-        if(asAnnounTypeId=="Select Announcement Type"){
-            asAnnounTypeId=null;
-        } 
+        if (asAnnounTypeId == "Select Announcement Type") {
+            asAnnounTypeId = null;
+        }
 
-        if(asAnnounStatus=="Select Announcement Status")
-        {
-            asAnnounStatus='null';
+        if (asAnnounStatus == "Select Announcement Status") {
+            asAnnounStatus = 'null';
         }
         let advComplaintSearch = { asAnnounFromDate, asAnnounToDate, asAnnounStatus, asAnnounTypeId, statusCd };
 
-        console.log(advComplaintSearch)
+
         AnnouncementService.advanceSearchAnnouncementDetails(advComplaintSearch).then(res => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setAnnouncements(res.data.responseData.content);
-               
-                console.log(res.data.responseData.content)
+
+
                 //setAsAnnounTypes(res.data.responseData.content);
             }
             else {
@@ -99,21 +117,6 @@ export default function AnnouncementComponent() {
         }
         );
     }
-
-    const handleAnnouncementTypeChange = (value) => {
-        if (value == "Select Announcement") {
-            value = null;
-        }
-        setAnnounTypeId(value)
-    }
-
-    const handleAsAnnouncementTypeChange = (value) => {
-        if (value == "Select Announcement") {
-            value = null;
-        }
-        setAsAnnounTypeId(value)
-    }
-
 
     const onAsAnnouncementStatusChangeHandler = (event) => {
 
@@ -166,9 +169,9 @@ export default function AnnouncementComponent() {
                 AnnouncementService.cancelAnnouncement(announcement).then(res => {
                     AnnouncementService.getAnnouncementByPaging().then((res) => {
                         setAnnouncements(res.data.responseData.content);
-                        console.log(res.data.responseData.content)
+
                     });
-                    console.log("Announcement cancel");
+
                 }
                 );
             });
@@ -198,11 +201,19 @@ export default function AnnouncementComponent() {
         let announCreatedByDesigName = Cookies.get('desigName')
 
         let announcement = { announTypeId, announStartDate, announEndDate, announCreatedByEmpId, announCreatedByEmpEId, announCreatedByEmpName, announCreatedByRoleId, announCreatedByRoleName, announCreatedByDeptId, announCreatedByDeptName, announCreatedByDesigId, announCreatedByDesigName, announVenue, announTitle, announDescription, announStatus, remark, statusCd, employeeId };
-        console.log("announcement :", announcement)
+
         AnnouncementService.saveAnnouncementDetails(announcement).then(res => {
 
             AnnouncementService.getAnnouncementByPaging().then((res) => {
-                setAnnouncements(res.data.responseData.content);
+                if (res.data.success) {
+                    setIsSuccess(true);
+                    setAnnouncements(res.data.responseData.content);
+
+
+                }
+                else {
+                    setIsSuccess(false);
+                }
             });
         }
         );
@@ -240,7 +251,7 @@ export default function AnnouncementComponent() {
                         </div>
                     </div>
                     <div className="row">
-                    {isSuccess ?
+                        {isSuccess ?
                             <table className="table table-bordered">
                                 <thead>
                                     <tr>
@@ -285,6 +296,12 @@ export default function AnnouncementComponent() {
                                 </tbody>
                             </table>
                             : <h1>No Data Found</h1>}
+                        <PaginationComponent
+                            currentPage={currentPage}
+                            totalPages={dataPageable.totalPages || 10}
+                            onPageChange={handlePageChange}
+                            onItemsPerPageChange={handleItemsPerPageChange}
+                        />
                     </div>
 
                 </div>

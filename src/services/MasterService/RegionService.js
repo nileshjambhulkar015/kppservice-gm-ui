@@ -2,23 +2,37 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import { BASE_URL_API, LOGIN_UI_BASE_URL } from "../URLConstants";
 
+const BASE_URL = BASE_URL_API+"/region";
 
 
-class CompanyMasterService {
+class RegionService {
 
-    saveCompanyDetails(company) {
+
+    saveRegionDetails(region) {
         if (null != Cookies.get('empId')) {
-            return axios.post(BASE_URL_API+"/company-master", company)
+            return axios.post(BASE_URL, region)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
-        }       
+        }
+
     }
 
-    deleteCompanyById(companyId) {
+
+    updateRegion(region) {
+        if (null != Cookies.get('empId')) {
+            return axios.put(BASE_URL, region)
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+
+    }
+
+    deleteRegionById(regionId) {
        
         if (null != Cookies.get('empId')) {
-            return axios.delete(BASE_URL_API+`/company-master?companyId=${companyId}`)
+            return axios.delete(BASE_URL+`/?regionId=${regionId}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -26,43 +40,38 @@ class CompanyMasterService {
 
     }
 
-    getCompanyById(companyId) {
+
+
+    //at page load call all the region load all departments
+    getRegionsByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/company-master/by-comp-id?companyId=${companyId}`)
+            return axios.get(BASE_URL_API+"/region/search?statusCd=A&page=0&size=1200&sort=regionName asc")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
-    
-    getCompanyDetailsByPaging() {
-        if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/company-master/search?statusCd=A&page=0&size=20&sort=region_id")
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }      
-    }
 
-    updateCompanyDetails(company) {
+    getRegionsById(regionId) {
         if (null != Cookies.get('empId')) {
-            return axios.put(BASE_URL_API+"/company-master", company)
+            return axios.get(BASE_URL_API+`/region?regionId=${regionId}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
-    ddAllCompanyies() {
+    ddRegions(regionId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/company-master/dd-all-company")
+            return axios.get(BASE_URL_API+`/region/dd-regions-regions`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
-        }       
+        }
     }
 
 }
 
-export default new CompanyMasterService()
+
+export default new RegionService();

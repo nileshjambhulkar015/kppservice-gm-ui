@@ -30,9 +30,9 @@ class CumulativeService {
     //For All Employee
 
     // view previous months kpp 
-    getOverallEmployeeCumulative() {
+    getOverallEmployeeCumulative(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?roleId=3`)
+            return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?roleId=3&page=${data.currentPage-1}&size=${data.itemsPerPage}`)
           //  return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?gmEmpId=${Cookies.get('empId')}&roleId=3`)
         } else {
             alert("You need to login first")
@@ -57,9 +57,9 @@ class CumulativeService {
 
     
     // view previous months kpp 
-    getOverallHODCumulative() {
+    getOverallHODCumulative(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?roleId=2`)
+            return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?roleId=2&page=${data.currentPage-1}&size=${data.itemsPerPage}`)
             //return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?gmEmpId=${Cookies.get('empId')}&roleId=2`)
         } else {
             alert("You need to login first")

@@ -3,34 +3,74 @@ import React, { useEffect, useState } from 'react';
 import AllEmployeesKppService from '../../services/AllEmployeesKppService';
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
+import PaginationComponent from '../PaginationComponent/PaginationComponent';
 export default function AllEmployeesKppComponent() {
 
   
     const navigate = useNavigate();
+    const [isSuccess, setIsSuccess] = useState(true)
     const [empKppStatus, setEmpKppStatus] = useState('In-Progress')
     const [empResponses, setEmpResponses] = useState([])
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [dataPageable, setDataPageable] = useState([])
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        // Handle data fetching or any other logic here
+    };
+
+    // Handle items per page change
+    const handleItemsPerPageChange = (newItemsPerPage) => {
+        setItemsPerPage(newItemsPerPage);
+        setCurrentPage(1); // Reset to first page when items per page changes
+    };
 
     useEffect(() => {
-        AllEmployeesKppService.getEmployeeDetailsByPagination().then((res) => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        AllEmployeesKppService.getEmployeeDetailsByPagination(data).then((res) => {
+            if (res.data.success) {
+                setIsSuccess(true);
             setEmpResponses(res.data.responseData.content);
+            setDataPageable(res.data.responseData);
+
+        }
+        else {
+            setIsSuccess(false);
+        }
         });
-    }, []);
+    }, [currentPage, itemsPerPage]);
 
     const onOptionChangeHandler = (event) => {
-        console.log("event=", event)
         setEmpKppStatus(event);
     };
 
     const searchByEKpp = (e) => {
-        console.log("data=", empKppStatus)
-        AllEmployeesKppService.getEmployeeByStatusByPagination(empKppStatus).then((res) => {
-            setEmpResponses(res.data.responseData.content);          
-        });
+        const data = {
+            currentPage,
+            itemsPerPage,
+            empKppStatus
+        }
+        console.log("Data ", data)
+    
+        AllEmployeesKppService.getEmployeeByStatusByPagination(data).then((res) => {
+            if (res.data.success) {
+                setIsSuccess(true);
+            setEmpResponses(res.data.responseData.content);      
+            setDataPageable(res.data.responseData);
+
+        }
+        else {
+            setIsSuccess(false);
+        }    
+        }, [currentPage, itemsPerPage]);
     }
 
     const navigateToUpdateRating=(empId)=>{
-        console.log("New empId =",empId)
         Cookies.set('empIdForKppRatings', empId);
         navigate(`/addEmployeeKppRating`, { replace: true })       
     }
@@ -51,7 +91,7 @@ export default function AllEmployeesKppComponent() {
                         <form className="form-horizontal">
                             <label className="control-label col-sm-2" htmlFor="empKppStatus">KPP Status:</label>
                             <div className="col-sm-2">
-                                <select className="form-control" name="empKppStatus" id="empKppStatus" value={empKppStatus} onChange={(e) => onOptionChangeHandler(e.target.value)} defaultValue={empKppStatus} >
+                                <select className="form-control" name="empKppStatus" id="empKppStatus" onChange={(e) => onOptionChangeHandler(e.target.value)} defaultValue={empKppStatus} >
                                     <option value="All">All</option>
                                     <option value="In-Progress">In-Progress</option>
                                     <option value="Pending">Pending</option>
@@ -64,6 +104,7 @@ export default function AllEmployeesKppComponent() {
                 </div>
 
                 <form className="form-horizontal">
+                {isSuccess ?
                     <table className="table table-bordered">
                         <thead>
                             <tr>
@@ -102,6 +143,13 @@ export default function AllEmployeesKppComponent() {
                             }
                         </tbody>
                     </table>
+                    : <h4>Employee KPP is not available</h4>}
+                    <PaginationComponent
+                        currentPage={currentPage}
+                        totalPages={dataPageable.totalPages || 10}
+                        onPageChange={handlePageChange}
+                        onItemsPerPageChange={handleItemsPerPageChange}
+                    />
 
                 </form>
 

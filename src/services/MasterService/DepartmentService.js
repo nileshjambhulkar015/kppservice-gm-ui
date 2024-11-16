@@ -2,15 +2,14 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import { BASE_URL_API, LOGIN_UI_BASE_URL } from "../URLConstants";
 
-const BASE_URL = BASE_URL_API+"/site";
+const BASE_URL = BASE_URL_API+"/department";
 
 
-class SiteService {
+class DepartmentService {
 
-
-    saveSiteDetails(site) {
+    saveDepartmentDetails(department) {
         if (null != Cookies.get('empId')) {
-            return axios.post(BASE_URL, site)
+            return axios.post(BASE_URL, department)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -18,21 +17,10 @@ class SiteService {
 
     }
 
-    //when click on view button of UI
-    getSiteById(siteId) {
-        if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL + `/by-site-id?siteId=${siteId}`)
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }
-
-    }
-
-    deleteSiteById(siteId) {
+    deleteDepartmentById(deptId) {
        
         if (null != Cookies.get('empId')) {
-            return axios.delete(BASE_URL+`/?siteId=${siteId}`)
+            return axios.delete(BASE_URL+`/?deptId=${deptId}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -40,9 +28,22 @@ class SiteService {
 
     }
 
-    updateSiteDetails(site) {
+
+    //when click on view button of UI
+    getDepartmentById(deptId) {
         if (null != Cookies.get('empId')) {
-            return axios.put(BASE_URL, site)
+            return axios.get(BASE_URL + `/by-dept-id?deptId=${deptId}`)
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+
+    }
+
+    updateDepartmentDetails(department) {
+        if (null != Cookies.get('empId')) {
+            console.log("department : ", department)
+            return axios.put(BASE_URL, department)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -52,44 +53,35 @@ class SiteService {
 
 
     //at page load call all the departments load all departments
-    getSiteDetailsByPaging() {
-        if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/site/search?statusCd=A&page=0&size=20&sort=site_name")
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }
-    }
-
-    
-
-    //Get all regions present in site table for site form
-    getRegionInDept() {
-        if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/roles/department/role")
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }
-
-    }
-
-    //Get all roles present in department table for designation form
-    getAllRegions() {
-        if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/site/dd-regions-sites")
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }
+    getDepartmentDetailsByPaging(data) {
        
+        if (null != Cookies.get('empId')) {
+            return axios.get(BASE_URL_API+`/department/search?statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=dept.dept_name asc`)
+        } else {
+            alert("You need to login first") 
+            
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
     }
 
-    //Get all sites present in department table from designation for KPP
-    getSiteDetailsByRegionId(regionId) {
-  
+    // search department by its name
+    getDepartmentDetailsByDeptNamePaging(deptName) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/site/dd-sites-sites?regionId=${regionId}`)  
+            return axios.get(BASE_URL_API+`/department/search?deptName=${deptName}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+
+    }
+   
+     //Upload department
+     uploadExcelDept(formData) {
+        if (null != Cookies.get('empId')) {
+            return axios.post(BASE_URL_API+"/department/upload-department",formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },});
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -97,9 +89,9 @@ class SiteService {
         
     }
 
-    ddAllSites() {
+    ddAllDepartmentExceptGM() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/site/dd-all-sites")
+            return axios.get(BASE_URL_API +"/designation/department-except-gm")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -109,4 +101,4 @@ class SiteService {
 }
 
 
-export default new SiteService();
+export default new DepartmentService();

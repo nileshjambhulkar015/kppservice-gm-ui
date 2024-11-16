@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import DesignationService from "../../services/DesignationService";
+import DesignationService from "../../services/MasterService/DesignationService";
 import EmployeeService from "../../services/EmployeeService";
 import EmployeeTypeService from "../../services/MasterService/EmployeeTypeService";
-import RegionService from "../../services/RegionService";
-import RoleService from "../../services/RoleService";
+import RegionService from "../../services/MasterService/RegionService";
+import RoleService from "../../services/MasterService/RoleService";
 import SiteService from "../../services/MasterService/SiteService";
 import CompanyMasterService from "../../services/MasterService/CompanyMasterService";
 import { BASE_URL_API } from "../../services/URLConstants";
+import PaginationComponent from "../PaginationComponent/PaginationComponent";
 export default function MainEmployeeComponent() {
     const navigate = useNavigate();
 
@@ -64,14 +65,32 @@ export default function MainEmployeeComponent() {
         setEmpBloodgroup(event);
     };
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [dataPageable, setDataPageable] = useState([])
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        // Handle data fetching or any other logic here
+    };
+
+    // Handle items per page change
+    const handleItemsPerPageChange = (newItemsPerPage) => {
+        setItemsPerPage(newItemsPerPage);
+        setCurrentPage(1); // Reset to first page when items per page changes
+    };
 
     useEffect(() => {
-        EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        EmployeeService.getEmployeeDetailsByPaging(data).then((res) => {
 
             if (res.data.success) {
                 setIsSuccess(true);
                 setEmployees(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
             }
             else {
                 setIsSuccess(false);
@@ -79,15 +98,15 @@ export default function MainEmployeeComponent() {
 
         });
 
-        RoleService.getRoles().then((res) => {
+        RoleService.ddRoles().then((res) => {
             setRoles(res.data);
         });
 
-        EmployeeTypeService.getDDEmployeeType().then((res) => {
+        EmployeeTypeService.ddEmployeeType().then((res) => {
             setEmpTypes(res.data.responseData);
         });
 
-        DesignationService.getAllDepartmentDetails().then((res) => {
+        DesignationService.ddAllDepartmentDetails().then((res) => {
             setDepartments(res.data);
         });
 
@@ -95,16 +114,16 @@ export default function MainEmployeeComponent() {
             setRegions(res.data);
         });
 
-        SiteService.getAllSites().then((res) => {
+        SiteService.ddAllSites().then((res) => {
             setSites(res.data);
         });
 
-        CompanyMasterService.getAllCompanyies().then((res) => {
+        CompanyMasterService.ddAllCompanyies().then((res) => {
             setCompanys(res.data);
         });
 
 
-    }, []);;
+    }, [currentPage, itemsPerPage]);;
 
 
     //for role , department and designation
@@ -160,49 +179,56 @@ export default function MainEmployeeComponent() {
 
         e.preventDefault()
         let advEmployeeSearch = { roleId, deptId, regionId, siteId, companyId, empTypeId };
-
-        EmployeeService.advanceSearchEmployee(advEmployeeSearch).then(res => {
-            setEmployees(res.data.responseData.content);
-            console.log("Site added");
+        const data = {
+            currentPage,
+            itemsPerPage,
+            advEmployeeSearch
         }
-        );
+       
+
+        EmployeeService.advanceSearchEmployee(data).then(res => {
+            if (res.data.success) {
+                setIsSuccess(true);
+            setEmployees(res.data.responseData.content);
+            setDataPageable(res.data.responseData);
+        }
+        else {
+            setIsSuccess(false);
+        }
+           
+        },[currentPage, itemsPerPage]);
     }
 
 
     const searchEmployeeEId = (e) => {
         setEmpEIdSearch(e.target.value)
-
-        EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e.target.value).then((res) => {
-
-            if (res.data.success) {
-                setIsSuccess(true);
-                setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
-            }
-            else {
-                setIsSuccess(false);
-            }
-        });
-    }
-
-    const searchEmployeeFirstName = (e) => {
-        EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
+       let empEId=e.target.value;
+        const data = {
+            currentPage,
+            itemsPerPage,
+            empEId
+        }
+        EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(data).then((res) => {
 
             if (res.data.success) {
                 setIsSuccess(true);
                 setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
+                setDataPageable(res.data.responseData);
             }
             else {
                 setIsSuccess(false);
             }
-        });
+        },[currentPage, itemsPerPage]);
     }
+
+    
 
 
     const showEmployeeById = (e) => {
 
         EmployeeService.getEmployeeById(e).then(res => {
             let employee = res.data;
-            console.log(employee)
+    
             setEmpId(employee.empId)
             setEmpEId(employee.empEId)
             setRoleId(employee.roleId)
@@ -237,53 +263,28 @@ export default function MainEmployeeComponent() {
     }
 
     const deleteEmployeeById = (e) => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         if (window.confirm("Do you want to delete this Employee ?")) {
-            EmployeeService.getEmployeeById(e).then(res => {
-                let employee = res.data;
-                console.log(employee)
-                setEmpEId(employee.empEId)
-                setRoleId(employee.roleId)
-                setEmpId(employee.empId)
-                setDeptId(employee.deptId)
-                setDeptName(employee.deptName)
-                setDesigId(employee.desigId)
-                setDesigName(employee.desigName)
-                setReportingEmpId(employee.reportingEmpId)
-                setRegionId(employee.regionId)
-                setRegionName(employee.regionName)
-                setSiteId(employee.siteId)
-                setSiteName(employee.siteName)
-                setEmpFirstName(employee.empFirstName)
-                setEmpMiddleName(employee.empMiddleName)
-                setEmpLastName(employee.empLastName)
-                setEmpDob(employee.empDob)
-                setEmpPhoto(employee.empPhoto || '')
-                setEmpMobileNo(employee.empMobileNo)
-                setEmpEmerMobileNo(employee.empEmerMobileNo)
-                setEmailId(employee.emailId)
-                setTempAddress(employee.tempAddress)
-                setPermAddress(employee.permAddress)
-                setEmpGender(employee.empGender)
-                setEmpBloodgroup(employee.empBloodgroup)
-                setRemark(employee.remark)
 
-                let statusCd = 'I';
-
-                let employeeData = { empId, empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
-                EmployeeService.updateEmployeeDetails(employeeData).then(res => {
-                    if (res.data.success) {
-                        EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+                EmployeeService.deleteEmployeeById(e).then(res => {
+                    EmployeeService.getEmployeeDetailsByPaging(data).then((res) => {
+                        if (res.data.success) {
+                            setIsSuccess(true);
                             setEmployees(res.data.responseData.content);
-                        });
-                    }
-                    else {
-                        alert(res.data.responseMessage)
-                    }
-                    console.log("Employee deleted");
+                            setDataPageable(res.data.responseData);
+                        }
+                        else {
+                            setIsSuccess(false);
+                        }
+        
+                    },[currentPage, itemsPerPage]);
                 }
                 );
-            }
-            );
+    
+          
         } else {
             // User clicked Cancel
             console.log("User canceled the action.");
@@ -302,7 +303,7 @@ export default function MainEmployeeComponent() {
             EmployeeService.getEmployeeDetailsByPaging().then((res) => {
                 setEmployees(res.data.responseData.content);
             });
-            console.log("Employee deleted");
+         
         }
         );
     }
@@ -318,7 +319,7 @@ export default function MainEmployeeComponent() {
         })
             .then(response => {
                 // Handle response
-                console.log("respons: ", response)
+              
                 alert("Employee uploaded successfully")
                 EmployeeService.getEmployeeDetailsByPaging().then((res) => {
                     setEmployees(res.data.responseData.content);
@@ -334,8 +335,6 @@ export default function MainEmployeeComponent() {
 
 
     return (
-
-
         <div className="row">
             <h2 className="text-center">Employee List</h2>
 
@@ -349,7 +348,7 @@ export default function MainEmployeeComponent() {
                                     <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter First Name" value={empFirstNameSearch} onChange={(e) => searchEmployeeEId(e)} />
                                 </div>
                             </form>
-                           
+
                         </div>
                     </div>
                     <div className="col-sm-5">
@@ -400,6 +399,12 @@ export default function MainEmployeeComponent() {
                             </tbody>
                         </table>
                         : <h4>Employee Id is not available</h4>}
+                        <PaginationComponent
+                        currentPage={currentPage}
+                        totalPages={dataPageable.totalPages || 10}
+                        onPageChange={handlePageChange}
+                        onItemsPerPageChange={handleItemsPerPageChange}
+                    />
                 </div>
 
             </div>

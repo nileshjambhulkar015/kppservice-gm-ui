@@ -1,44 +1,44 @@
 import React from "react";
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import './App.css';
-import KeyParameterComponent from './components/KeyParameterComponent/KeyParameterComponent';
+import KeyParameterComponent from './components/MasterComponent/KeyParameterComponent';
 
 import MainEmployeeComponent from './components/EmployeeComponent/MainEmployeeComponent';
 
-import DesignationComponent from './components/MasterComponent/DesignationComponent/DesignationComponent';
+import DesignationComponent from './components/MasterComponent/DesignationComponent';
 
 import Cookies from 'js-cookie';
 import AddNewEmployeeComponent from './components/EmployeeComponent/AddNewEmployeeComponent';
 import AllEmployeesKppComponent from "./components/AllEmployeesKppComponent/AllEmployeesKppComponent";
 import AllHodKppStatusComponent from './components/AllHodKppStatusComponent/AllHodKppStatusComponent';
 import AssignEmployeeKppComponent from './components/AssignEmployeeKppComponent/AssignEmployeeKppComponent';
-import SingleEmployeeCumulativeComponent from "./components/CumulativeKppComponent/SingleEmployeeCumulativeComponent/SingleEmployeeCumulativeComponent";
-import SingleHODCumulativeComponent from "./components/CumulativeKppComponent/SingleHODCumulativeComponent/SingleHODCumulativeComponent";
-import ViewAllEmployeeCumulativeComponent from "./components/CumulativeKppComponent/ViewAllEmployeeCumulativeComponent/ViewAllEmployeeCumulativeComponent";
-import ViewAllHODCumulativeComponent from "./components/CumulativeKppComponent/ViewAllHODCumulativeComponent/ViewAllHODCumulativeComponent";
-import EmplyeeUpdateKppRatingsComponent from './components/EmplyeeUpdateKppRatingsComponent/EmplyeeUpdateKppRatingsComponent';
-import HODUpdateKppRatingsComponent from './components/HODUpdateKppRatingsComponent/HODUpdateKppRatingsComponent';
-import CompanyMasterComponent from './components/MasterComponent/CompanyMasterComponent/CompanyMasterComponent';
-import DepartmentComponent from './components/MasterComponent/DepartmentComponent/DepartmentComponent';
-import EmployeeTypeComponent from "./components/MasterComponent/EmployeeTypeComponent/EmployeeTypeComponent";
-import RegionComponent from "./components/MasterComponent/RegionComponent/RegionComponent";
-import RoleComponent from "./components/MasterComponent/RoloComponent/RoleComponent";
-import SiteComponent from "./components/MasterComponent/SiteComponent/SiteComponent";
-import UoMComponent from "./components/MasterComponent/UoMComponent/UoMComponent";
-import ShowEmployeeForKppComponent from './components/ShowEmployeeForKppComponent/ShowEmployeeForKppComponent';
+import SingleEmployeeCumulativeComponent from "./components/CumulativeKppComponent/SingleEmployeeCumulativeComponent";
+import SingleHODCumulativeComponent from "./components/CumulativeKppComponent/SingleHODCumulativeComponent";
+import ViewAllEmployeeCumulativeComponent from "./components/CumulativeKppComponent/ViewAllEmployeeCumulativeComponent";
+import ViewAllHODCumulativeComponent from "./components/CumulativeKppComponent/ViewAllHODCumulativeComponent";
+import EmplyeeUpdateKppRatingsComponent from './components/UpdateKppRatingsComponent/EmplyeeUpdateKppRatingsComponent';
+import HODUpdateKppRatingsComponent from './components/UpdateKppRatingsComponent/HODUpdateKppRatingsComponent';
+import CompanyMasterComponent from './components/MasterComponent/CompanyMasterComponent';
+import DepartmentComponent from './components/MasterComponent/DepartmentComponent';
+import EmployeeTypeComponent from "./components/MasterComponent/EmployeeTypeComponent";
+import RegionComponent from "./components/MasterComponent/RegionComponent";
+import RoleComponent from "./components/MasterComponent/RoleComponent";
+import SiteComponent from "./components/MasterComponent/SiteComponent";
+import UoMComponent from "./components/MasterComponent/UoMComponent";
+import ShowEmployeeForKppComponent from './components/AssignEmployeeKppComponent/ShowEmployeeForKppComponent';
 import ViewAllEmpTransferToOtherHODComponent from "./components/ViewAllEmpTransferToOtherHODComponent/ViewAllEmpTransferToOtherHODComponent";
-import ComplaintTypeComponent from "./components/MasterComponent/ComplaintTypeComponent/ComplaintTypeComponent";
+import ComplaintTypeComponent from "./components/MasterComponent/ComplaintTypeComponent";
 import OthersPendingComplaintComponent from './components/ComplaintManagementComponent/OthersPendingComplaintComponent';
 import OthersResolveComplaintComponent from './components/ComplaintManagementComponent/OthersResolveComplaintComponent';
 import OthersInProgressComplaintComponent from './components/ComplaintManagementComponent/OthersInProgressComplaintComponent';
 import MeetingMasterComponent from "./components/MeetingMasterComponent/MeetingMasterComponent";
 
 
-import AnnouncementTypeComponent from "./components/MasterComponent/AnnouncementTypeComponent/AnnouncementTypeComponent";
+import AnnouncementTypeComponent from "./components/MasterComponent/AnnouncementTypeComponent";
 import AnnouncementComponent from "./components/AnnouncementComponent/AnnouncementComponent";
 
 function App() {
- 
+
   const removeCookies = () => {
     Cookies.remove('empId');
     Cookies.remove('roleId');

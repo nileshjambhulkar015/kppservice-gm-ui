@@ -6,7 +6,7 @@ class AddHodKppRatingService {
 
 
     getKPPDetails(empId) {
-        console.log("new emop Id : ", empId)
+     
         if (null != Cookies.get('empId')) {
 
             return axios.get(BASE_URL_API+`/hod-approval/employee-kpp?empId=${empId}&statusCd=A`)

@@ -14,9 +14,9 @@ class OthersResolveComplaintService {
 
 
     //at page load call all the departments load all departments
-    getEmployeeCompaintsDetailsByPaging() {
+    getEmployeeCompaintsDetailsByPaging(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + `/complaint/complaint-search?compStatus=Resolved&statusCd=A&page=0&size=1200&sort=empCompId asc`)
+            return axios.get(BASE_URL_API + `/complaint/complaint-search?compStatus=Resolved&statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=empCompId asc`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

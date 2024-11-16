@@ -4,6 +4,7 @@ import KeyParameterService from "../../services/KeyParameterService";
 import Cookies from 'js-cookie';
 import EmployeeKppsService from "../../services/EmployeeKppsService";
 import EmployeeService from "../../services/EmployeeService";
+import PaginationComponent from "../PaginationComponent/PaginationComponent";
 export default function AssignEmployeeKppComponent() {
 
     const navigate = useNavigate();
@@ -33,68 +34,33 @@ export default function AssignEmployeeKppComponent() {
     const [overallWeightage, setOverallWeightage] = useState(0);
     const [kppObjectiveNoSearch, setKppObjectiveNoSearch] = useState('');
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [dataPageable, setDataPageable] = useState([])
 
-    //for Overall Targate change
-    const onOverallTargetChangeHandler = (value) => {
-        setOverallTarget(value);
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        // Handle data fetching or any other logic here
     };
 
-    //For Overall weightage chage
-    const onOverallWeightageChangeHandler = (value) => {
-        setOverallWeightage(value);
+    // Handle items per page change
+    const handleItemsPerPageChange = (newItemsPerPage) => {
+        setItemsPerPage(newItemsPerPage);
+        setCurrentPage(1); // Reset to first page when items per page changes
     };
 
-    const searchByKppObjectiveNo = (e) => {
-        setKppObjectiveNoSearch(e.target.value)
+ 
 
-        KeyParameterService.getKPPDetailsForAssignKppByPaging(e.target.value).then((res) => {
-
-            if (res.data.success) {
-                setIsSuccess(true);
-                setKpps(res.data.responseData.content);
-            }
-            else {
-                setIsSuccess(false);
-            }
-        });
-    }
-
-    // Advance search employee
-    const advanceSearchEmployeeKpp = (e) => {
-        setKppObjectiveNo(e.target.value)
-        e.preventDefault()
-        let advanceKppSearch = { kppObjectiveNo, kppObjective, kppPerformanceIndica };
-
-        KeyParameterService.advanceSearchEmployeeKPP(advanceKppSearch).then(res => {
-            if (res.data.success) {
-                setKppIsSuccess(true);
-                setKpps(res.data.responseData.content);
-            }
-            else {
-                setKppIsSuccess(false);
-            }
-        }
-        );
-    }
-
-    const clearSearchAssignKpp = (e) => {
-        KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
-            if (res.data.success) {
-                setKppIsSuccess(true);
-                setKpps(res.data.responseData.content);
-            }
-            else {
-                setKppIsSuccess(false);
-            }
-
-        });
-
-    }
     useEffect(() => {
-        KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        KeyParameterService.getKPPDetailsForAssignKppByPaging(data).then((res) => {
             if (res.data.success) {
                 setKppIsSuccess(true);
                 setKpps(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
             }
             else {
                 setKppIsSuccess(false);
@@ -124,7 +90,71 @@ export default function AssignEmployeeKppComponent() {
             setDeptName(res.data.deptName)
             setDesigName(res.data.desigName)
         });
-    }, []);
+    }, [currentPage, itemsPerPage]);
+
+    // Advance search employee
+    const advanceSearchEmployeeKpp = (e) => {
+        setKppObjectiveNo(e.target.value)
+        e.preventDefault()
+        let advanceKppSearch = { kppObjectiveNo, kppObjective, kppPerformanceIndica };
+
+        const data = {
+            currentPage,
+            itemsPerPage,
+            advanceKppSearch
+        }
+        KeyParameterService.advanceSearchEmployeeKPP(data).then(res => {
+            if (res.data.success) {
+                setKppIsSuccess(true);
+                setKpps(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
+            }
+            else {
+                setKppIsSuccess(false);
+            }
+        },[currentPage, itemsPerPage]);
+    }
+
+    const searchKPPObjectiveNoPaging = (e) => {
+        setKppObjectiveNo(e.target.value)
+       let kppObjectiveNo=e.target.value;
+        const data = {
+            currentPage,
+            itemsPerPage,
+            kppObjectiveNo
+        }
+        KeyParameterService.searchKPPObjectiveNoPaging(data).then((res) => {
+
+            if (res.data.success) {
+                setIsSuccess(true);
+                setKpps(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
+            }
+            else {
+                setIsSuccess(false);
+            }
+        },[currentPage, itemsPerPage]);
+    }
+
+
+    const clearSearchAssignKpp = (e) => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        KeyParameterService.getKPPDetailsForAssignKppByPaging(data).then((res) => {
+            if (res.data.success) {
+                setKppIsSuccess(true);
+                setKpps(res.data.responseData.content);
+            }
+            else {
+                setKppIsSuccess(false);
+            }
+
+        }, [currentPage, itemsPerPage]);
+
+    }
+  
 
     const removeCookies = () => {
         Cookies.remove('empIdForKpp');
@@ -140,8 +170,13 @@ export default function AssignEmployeeKppComponent() {
 
 
     const saveKPPDetailsForEmployee = (e, newKppId) => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         if (window.confirm("Do you want to assign this Employee KPP ?")) {
             e.preventDefault()
+            
             let statusCd = 'A';
             let kppId = newKppId;
             let empId = Cookies.get('empIdForKpp');
@@ -157,14 +192,15 @@ export default function AssignEmployeeKppComponent() {
             let kppOverallTarget = overallTarget;
             let kppOverallWeightage = overallWeightage;
             let kpp = { kppId, kppOverallTarget, kppOverallWeightage, empId, empEId, roleId, deptId, desigId, reportingEmpId, statusCd, employeeId };
-            console.log(kpp)
+       
 
             EmployeeKppsService.assignEmployeeKppDetails(kpp).then(res => {
 
-                KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
+                KeyParameterService.getKPPDetailsForAssignKppByPaging(data).then((res) => {
                     if (res.data.success) {
                         setKppIsSuccess(true);
                         setKpps(res.data.responseData.content);
+                        setDataPageable(res.data.responseData);
                         setOverallTarget(0);
                         setOverallWeightage(0);
                     }
@@ -180,6 +216,7 @@ export default function AssignEmployeeKppComponent() {
                         setIsSuccess(true);
                         setEmpKppOverallTargetCount(res.data.responseData.empKppOverallTargetCount)
                         setViewEmpKpps(res.data.responseData.kppResponses.content);
+                      
                     }
                     else {
 
@@ -195,13 +232,18 @@ export default function AssignEmployeeKppComponent() {
         }
     }
 
-    const deleteKPPDetailsForEmployee = (kppId,kppOverallTarget,kppOverallWeightage) => {
+    const deleteKPPDetailsForEmployee = (kppId, kppOverallTarget, kppOverallWeightage) => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         if (window.confirm("Do you want to delete this Employee KPP ?")) {
-            EmployeeKppsService.deleteEmployeeKppDetails(kppId,kppOverallTarget,kppOverallWeightage).then(res => {
-                KeyParameterService.getKPPDetailsForAssignKppByPaging().then((res) => {
+            EmployeeKppsService.deleteEmployeeKppDetails(kppId, kppOverallTarget, kppOverallWeightage).then(res => {
+                KeyParameterService.getKPPDetailsForAssignKppByPaging(data).then((res) => {
                     if (res.data.success) {
                         setKppIsSuccess(true);
                         setKpps(res.data.responseData.content);
+                        setDataPageable(res.data.responseData);
                     }
                     else {
                         setKppIsSuccess(false);
@@ -250,11 +292,11 @@ export default function AssignEmployeeKppComponent() {
                         </div>
 
                         <div className="form-group">
-                        <label className="control-label col-sm-2"  >Employee Id :</label>
-                        <div className="col-sm-5">
-                            {empEId}
+                            <label className="control-label col-sm-2"  >Employee Id :</label>
+                            <div className="col-sm-5">
+                                {empEId}
+                            </div>
                         </div>
-                    </div>
 
                         <div className="form-group">
                             <label className="control-label col-sm-2"  >Role :</label>
@@ -293,7 +335,7 @@ export default function AssignEmployeeKppComponent() {
                             <form className="form-horizontal">
                                 <label className="control-label col-sm-5" htmlFor="kppObjectiveSearch">Enter KPP Objective No:</label>
                                 <div className="col-sm-4">
-                                    <input type="text" className="form-control" id="kppObjectiveNo" placeholder="Enter Objective No" value={kppObjectiveNo} onChange={(e) => advanceSearchEmployeeKpp(e)} />
+                                    <input type="text" className="form-control" id="kppObjectiveNo" placeholder="Enter Objective No" value={kppObjectiveNo} onChange={(e) => searchKPPObjectiveNoPaging(e)} />
                                 </div>
                             </form>
 
@@ -362,6 +404,12 @@ export default function AssignEmployeeKppComponent() {
                             </tbody>
                         </table>
                         : <h3>All Kpp Set to Employee</h3>}
+                        <PaginationComponent
+                                currentPage={currentPage}
+                                totalPages={dataPageable.totalPages || 10}
+                                onPageChange={handlePageChange}
+                                onItemsPerPageChange={handleItemsPerPageChange}
+                            />
                 </div>
 
             </div>
@@ -399,7 +447,7 @@ export default function AssignEmployeeKppComponent() {
                                         (kpp, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={kpp.kppId}>
                                                 <td className="text-center">{index + 1}</td>
-                                                <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => deleteKPPDetailsForEmployee(kpp.kppId,kpp.kppOverallTarget,kpp.kppOverallWeightage)}>Remove</button></td>
+                                                <td className="text-center"> <button type="submit" className="btn btn-info" onClick={(e) => deleteKPPDetailsForEmployee(kpp.kppId, kpp.kppOverallTarget, kpp.kppOverallWeightage)}>Remove</button></td>
                                                 <td className="text-justify">{kpp.kppObjectiveNo}</td>
                                                 <td className="text-justify">{kpp.kppObjective}</td>
                                                 <td className="text-justify">{kpp.kppPerformanceIndi}</td>
