@@ -74,11 +74,12 @@ export default function ComplaintTypeComponent() {
 
         // for employee except GM Role
         ComplaintTypeService.getAllComplaintTypeDepartments().then((res) => {
+            console.log(res.data)
             setCompDepartments(res.data);
-            setCompDeptId(res.data?.[0].deptId)
+           setCompDeptId(res.data?.[0]?.deptId)
         });
 
-        DesignationService.getAllDepartmentDetails().then((res) => {
+        DesignationService.ddAllDepartmentDetails().then((res) => {
             setDepartments(res.data);
         });
  
@@ -86,12 +87,23 @@ export default function ComplaintTypeComponent() {
 
 
     const handleCompDepartmentChange = (value) => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         if (value == "Select Department Name") {
             value = null;
            
-            ComplaintTypeService.getComplaintTypeDetailsByPaging().then((res) => {
+            ComplaintTypeService.getComplaintTypeDetailsByPaging(data).then((res) => {
+                if (res.data.success) {
+                    setIsSuccess(true);
                 setComplaintTypes(res.data.responseData.content);
-            });
+                setDataPageable(res.data.responseData);
+            }
+            else {
+                setIsSuccess(false);
+            }
+            },[currentPage, itemsPerPage]);
     
         }
         setCompDeptId(value)
@@ -210,7 +222,7 @@ export default function ComplaintTypeComponent() {
                             <label className="control-label col-sm-5" htmlFor="deptNameSearch"> Select Department Name:</label>
                             <div className="col-sm-6">
                             <select className="form-control" id="empTypeId" onChange={(e) => handleCompDepartmentChange(e.target.value)}>
-                            <option>Select Department Name</option>
+                          
                         {
                             compDepartments.map(
                                 compDepartment =>

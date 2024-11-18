@@ -84,18 +84,22 @@ export default function DesignationComponent() {
         e.preventDefault()
         let statusCd = 'A';
         let designation = { deptId, desigName, remark, statusCd };
-
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         DesignationService.saveDesignationDetails(designation).then(res => {
-            DesignationService.getDesignationDetailsByPaging().then((res) => {
+            DesignationService.getDesignationDetailsByPaging(data).then((res) => {
                 if (res.data.success) {
                     setIsSuccess(true);
                     setDesignations(res.data.responseData.content);
+                    setDataPageable(res.data.responseData);
                 }
                 else {
                     setIsSuccess(false);
                 }
 
-            });
+            }, [currentPage, itemsPerPage]);
 
         }
         );

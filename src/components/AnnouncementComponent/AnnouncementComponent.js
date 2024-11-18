@@ -186,10 +186,13 @@ export default function AnnouncementComponent() {
 
     const saveAnnouncement = (e) => {
         e.preventDefault()
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         let statusCd = 'A';
         let announStatus = 'Pending'
         let employeeId = Cookies.get('empId');
-
         let announCreatedByEmpId = Cookies.get('empId')
         let announCreatedByEmpEId = Cookies.get('empEId')
         let announCreatedByEmpName = Cookies.get('empFirstName') + ' ' + Cookies.get('empMiddleName') + ' ' + Cookies.get('empLastName')
@@ -204,17 +207,17 @@ export default function AnnouncementComponent() {
 
         AnnouncementService.saveAnnouncementDetails(announcement).then(res => {
 
-            AnnouncementService.getAnnouncementByPaging().then((res) => {
+            AnnouncementService.getAnnouncementByPaging(data).then((res) => {
                 if (res.data.success) {
                     setIsSuccess(true);
                     setAnnouncements(res.data.responseData.content);
-
+                    setDataPageable(res.data.responseData);
 
                 }
                 else {
                     setIsSuccess(false);
                 }
-            });
+            }, [currentPage, itemsPerPage]);
         }
         );
 
