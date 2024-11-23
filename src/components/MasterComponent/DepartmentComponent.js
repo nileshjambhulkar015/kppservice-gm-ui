@@ -16,7 +16,7 @@ export default function DepartmentComponent() {
 
     const [departments, setDepartments] = useState([])
 
-    
+
 
     const updatedDept = ['Human Resource', 'General Manager'];
     const [roles, setRoles] = useState([])
@@ -27,7 +27,7 @@ export default function DepartmentComponent() {
     const [updateDeptAlert, setUpdateDeptAlert] = useState(false);
 
     const [isSuccess, setIsSuccess] = useState(true)
-
+    const [responseMessage, setResponseMessage] = useState('')
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -63,9 +63,9 @@ export default function DepartmentComponent() {
                 setIsSuccess(true);
                 setDepartments(res.data.responseData.content);
                 setDataPageable(res.data.responseData);
-
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
 
@@ -76,17 +76,24 @@ export default function DepartmentComponent() {
 
     //search department by it's name
     const searchDeptName = (e) => {
+        let deptName = e.target.value
+        const data = {
+            currentPage,
+            itemsPerPage,
+            deptName
+        }
         setDeptNameSearch(e.target.value)
-        DepartmentService.getDepartmentDetailsByDeptNamePaging(e.target.value).then((res) => {
+        DepartmentService.getDepartmentDetailsByDeptNamePaging(data).then((res) => {
 
             if (res.data.success) {
                 setIsSuccess(true);
                 setDepartments(res.data.responseData.content?.filter((item) => item.roleId !== 1));
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
-        });
+        }, [currentPage, itemsPerPage]);
     }
 
     const saveDepartment = (e) => {
@@ -108,10 +115,11 @@ export default function DepartmentComponent() {
                     setDataPageable(res.data.responseData);
                 }
                 else {
+                    setResponseMessage(res.data.responseMessage)
                     setIsSuccess(false);
                 }
 
-            });
+            }, [currentPage, itemsPerPage]);
             setSaveDepatmentAlert(false);
 
         }
@@ -148,10 +156,11 @@ export default function DepartmentComponent() {
                         setDataPageable(res.data.responseData);
                     }
                     else {
+                        setResponseMessage(res.data.responseMessage)
                         setIsSuccess(false);
                     }
 
-                });
+                }, [currentPage, itemsPerPage]);
             }
             );
 
@@ -181,10 +190,11 @@ export default function DepartmentComponent() {
                     setDataPageable(res.data.responseData);
                 }
                 else {
+                    setResponseMessage(res.data.responseMessage)
                     setIsSuccess(false);
                 }
 
-            });
+            }, [currentPage, itemsPerPage]);
 
         }
 
@@ -268,7 +278,7 @@ export default function DepartmentComponent() {
                                     </tbody>
                                 </table>
 
-                                : <h4>Department name is not available</h4>}
+                                : <h4>{responseMessage}</h4>}
                             <PaginationComponent
                                 currentPage={currentPage}
                                 totalPages={dataPageable.totalPages || 10}

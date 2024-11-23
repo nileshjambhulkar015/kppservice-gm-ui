@@ -4,6 +4,7 @@ import CumulativeService from "../../services/CumulativeService";
 import Cookies from 'js-cookie';
 import { BASE_URL_API } from "../../services/URLConstants";
 import EmployeeService from "../../services/EmployeeService";
+import PaginationComponent from "../PaginationComponent/PaginationComponent";
 export default function SingleHODCumulativeComponent() {
 
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function SingleHODCumulativeComponent() {
     const [sumOfEmployeeRatings, setSumOfEmployeeRatings] = useState()
     const [sumOfHodRatings, setSumOfHodRatings] = useState()
     const [sumOfGMRatings, setSumOfGMRatings] = useState()
-
+    const [responseMessage, setResponseMessage] = useState('')
     const [cummulativeRatings, setCummulativeRatings] = useState()
     const [avgCummulativeRatings, setAvgCummulativeRatings] = useState()
     const [isSuccess, setIsSuccess] = useState(true)
@@ -30,14 +31,32 @@ export default function SingleHODCumulativeComponent() {
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
 
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [dataPageable, setDataPageable] = useState([])
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        // Handle data fetching or any other logic here
+    };
+
+    // Handle items per page change
+    const handleItemsPerPageChange = (newItemsPerPage) => {
+        setItemsPerPage(newItemsPerPage);
+        setCurrentPage(1); // Reset to first page when items per page changes
+    };
+
     function clearDates() {
         document.getElementById("fromDate").value = "";
         document.getElementById("toDate").value = "";
     }
     const loadCumulativeData = () => {
-        CumulativeService.getSingleHODKppReportDetailsByPaging().then((res) => {
-
-
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        CumulativeService.getSingleHODKppReportDetailsByPaging(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setSumOfEmployeeRatings(res.data.responseData.sumOfEmployeeRatings)
@@ -51,6 +70,47 @@ export default function SingleHODCumulativeComponent() {
             }
             else {
                 alert("Kpp is not approved for month");
+                setResponseMessage(res.data.responseMessage)
+                setIsSuccess(false);
+            }
+
+        }, [currentPage, itemsPerPage]).catch((err) => {
+            alert(err.response.data.details)
+        });
+
+
+        //for employee basic details
+        EmployeeService.searchEmployeeById(Cookies.get('viewSingleHODIdForKppRatings')).then((res) => {
+            setEmpId(res.data.empId)
+            setEmpEId(res.data.empEId)
+            setEmpName(res.data.empFirstName + ' ' + res.data.empMiddleName + ' ' + res.data.empLastName)
+            setRoleName(res.data.roleName)
+            setDeptName(res.data.deptName)
+            setDesigName(res.data.desigName)
+        });
+
+    }
+
+    useEffect(() => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        CumulativeService.getSingleHODKppReportDetailsByPaging(data).then((res) => {
+            if (res.data.success) {
+                setIsSuccess(true);
+                setSumOfEmployeeRatings(res.data.responseData.sumOfEmployeeRatings)
+                setSumOfHodRatings(res.data.responseData.sumOfHodRatings)
+                setSumOfGMRatings(res.data.responseData.sumOfGMRatings)
+                setCummulativeRatings(res.data.responseData.cummulativeRatings)
+                setTotalMonths(res.data.responseData.totalMonths)
+                setAvgCummulativeRatings(res.data.responseData.avgCummulativeRatings)
+
+                setEmployees(res.data.responseData.employeeKppStatusResponses.content);
+            }
+            else {
+                //alert("Kpp is not approved for month");
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
 
@@ -69,14 +129,16 @@ export default function SingleHODCumulativeComponent() {
             setDesigName(res.data.desigName)
         });
 
-    }
-
-    useEffect(() => {
-        loadCumulativeData();
-    }, []);
+    }, [currentPage, itemsPerPage]);
 
     const getKPPDetailsByDate = (e) => {
-        CumulativeService.getSingleHODKppReportByDates(fromDate, toDate).then((res) => {
+        const data = {
+            currentPage,
+            itemsPerPage,
+            fromDate,
+            toDate
+        }
+        CumulativeService.getSingleHODKppReportByDates(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setSumOfEmployeeRatings(res.data.responseData.sumOfEmployeeRatings)
@@ -87,12 +149,11 @@ export default function SingleHODCumulativeComponent() {
                 setTotalMonths(res.data.responseData.totalMonths)
                 setEmployees(res.data.responseData.employeeKppStatusResponses.content);
             } else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
 
             }
-
-
-        });
+        }, [currentPage, itemsPerPage]);
 
     }
 
@@ -157,7 +218,7 @@ export default function SingleHODCumulativeComponent() {
 
             <h3 className="text-center">View HOD KPP Report</h3>
             <div className="form-group">
-                <form className="form-horizontal" enctype="multipart/form-data">
+                <form className="form-horizontal" encType="multipart/form-data">
                     <label className="control-label col-sm-1" htmlFor="deptNameSearch"> From Date:</label>
 
                     <div className="col-sm-2">
@@ -205,10 +266,10 @@ export default function SingleHODCumulativeComponent() {
                                             <td className="text-center">{employee.sumOfRatings}</td>
 
                                             <td className="text-center">
-                                            <div className="col-sm-3">
-                                            <a href={BASE_URL_API+`/report-evidence?empId=${employee.empId}&evMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
-                                            View</a>
-                                            </div>
+                                                <div className="col-sm-3">
+                                                    <a href={BASE_URL_API + `/report-evidence?empId=${employee.empId}&evMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
+                                                        View</a>
+                                                </div>
                                             </td>
                                             <td className="text-center">
                                                 <a href={BASE_URL_API + `/report/completed-hod-kpp-status?empId=${employee.empId}&ekppMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
@@ -224,7 +285,7 @@ export default function SingleHODCumulativeComponent() {
                                 <th className="text-right">Total</th>
                                 <td className="text-center"></td>
                                 <td className="text-center">{sumOfEmployeeRatings}</td>
-                                <td className="text-center">{sumOfHodRatings}</td>
+
                                 <td className="text-center">{sumOfGMRatings}</td>
                                 <td className="text-center"></td>
                                 <td className="text-center"></td>
@@ -246,7 +307,13 @@ export default function SingleHODCumulativeComponent() {
                         </tbody>
 
                     </table>
-                    : <h1>No Data Found</h1>}
+                    : <h1>{responseMessage}</h1>}
+                <PaginationComponent
+                    currentPage={currentPage}
+                    totalPages={dataPageable.totalPages || 10}
+                    onPageChange={handlePageChange}
+                    onItemsPerPageChange={handleItemsPerPageChange}
+                />
             </div>
 
 

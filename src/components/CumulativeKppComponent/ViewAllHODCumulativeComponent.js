@@ -11,7 +11,7 @@ export default function ViewAllHODCumulativeComponent() {
     const [toDate, setToDate] = useState('')
     const [isSuccess, setIsSuccess] = useState(true)
     const [employees, setEmployees] = useState([])
-
+    const [responseMessage, setResponseMessage] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [dataPageable, setDataPageable] = useState([])
@@ -27,11 +27,11 @@ export default function ViewAllHODCumulativeComponent() {
         setCurrentPage(1); // Reset to first page when items per page changes
     };
 
-    function clearDates(){
+    function clearDates() {
         document.getElementById("fromDate").value = "";
         document.getElementById("toDate").value = "";
     }
-    const loadCumulativeData = ()=>{
+    const loadCumulativeData = () => {
         const data = {
             currentPage,
             itemsPerPage
@@ -43,7 +43,8 @@ export default function ViewAllHODCumulativeComponent() {
                 setDataPageable(res.data.responseData);
             }
             else {
-                alert("Kpp is not approved for month");
+                //  alert("Kpp is not approved for month");
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
 
@@ -58,17 +59,25 @@ export default function ViewAllHODCumulativeComponent() {
 
 
     const getKPPDetailsByDate = (e) => {
-        CumulativeService.getOverallHODCumulativeByDates(fromDate, toDate).then((res) => {
+        const data = {
+            currentPage,
+            itemsPerPage,
+            fromDate,
+            toDate
+        }
+        CumulativeService.getOverallHODCumulativeByDates_ADMIN(data).then((res) => {
             if (res.data.success) {
-                setEmployees(res.data.responseData);
+                setEmployees(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
                 setIsSuccess(true);
             } else {
-              //  alert("Kpp is not found for month");
+                //  alert("Kpp is not found for month");
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
 
 
-        });
+        }, [currentPage, itemsPerPage]);
 
     }
 
@@ -78,7 +87,7 @@ export default function ViewAllHODCumulativeComponent() {
         navigate(`/viewSingleHODRatings`, { replace: true })
     }
 
-    function clearDates(){
+    function clearDates() {
         document.getElementById("fromDate").value = "";
         document.getElementById("toDate").value = "";
     }
@@ -100,65 +109,65 @@ export default function ViewAllHODCumulativeComponent() {
                     </div>
                 </form>
                 <button type="submit" className="btn btn-primary" onClick={(e) => getKPPDetailsByDate(fromDate, toDate)}>Search</button>
-                <button type="submit" className="btn btn-primary col-sm-offset-1" onClick={(e) =>{
+                <button type="submit" className="btn btn-primary col-sm-offset-1" onClick={(e) => {
                     loadCumulativeData();
-                    clearDates();   
-                       } }>Clear</button>
+                    clearDates();
+                }}>Clear</button>
             </div>
 
 
             <div className="col-sm-8">
-            {isSuccess?
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th className="text-center">Sr No</th>
-                            <th className="text-center">Employee Name</th>
-                            
-                            <th className="text-center">Department Name</th>
-                            <th className="text-center">Employee Designation</th>
-                            <th className="text-center">Total Ratings</th>
-                            <th className="text-center">Total Month</th>
-                            <th className="text-center">Average Cumulative</th>
-                            <th className="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            employees.map(
-                                (employee, index) =>   //index is inbuilt variable of map started with 0
-                                    <tr key={employee.empId}>
-                                        <td className="text-center">{index + 1}</td>
+                {isSuccess ?
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th className="text-center">Sr No</th>
+                                <th className="text-center">Employee Name</th>
+                                <th className="text-center">Employee Id</th>
+                                <th className="text-center">Department Name</th>
+                                <th className="text-center">Employee Designation</th>
+                                <th className="text-center">Total Ratings</th>
+                                <th className="text-center">Total Month</th>
+                                <th className="text-center">Average Cumulative</th>
+                                <th className="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                employees.map(
+                                    (employee, index) =>   //index is inbuilt variable of map started with 0
+                                        <tr key={employee.empId}>
+                                            <td className="text-center">{index + 1}</td>
 
-                                        <td className="text-center">{employee.empName}</td>
-                                        
-                                        <td className="text-center">{employee.deptName}</td>
-                                        <td className="text-center">{employee.desigName}</td>
-                                        <td className="text-center">{employee.totalHodKppRatings}</td>
-                                        <td className="text-center">{employee.totalMonths}</td>
-                                        <td className="text-center">{employee.avgTotalHodKppRatings}</td>
+                                            <td className="text-center">{employee.empName}</td>
+                                            <td className="text-center">{employee.empEId}</td>
+                                            <td className="text-center">{employee.deptName}</td>
+                                            <td className="text-center">{employee.desigName}</td>
+                                            <td className="text-center">{employee.totalHodKppRatings}</td>
+                                            <td className="text-center">{employee.totalMonths}</td>
+                                            <td className="text-center">{employee.avgTotalHodKppRatings}</td>
 
-                                        <td className="text-center">
+                                            <td className="text-center">
 
 
-                                            <button type="submit" className="btn btn-info" onClick={() => navigateToViewEmployeeRating(employee.empId)}>View Details</button>
+                                                <button type="submit" className="btn btn-info" onClick={() => navigateToViewEmployeeRating(employee.empId)}>View Details</button>
 
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
 
-                            )
+                                )
 
-                        }
-                    </tbody>
+                            }
+                        </tbody>
 
-                </table>
-                :<h1>No Data Found</h1>}
+                    </table>
+                    : <h1>{responseMessage}</h1>}
                 <PaginationComponent
-                currentPage={currentPage}
-                totalPages={dataPageable.totalPages || 10}
-                onPageChange={handlePageChange}
-                onItemsPerPageChange={handleItemsPerPageChange}
-            />
+                    currentPage={currentPage}
+                    totalPages={dataPageable.totalPages || 10}
+                    onPageChange={handlePageChange}
+                    onItemsPerPageChange={handleItemsPerPageChange}
+                />
             </div>
 
 

@@ -9,7 +9,7 @@ class CumulativeService {
     getEmployeeKppReportDetailsByPaging() {
         if (null != Cookies.get('empId')) {
 
-            return axios.get(BASE_URL_API+`/cumulative/employee-kpp-cumulative?empId=${Cookies.get('empId')}`)
+            return axios.get(BASE_URL_API + `/cumulative/employee-kpp-cumulative?empId=${Cookies.get('empId')}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -20,7 +20,7 @@ class CumulativeService {
     getEmployeeKppReportByDates(fromDate, toDate) {
         if (null != Cookies.get('empId')) {
 
-            return axios.get(BASE_URL_API+`/cumulative/employee-kpp-cumulative?fromDate=${fromDate}&toDate=${toDate}&empId=${Cookies.get('empId')}&page=0&size=1200`)
+            return axios.get(BASE_URL_API + `/cumulative/employee-kpp-cumulative?fromDate=${fromDate}&toDate=${toDate}&empId=${Cookies.get('empId')}&page=0&size=1200`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -32,8 +32,8 @@ class CumulativeService {
     // view previous months kpp 
     getOverallEmployeeCumulative(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?roleId=3&page=${data.currentPage-1}&size=${data.itemsPerPage}`)
-          //  return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?gmEmpId=${Cookies.get('empId')}&roleId=3`)
+            return axios.get(BASE_URL_API + `/cumulative/hod-cummulatve?roleId=3&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
+            //  return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?gmEmpId=${Cookies.get('empId')}&roleId=3`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -41,11 +41,22 @@ class CumulativeService {
     }
 
 
-    getOverallEmployeeCumulativeByDates(fromDate, toDate) {
+    getOverallEmployeeCumulativeByDates(data) {
         if (null != Cookies.get('empId')) {
-            
-            return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?fromDate=${fromDate}&toDate=${toDate}&gmEmpId=${Cookies.get('empId')}&roleId=3&page=0&size=1200`)
-            
+
+            return axios.get(BASE_URL_API + `/cumulative/hod-cummulatve?fromDate=${data.fromDate}&toDate=${data.toDate}&gmEmpId=${Cookies.get('empId')}&roleId=3&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
+
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+    }
+
+    getOverallEmployeeCumulativeByDates_ADMIN(data) {
+        if (null != Cookies.get('empId')) {
+
+            return axios.get(BASE_URL_API + `/cumulative/hod-cummulatve?fromDate=${data.fromDate}&toDate=${data.toDate}&roleId=3&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
+
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -55,11 +66,11 @@ class CumulativeService {
 
     //for all HOD
 
-    
+
     // view previous months kpp 
     getOverallHODCumulative(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?roleId=2&page=${data.currentPage-1}&size=${data.itemsPerPage}`)
+            return axios.get(BASE_URL_API + `/cumulative/hod-cummulatve?roleId=2&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
             //return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?gmEmpId=${Cookies.get('empId')}&roleId=2`)
         } else {
             alert("You need to login first")
@@ -68,18 +79,29 @@ class CumulativeService {
     }
 
 
-    getOverallHODCumulativeByDates(fromDate, toDate) {
+    getOverallHODCumulativeByDates(data) {
         if (null != Cookies.get('empId')) {
-            
-            return axios.get(BASE_URL_API+`/cumulative/hod-cummulatve?fromDate=${fromDate}&toDate=${toDate}&gmEmpId=${Cookies.get('empId')}&roleId=2&page=0&size=1200`)
-           
+
+            return axios.get(BASE_URL_API + `/cumulative/hod-cummulatve?fromDate=${data.fromDate}&toDate=${data.toDate}&gmEmpId=${Cookies.get('empId')}&roleId=2&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
+
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
-    
+    getOverallHODCumulativeByDates_ADMIN(data) {
+        if (null != Cookies.get('empId')) {
+
+            return axios.get(BASE_URL_API + `/cumulative/hod-cummulatve?fromDate=${data.fromDate}&toDate=${data.toDate}&roleId=2&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
+
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+    }
+
+
 
     //when HOD want to view single employee kpp ratings
 
@@ -87,7 +109,7 @@ class CumulativeService {
     getSingleEmployeeKppReportDetailsByPaging() {
         if (null != Cookies.get('empId')) {
 
-            return axios.get(BASE_URL_API+`/cumulative/employee-kpp-cumulative?empId=${Cookies.get('viewSingleEmpIdForKppRatings')}`)
+            return axios.get(BASE_URL_API + `/cumulative/employee-kpp-cumulative?empId=${Cookies.get('viewSingleEmpIdForKppRatings')}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -98,21 +120,7 @@ class CumulativeService {
     getSingleEmployeeKppReportByDates(fromDate, toDate) {
         if (null != Cookies.get('empId')) {
 
-            return axios.get(BASE_URL_API+`/cumulative/employee-kpp-cumulative?fromDate=${fromDate}&toDate=${toDate}&empId=${Cookies.get('viewSingleEmpIdForKppRatings')}&page=0&size=1200`)
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }
-    }
-
-
-//for HOD flow
-
-       // view previous months kpp 
-       getSingleHODKppReportDetailsByPaging() {
-        if (null != Cookies.get('empId')) {
-
-            return axios.get(BASE_URL_API+`/cumulative/employee-kpp-cumulative?empId=${Cookies.get('viewSingleHODIdForKppRatings')}`)
+            return axios.get(BASE_URL_API + `/cumulative/employee-kpp-cumulative?fromDate=${fromDate}&toDate=${toDate}&empId=${Cookies.get('viewSingleEmpIdForKppRatings')}&page=0&size=1200`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -120,10 +128,35 @@ class CumulativeService {
     }
 
     // view previous months kpp  bt from date and to date
-    getSingleHODKppReportByDates(fromDate, toDate) {
+    getSingleEmployeeKppReportByDates_ADMIN(data) {
         if (null != Cookies.get('empId')) {
 
-            return axios.get(BASE_URL_API+`/cumulative/employee-kpp-cumulative?fromDate=${fromDate}&toDate=${toDate}&empId=${Cookies.get('viewSingleHODIdForKppRatings')}&page=0&size=1200`)
+            return axios.get(BASE_URL_API + `/cumulative/employee-kpp-cumulative?fromDate=${data.fromDate}&toDate=${data.toDate}&empId=${Cookies.get('viewSingleEmpIdForKppRatings')}&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+    }
+
+
+    //for HOD flow
+
+    // view previous months kpp 
+    getSingleHODKppReportDetailsByPaging(data) {
+        if (null != Cookies.get('empId')) {
+
+            return axios.get(BASE_URL_API + `/cumulative/employee-kpp-cumulative?empId=${Cookies.get('viewSingleHODIdForKppRatings')}&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+    }
+
+    // view previous months kpp  bt from date and to date
+    getSingleHODKppReportByDates(data) {
+        if (null != Cookies.get('empId')) {
+
+            return axios.get(BASE_URL_API + `/cumulative/employee-kpp-cumulative?fromDate=${data.fromDate}&toDate=${data.toDate}&empId=${Cookies.get('viewSingleHODIdForKppRatings')}&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

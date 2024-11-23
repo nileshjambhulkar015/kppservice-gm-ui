@@ -8,15 +8,12 @@ export default function CompanyMasterComponent() {
     const [siteId, setSiteId] = useState('');
     const [siteName, setSiteName] = useState('');
     const [companyId, setCompanyId] = useState('');
-
     const [companyName, setCompanyName] = useState('');
     const [companyAddress, setCompanyAddress] = useState('')
     const [companyMbNo, setCompanyMbNo] = useState('')
     const [companyFinYear, setCompanyFinYear] = useState('')
-
     const [remark, setRemark] = useState('');
-
-
+    const [responseMessage, setResponseMessage] = useState('')
 
     const [regions, setRegions] = useState([])
     const [sites, setSites] = useState([])
@@ -43,19 +40,20 @@ export default function CompanyMasterComponent() {
         CompanyMasterService.getCompanyDetailsByPaging().then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
-            setCompanys(res.data.responseData.content);
-        }
-        else {
-            setIsSuccess(false);
-        }
+                setCompanys(res.data.responseData.content);
+            }
+            else {
+                setResponseMessage(res.data.responseMessage)
+                setIsSuccess(false);
+            }
         });
 
         SiteService.getAllRegions().then((res) => {
             setRegions(res.data);
-            setRegionId(res.data?.[0].regionId)
+            setRegionId(res.data?.[0]?.regionId)
 
-            let regionId = res.data?.[0].regionId;
-           
+            let regionId = res.data?.[0]?.regionId;
+
             SiteService.getSiteDetailsByRegionId(regionId).then((res1) => {
                 setSites(res1.data);
                 setSiteId(res1.data?.[0]?.siteId)
@@ -73,7 +71,7 @@ export default function CompanyMasterComponent() {
         SiteService.getSiteDetailsByRegionId(regionId).then((res1) => {
             setSites(res1.data);
             setSiteId(res1.data?.[0]?.siteId)
-          
+
         });
 
     };
@@ -114,7 +112,7 @@ export default function CompanyMasterComponent() {
 
         CompanyMasterService.getCompanyById(e).then(res => {
             let company = res.data;
-           
+
             setRegionId(company.regionId)
             setRegionName(company.regionName)
             setSiteId(company.siteId)
@@ -171,7 +169,7 @@ export default function CompanyMasterComponent() {
 
         if (window.confirm("Do you want to delete this Company ?")) {
 
-          
+
             CompanyMasterService.deleteCompanyById(e).then(res => {
                 CompanyMasterService.getCompanyDetailsByPaging().then((res) => {
                     if (res.data.success) {
@@ -181,12 +179,12 @@ export default function CompanyMasterComponent() {
                     else {
                         setIsSuccess(false);
                     }
-    
+
                 });
             }
             );
-                
-          
+
+
         } else {
             // User clicked Cancel
             console.log("User canceled the action.");

@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import { BASE_URL_API, LOGIN_UI_BASE_URL } from "../URLConstants";
 
-const BASE_URL = BASE_URL_API+"/region";
+const BASE_URL = BASE_URL_API + "/region";
 
 
 class RegionService {
@@ -30,9 +30,9 @@ class RegionService {
     }
 
     deleteRegionById(regionId) {
-       
+
         if (null != Cookies.get('empId')) {
-            return axios.delete(BASE_URL+`/?regionId=${regionId}`)
+            return axios.delete(BASE_URL + `/?regionId=${regionId}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -45,7 +45,7 @@ class RegionService {
     //at page load call all the region load all departments
     getRegionsByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/region/search?statusCd=A&page=0&size=1200&sort=regionName asc")
+            return axios.get(BASE_URL_API + "/region/search?statusCd=A&page=0&size=1200&sort=regionName asc")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -55,7 +55,7 @@ class RegionService {
 
     getRegionsById(regionId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/region?regionId=${regionId}`)
+            return axios.get(BASE_URL_API + `/region?regionId=${regionId}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -64,7 +64,7 @@ class RegionService {
 
     ddRegions(regionId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/region/dd-regions-regions`)
+            return axios.get(BASE_URL_API + `/region/dd-regions-regions`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

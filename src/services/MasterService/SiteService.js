@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import { BASE_URL_API, LOGIN_UI_BASE_URL } from "../URLConstants";
 
-const BASE_URL = BASE_URL_API+"/site";
+const BASE_URL = BASE_URL_API + "/site";
 
 
 class SiteService {
@@ -30,9 +30,9 @@ class SiteService {
     }
 
     deleteSiteById(siteId) {
-       
+
         if (null != Cookies.get('empId')) {
-            return axios.delete(BASE_URL+`/?siteId=${siteId}`)
+            return axios.delete(BASE_URL + `/?siteId=${siteId}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -54,19 +54,19 @@ class SiteService {
     //at page load call all the departments load all departments
     getSiteDetailsByPaging() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/site/search?statusCd=A&page=0&size=20&sort=site_name")
+            return axios.get(BASE_URL_API + "/site/search?statusCd=A&page=0&size=20&sort=site_name")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
         }
     }
 
-    
+
 
     //Get all regions present in site table for site form
     getRegionInDept() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/roles/department/role")
+            return axios.get(BASE_URL_API + "/roles/department/role")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -77,33 +77,33 @@ class SiteService {
     //Get all roles present in department table for designation form
     getAllRegions() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/site/dd-regions-sites")
+            return axios.get(BASE_URL_API + "/site/dd-regions-sites")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
         }
-       
+
     }
 
     //Get all sites present in department table from designation for KPP
     getSiteDetailsByRegionId(regionId) {
-  
+
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/site/dd-sites-sites?regionId=${regionId}`)  
+            return axios.get(BASE_URL_API + `/site/dd-sites-sites?regionId=${regionId}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
         }
-        
+
     }
 
     ddAllSites() {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+"/site/dd-all-sites")
+            return axios.get(BASE_URL_API + "/site/dd-all-sites")
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
-        }       
+        }
     }
 
 }

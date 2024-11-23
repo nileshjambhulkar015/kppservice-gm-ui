@@ -39,8 +39,8 @@ export default function ShowEmployeeForKppComponent() {
 
     const [regions, setRegions] = useState([])
     const [sites, setSites] = useState([])
-    
-    const[empFirstNameSearch, setEmpFirstNameSearch] = useState();
+
+    const [empFirstNameSearch, setEmpFirstNameSearch] = useState();
     const [isSuccess, setIsSuccess] = useState(true)
     const [empEIdSearch, setEmpEIdSearch] = useState('');
     const [empTypeId, setEmpTypeId] = useState('');
@@ -49,6 +49,7 @@ export default function ShowEmployeeForKppComponent() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [dataPageable, setDataPageable] = useState([])
+    const [responseMessage, setResponseMessage] = useState('')
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -61,14 +62,13 @@ export default function ShowEmployeeForKppComponent() {
         setCurrentPage(1); // Reset to first page when items per page changes
     };
 
-    useEffect(() => {
+    const getEmployeeKPPDetailsByPaging = () => {
+        setEmpEIdSearch('')
         const data = {
             currentPage,
             itemsPerPage
         }
         EmployeeKppsService.getEmployeeKPPDetailsByPaging(data).then((res) => {
-           
-
             if (res.data.success) {
                 setIsSuccess(true);
                 setEmployees(res.data.responseData.content);
@@ -76,6 +76,27 @@ export default function ShowEmployeeForKppComponent() {
 
             }
             else {
+                setResponseMessage(res.data.responseMessage)
+                setIsSuccess(false);
+            }
+        }, [currentPage, itemsPerPage]);
+    }
+
+
+    useEffect(() => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        EmployeeKppsService.getEmployeeKPPDetailsByPaging(data).then((res) => {
+            if (res.data.success) {
+                setIsSuccess(true);
+                setEmployees(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
+
+            }
+            else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
         });
@@ -108,7 +129,7 @@ export default function ShowEmployeeForKppComponent() {
 
     const searchEmployeeEId = (e) => {
         setEmpEIdSearch(e.target.value)
-        let empEId=e.target.value;
+        let empEId = e.target.value;
         const data = {
             currentPage,
             itemsPerPage,
@@ -122,6 +143,7 @@ export default function ShowEmployeeForKppComponent() {
                 setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
         }, [currentPage, itemsPerPage]);
@@ -129,7 +151,7 @@ export default function ShowEmployeeForKppComponent() {
 
 
     const navigateToAssignEmployee = (empId, empEId, roleId, deptId, desigId, reportingEmpId) => {
-       
+
         Cookies.set('empIdForKpp', empId);
         Cookies.set('empEIdForKpp', empEId);
         Cookies.set('empKppRoleId', roleId);
@@ -139,74 +161,86 @@ export default function ShowEmployeeForKppComponent() {
         navigate(`/assignEmployeeKpp`, { replace: true });
     }
 
-        // Advance search employee
-        const searchEmployeeDetails = (e) => {
+    // Advance search employee
+    const searchEmployeeDetails = (e) => {
 
-            e.preventDefault()
-            let advEmployeeSearch = { roleId, deptId, regionId,siteId,companyId,empTypeId };
-          
-            EmployeeService.advanceSearchEmployee(advEmployeeSearch).then(res => {
-                setEmployees(res.data.responseData.content);
-             
-            }
-            );
+        e.preventDefault()
+
+        let advEmployeeSearch = { roleId, deptId, regionId, siteId, companyId, empTypeId };
+        const data = {
+            currentPage,
+            itemsPerPage,
+            advEmployeeSearch
         }
-       
+        EmployeeService.advanceSearchEmployee(data).then(res => {
+            if (res.data.success) {
+                setIsSuccess(true);
+                setEmployees(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
+            }
+            else {
+                setResponseMessage(res.data.responseMessage)
+                setIsSuccess(false);
+            }
 
-  //Employee advance search
+        }, [currentPage, itemsPerPage]);
+    }
 
-      //for role , department and designation
-      const handleRoleIdChange = (value) => {
-        if(value=="Select Role"){
-            value=null;
+
+    //Employee advance search
+
+    //for role , department and designation
+    const handleRoleIdChange = (value) => {
+        if (value == "Select Role") {
+            value = null;
         }
         setRoleId(value)
     }
 
-  const handleEmployeeTypeChange = (value) => {
-    if(value=="Select Employee Type"){
-        value=null;
+    const handleEmployeeTypeChange = (value) => {
+        if (value == "Select Employee Type") {
+            value = null;
+        }
+        setEmpTypeId(value)
     }
-    setEmpTypeId(value)
-}
 
-const handleDepartmentChange = (value) => {
-    if(value=="Select Department"){
-        value=null;
+    const handleDepartmentChange = (value) => {
+        if (value == "Select Department") {
+            value = null;
+        }
+        setDeptId(value)
     }
-    setDeptId(value)
-}
 
-//for role change
-const onRegionChangeHandler = (value) => {
-    if(value=="Select Region"){
-        value=null;
-    }
-    setRegionId(value);
-};
+    //for role change
+    const onRegionChangeHandler = (value) => {
+        if (value == "Select Region") {
+            value = null;
+        }
+        setRegionId(value);
+    };
 
-  //for site change
-  const onSiteChangeHandler = (value) => {
-    if(value=="Select Site"){
-        value=null;
-    }
-    setSiteId(value);
-};
+    //for site change
+    const onSiteChangeHandler = (value) => {
+        if (value == "Select Site") {
+            value = null;
+        }
+        setSiteId(value);
+    };
 
-     //for Company change
-     const onCompanyChangeHandler = (value) => {
-        if(value=="Select Company"){
-            value=null;
+    //for Company change
+    const onCompanyChangeHandler = (value) => {
+        if (value == "Select Company") {
+            value = null;
         }
         setCompanyId(value);
     };
 
 
     return (
-        
+
         <div className="row">
             <h3 className="text-center">Assign KPP to  New Employee</h3>
-            
+
             <div className="col-md-11">
                 <div className="row">
                     <div className="col-sm-6">
@@ -217,71 +251,72 @@ const onRegionChangeHandler = (value) => {
                                     <input type="text" className="form-control" id="empEIdSearch" placeholder="Enter Employee Id" value={empEIdSearch} onChange={(e) => searchEmployeeEId(e)} />
                                 </div>
                             </form>
-                           
+
                         </div>
                     </div>
                     <div className="col-sm-5">
                         <button type="button" className="btn btn-primary col-sm-offset-4" data-toggle="modal" data-target="#advanceSearchEmployee">Advance Search</button>
+                        <button type="button" className="btn btn-primary col-sm-offset-1" onClick={() => getEmployeeKPPDetailsByPaging()}>Clear Search</button>
                     </div>
                 </div>
-                
+
             </div>
             <div className="col-md-1"></div>
 
             <div className="col-sm-10">
-            {isSuccess?
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th className="text-center">Sr No</th>
-                            <th className="text-center">Employee Name</th>
-                            <th className="text-center">Employee Id</th>
-                            <th className="text-center">Role Name</th>
-                            <th className="text-center">Department Name</th>
-                            <th className="text-center">Designation Name</th>
-                            <th className="text-center">Mobile No</th>
-                            <th className="text-center">Overall Target</th>
-                            <th className="text-center">Overall Weightage</th>
-                            <th className="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            employees.map(
-                                (employee, index) =>   //index is inbuilt variable of map started with 0
-                                    <tr key={employee.empId}>
-                                        <td className="text-center">{index + 1}</td>
-                                        <td className="text-justify">{employee.empFirstName + ' ' + employee.empMiddleName + ' ' + employee.empLastName}</td>
-                                        <td className="text-center">{employee.empEId}</td>
-                                        <td className="text-center">{employee.roleName}</td>
-                                        <td className="text-center">{employee.deptName}</td>
-                                        <td className="text-center">{employee.desigName}</td>
-                                        <td className="text-center">{employee.empMobileNo}</td>
+                {isSuccess ?
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th className="text-center">Sr No</th>
+                                <th className="text-center">Employee Name</th>
+                                <th className="text-center">Employee Id</th>
+                                <th className="text-center">Role Name</th>
+                                <th className="text-center">Department Name</th>
+                                <th className="text-center">Designation Name</th>
+                                <th className="text-center">Mobile No</th>
+                                <th className="text-center">Overall Target</th>
+                                <th className="text-center">Overall Weightage</th>
+                                <th className="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                employees.map(
+                                    (employee, index) =>   //index is inbuilt variable of map started with 0
+                                        <tr key={employee.empId}>
+                                            <td className="text-center">{index + 1}</td>
+                                            <td className="text-justify">{employee.empFirstName + ' ' + employee.empMiddleName + ' ' + employee.empLastName}</td>
+                                            <td className="text-center">{employee.empEId}</td>
+                                            <td className="text-center">{employee.roleName}</td>
+                                            <td className="text-center">{employee.deptName}</td>
+                                            <td className="text-center">{employee.desigName}</td>
+                                            <td className="text-center">{employee.empMobileNo}</td>
 
-                                        <td className="text-center">{employee.totalOverallTarget}</td>
-                                        <td className="text-center">{employee.totalOverallWeightage}</td>
+                                            <td className="text-center">{employee.totalOverallTarget}</td>
+                                            <td className="text-center">{employee.totalOverallWeightage}</td>
 
-                                        <td className="text-center"> <button type="submit" className="btn btn-info" onClick={() =>
-                                            navigateToAssignEmployee(employee.empId, employee.empEId, employee.roleId, employee.deptId, employee.desigId, employee.reportingEmpId)
-                                        }>Assign</button></td>
-                                    </tr>
-                            )
-                        }
-                    </tbody>
-                    
-                </table>  :<h4>Employee Id is not available</h4>}
+                                            <td className="text-center"> <button type="submit" className="btn btn-info" onClick={() =>
+                                                navigateToAssignEmployee(employee.empId, employee.empEId, employee.roleId, employee.deptId, employee.desigId, employee.reportingEmpId)
+                                            }>Assign</button></td>
+                                        </tr>
+                                )
+                            }
+                        </tbody>
+
+                    </table> : <h4>{responseMessage}</h4>}
                 <PaginationComponent
-                currentPage={currentPage}
-                totalPages={dataPageable.totalPages || 10}
-                onPageChange={handlePageChange}
-                onItemsPerPageChange={handleItemsPerPageChange}
-            />
+                    currentPage={currentPage}
+                    totalPages={dataPageable.totalPages || 10}
+                    onPageChange={handlePageChange}
+                    onItemsPerPageChange={handleItemsPerPageChange}
+                />
             </div>
 
-            
+
             {/* Modal for Advance search for employee details */}
             <div className="modal fade" id="advanceSearchEmployee" role="dialog">
-                <form className="form-horizontal"  encType="multipart/form-data">
+                <form className="form-horizontal" encType="multipart/form-data">
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -296,10 +331,10 @@ const onRegionChangeHandler = (value) => {
                                         <div className="col-sm-3">
                                             <div className="form-group">
                                                 <select className="form-control" id="empTypeId" defaultValue={null} onChange={(e) => handleEmployeeTypeChange(e.target.value)}>
-                                                <option>Select Employee Type</option>
-                                                
+                                                    <option>Select Employee Type</option>
+
                                                     {
-                                                     
+
                                                         empTypes.map(
                                                             empType =>
                                                                 <option key={empType.empTypeId} value={empType.empTypeId}>{empType.empTypeName}</option>
@@ -315,9 +350,9 @@ const onRegionChangeHandler = (value) => {
                                         <label className="control-label col-sm-3" htmlFor="regionName">Role :</label>
                                         <div className="col-sm-3">
                                             <div className="form-group">
-                                                <select className="form-control" id="roleId" defaultValue={null}  onChange={(e) => handleRoleIdChange(e.target.value)}>
-                                                <option>Select Role</option>    
-                                                {
+                                                <select className="form-control" id="roleId" defaultValue={null} onChange={(e) => handleRoleIdChange(e.target.value)}>
+                                                    <option>Select Role</option>
+                                                    {
                                                         roles.map(
                                                             role =>
                                                                 <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
@@ -333,7 +368,7 @@ const onRegionChangeHandler = (value) => {
                                         <div className="col-sm-3">
                                             <div className="form-group">
                                                 <select className="form-control" id="deptId" defaultValue={null} onChange={(e) => handleDepartmentChange(e.target.value)}>
-                                                <option>Select Department</option>
+                                                    <option>Select Department</option>
                                                     {
                                                         departments.map(
                                                             department =>
@@ -352,8 +387,8 @@ const onRegionChangeHandler = (value) => {
                                         <div className="col-sm-3">
                                             <div className="form-group">
                                                 <select className="form-control" id="regionId" defaultValue={null} onChange={(e) => onRegionChangeHandler(e.target.value)}>
-                                                <option>Select Region</option>   
-                                                {
+                                                    <option>Select Region</option>
+                                                    {
                                                         regions.map(
                                                             region =>
                                                                 <option key={region.regionId} value={region.regionId}>{region.regionName}</option>
@@ -367,16 +402,16 @@ const onRegionChangeHandler = (value) => {
                                         <label className="control-label col-sm-2" htmlFor="siteName">Site:</label>
                                         <div className="col-sm-3">
                                             <div className="form-group">
-                                            <select className="form-control" id="regionId" defaultValue={null} onChange={(e) => onSiteChangeHandler(e.target.value)}>
-                                            <option>Select Site</option>
-                                            {
-                                                sites.map(
-                                                    site =>
-                                                        <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
-                                                )
-                                            };
+                                                <select className="form-control" id="regionId" defaultValue={null} onChange={(e) => onSiteChangeHandler(e.target.value)}>
+                                                    <option>Select Site</option>
+                                                    {
+                                                        sites.map(
+                                                            site =>
+                                                                <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
+                                                        )
+                                                    };
 
-                                        </select>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -386,16 +421,16 @@ const onRegionChangeHandler = (value) => {
                                         <label className="control-label col-sm-3" htmlFor="companyName">Company Name:</label>
                                         <div className="col-sm-5">
                                             <div className="form-group">
-                                            <select className="form-control" id="companyId" defaultValue={null} onChange={(e) => onCompanyChangeHandler(e.target.value)}>
-                                            <option>Select Company</option>
-                                            {
-                                                compnays.map(
-                                                    company =>
-                                                        <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
-                                                )
-                                            };
+                                                <select className="form-control" id="companyId" defaultValue={null} onChange={(e) => onCompanyChangeHandler(e.target.value)}>
+                                                    <option>Select Company</option>
+                                                    {
+                                                        compnays.map(
+                                                            company =>
+                                                                <option key={company.companyId} value={company.companyId}>{company.companyName}</option>
+                                                        )
+                                                    };
 
-                                        </select>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -405,7 +440,7 @@ const onRegionChangeHandler = (value) => {
 
                             </div>
                             <div className="modal-footer">
-                                
+
                                 <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e) => searchEmployeeDetails(e)}>Search</button>
                                 <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>

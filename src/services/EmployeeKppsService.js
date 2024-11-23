@@ -55,7 +55,7 @@ class EmployeeKppsService {
     //Assign employee kpp for assign kpp page
     assignEmployeeKppDetails(emplyeeKpp) {
         if (null != Cookies.get('empId')) {
-           
+
             return axios.post(BASE_URL_API + "/employee-kpp/assign-kpp", emplyeeKpp)
         } else {
             alert("You need to login first")
@@ -78,7 +78,7 @@ class EmployeeKppsService {
     //show employee KPP
     getEmployeeKPPDetailsByPaging(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + `/employee-kpp?statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=emp.emp_fname`);
+            return axios.get(BASE_URL_API + `/employee-kpp?statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=emp.emp_fname`);
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -87,7 +87,7 @@ class EmployeeKppsService {
 
     getEmployeeKPPDetailsByEmpEIdPaging(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + `/employee-kpp?empEId=${data.empEId}&statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=emp.emp_name`)
+            return axios.get(BASE_URL_API + `/employee-kpp?empEId=${data.empEId}&statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=emp.emp_name`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

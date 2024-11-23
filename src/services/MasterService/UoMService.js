@@ -19,9 +19,9 @@ class UoMService {
     }
 
     deleteUOMById(uomId) {
-       
+
         if (null != Cookies.get('empId')) {
-            return axios.delete(BASE_URL+`/?uomId=${uomId}`)
+            return axios.delete(BASE_URL + `/?uomId=${uomId}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -29,7 +29,7 @@ class UoMService {
 
     }
 
-   
+
 
     updateUoM(uom) {
         if (null != Cookies.get('empId')) {
@@ -45,7 +45,7 @@ class UoMService {
     //at page load call all the region load all departments
     getUoMByPaging(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + `/uom/search?statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=regionName asc`)
+            return axios.get(BASE_URL_API + `/uom/search?statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=regionName asc`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

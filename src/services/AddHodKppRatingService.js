@@ -6,10 +6,10 @@ class AddHodKppRatingService {
 
 
     getKPPDetails(empId) {
-     
+
         if (null != Cookies.get('empId')) {
 
-            return axios.get(BASE_URL_API+`/hod-approval/employee-kpp?empId=${empId}&statusCd=A`)
+            return axios.get(BASE_URL_API + `/hod-approval/employee-kpp?empId=${empId}&statusCd=A`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -17,20 +17,20 @@ class AddHodKppRatingService {
 
     }
 
-    saveEmployeeKppDetails(todos){
-     
+    saveEmployeeKppDetails(todos) {
+
         if (null != Cookies.get('empId')) {
-            return axios.put(BASE_URL_API+"/employee-key-perform-parameter",todos)
+            return axios.put(BASE_URL_API + "/employee-key-perform-parameter", todos)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
-        }  
+        }
     }
 
-   
+
     completeEmpKppGM(empId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/gm-approval/report?empId=${empId}&statusCd=A`)
+            return axios.get(BASE_URL_API + `/gm-approval/report?empId=${empId}&statusCd=A`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -38,7 +38,7 @@ class AddHodKppRatingService {
 
     }
 
-  
+
 }
 
 

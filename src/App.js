@@ -31,7 +31,7 @@ import ComplaintTypeComponent from "./components/MasterComponent/ComplaintTypeCo
 import OthersPendingComplaintComponent from './components/ComplaintManagementComponent/OthersPendingComplaintComponent';
 import OthersResolveComplaintComponent from './components/ComplaintManagementComponent/OthersResolveComplaintComponent';
 import OthersInProgressComplaintComponent from './components/ComplaintManagementComponent/OthersInProgressComplaintComponent';
-import MeetingMasterComponent from "./components/MeetingMasterComponent/MeetingMasterComponent";
+
 
 
 import AnnouncementTypeComponent from "./components/MasterComponent/AnnouncementTypeComponent";
@@ -62,83 +62,83 @@ function App() {
           </div>
           <ul className="nav navbar-nav">
 
-          <li><Link to="/keyparemeter">Key Indicator Master</Link></li>
-                 
-            
-          <li className="dropdown">
-          <a className="dropdown-toggle" data-toggle="dropdown" href="#">Employee Master
-          <span className="caret"></span></a>
-          <ul className="dropdown-menu">           
-          <li><Link to="/employee">Employee Master</Link></li>
-          
-          <li><Link to="/transferemployeetohod">Transfer Employee to Other HOD</Link></li>        
-          </ul>
-        </li>
+            <li><Link to="/keyparemeter">Key Indicator Master</Link></li>
 
-
-        <li className="dropdown">
-        <a className="dropdown-toggle" data-toggle="dropdown" href="#">Employee KPP Master
-        <span className="caret"></span></a>
-        <ul className="dropdown-menu">           
-       
-        <li><Link to="/showEmployeeForKpp">Assign Employee Kpp</Link></li>
-            
-        </ul>
-      </li>
 
             <li className="dropdown">
-            <a className="dropdown-toggle" data-toggle="dropdown" href="#">KPP Rating Master
-            <span className="caret"></span></a>
-            <ul className="dropdown-menu">           
-            <li><Link to="/allHodKppStatus">Add Ratings for HOD KPP</Link></li>
-            <li><Link to="/allEmployeeKppStatus">Add Ratings for Employee KPP</Link></li>        
-            </ul>
-          </li>
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#">Employee Master
+                <span className="caret"></span></a>
+              <ul className="dropdown-menu">
+                <li><Link to="/employee">Employee Master</Link></li>
 
-         
+                <li><Link to="/transferemployeetohod">Transfer Employee to Other HOD</Link></li>
+              </ul>
+            </li>
 
-          
-          <li className="dropdown">
-          <a className="dropdown-toggle" data-toggle="dropdown" href="#">Cumulative Master
-          <span className="caret"></span></a>
-          <ul className="dropdown-menu">
-          <li><Link to="/viewHODCumulativeKpp">View HOD Cumulative Ratings</Link></li>
-          <li><Link to="/viewEmployeeCumulativeKpp">View Employee Cumulative Ratings</Link></li>    
-          
-          </ul>
-        </li>
 
-        <li className="dropdown">
-        <a className="dropdown-toggle" data-toggle="dropdown" href="#">Complaint Management
-          <span className="caret"></span></a>
-        <ul className="dropdown-menu">
-          
-          <li><Link to="/othersPendingComplaint">Other's Pending Complaint</Link></li>
-          <li><Link to="/othersInProgressComplaint">Other's In Progress Complaint</Link></li>
-          <li><Link to="/othersResolveComplaint">Other's Resolve Complaint</Link></li>
-        </ul>
-      </li>
-      <li><Link to="/announcement">Announcement Master</Link></li>
-          
-        <li className="dropdown">
-        <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
-        <span className="caret"></span></a>
-        <ul className="dropdown-menu">
-        <li><Link to="/role">Role Master</Link></li>
-        <li><Link to="/department">Department Master</Link></li>
-        <li><Link to="/designation">Designation Master</Link></li>
-        <li><Link to="/uomMaster">UoM Master</Link></li>
-        <li><Link to="/empTypeMaster">Employee Type Master</Link></li>
-        <li><Link to="/complaintTypeMaster">Complaint Type Master</Link></li>
-        <li><Link to="/announcementType">Announcement Type Master</Link></li>
-        <li><Link to="/regionMaster">Region Master</Link></li>
-        <li><Link to="/siteMaster">Sites Master</Link></li>
-        <li><Link to="/companyMaster">Company Master</Link></li>
+            <li className="dropdown">
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#">Employee KPP Master
+                <span className="caret"></span></a>
+              <ul className="dropdown-menu">
 
-    
-        </ul>
-      </li>
-     
+                <li><Link to="/showEmployeeForKpp">Assign Employee Kpp</Link></li>
+
+              </ul>
+            </li>
+
+            <li className="dropdown">
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#">KPP Rating Master
+                <span className="caret"></span></a>
+              <ul className="dropdown-menu">
+                <li><Link to="/allHodKppStatus">Add Ratings for HOD KPP</Link></li>
+                <li><Link to="/allEmployeeKppStatus">Add Ratings for Employee KPP</Link></li>
+              </ul>
+            </li>
+
+
+
+
+            <li className="dropdown">
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#">Cumulative Master
+                <span className="caret"></span></a>
+              <ul className="dropdown-menu">
+                <li><Link to="/viewHODCumulativeKpp">View HOD Cumulative Ratings</Link></li>
+                <li><Link to="/viewEmployeeCumulativeKpp">View Employee Cumulative Ratings</Link></li>
+
+              </ul>
+            </li>
+
+            <li className="dropdown">
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#">Complaint Management
+                <span className="caret"></span></a>
+              <ul className="dropdown-menu">
+
+                <li><Link to="/othersPendingComplaint">Other's Pending Complaint</Link></li>
+                <li><Link to="/othersInProgressComplaint">Other's In Progress Complaint</Link></li>
+                <li><Link to="/othersResolveComplaint">Other's Resolve Complaint</Link></li>
+              </ul>
+            </li>
+            <li><Link to="/announcement">Announcement Master</Link></li>
+
+            <li className="dropdown">
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#">Master Records
+                <span className="caret"></span></a>
+              <ul className="dropdown-menu">
+                <li><Link to="/role">Role Master</Link></li>
+                <li><Link to="/department">Department Master</Link></li>
+                <li><Link to="/designation">Designation Master</Link></li>
+                <li><Link to="/uomMaster">UoM Master</Link></li>
+                <li><Link to="/empTypeMaster">Employee Type Master</Link></li>
+                <li><Link to="/complaintTypeMaster">Complaint Type Master</Link></li>
+                <li><Link to="/announcementType">Announcement Type Master</Link></li>
+                <li><Link to="/regionMaster">Region Master</Link></li>
+                <li><Link to="/siteMaster">Sites Master</Link></li>
+                <li><Link to="/companyMaster">Company Master</Link></li>
+
+
+              </ul>
+            </li>
+
           </ul>
           <ul className="nav navbar-nav navbar-right">
             <li><a href="#">Welcome: {Cookies.get('empEId')}</a></li>
@@ -147,8 +147,8 @@ function App() {
         </div>
       </nav>
       <Routes>
-      <Route exact path="/" element={<RoleComponent />}></Route>
-   
+        <Route exact path="/" element={<RoleComponent />}></Route>
+
         <Route exact path="/newEmployee" element={<AddNewEmployeeComponent />}></Route>
         <Route exact path="/role" element={<RoleComponent />}></Route>
         <Route exact path="/department" element={<DepartmentComponent />}></Route>
@@ -161,27 +161,27 @@ function App() {
         <Route exact path="/complaintTypeMaster" element={<ComplaintTypeComponent />}></Route>
         <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
         <Route exact path="/employee" element={<MainEmployeeComponent />}></Route>
-        <Route exact path="/showEmployeeForKpp" element={<ShowEmployeeForKppComponent / >}></Route>
-      
+        <Route exact path="/showEmployeeForKpp" element={<ShowEmployeeForKppComponent />}></Route>
+
         <Route exact path="/allHodKppStatus" element={<AllHodKppStatusComponent />}></Route>
         <Route exact path="/addHodKppRating" element={<HODUpdateKppRatingsComponent />}></Route>
-        
+
         <Route exact path="/allEmployeeKppStatus" element={<AllEmployeesKppComponent />}></Route>
         <Route exact path="/addEmployeeKppRating" element={<EmplyeeUpdateKppRatingsComponent />}></Route>
         <Route exact path="/viewEmployeeCumulativeKpp" element={<ViewAllEmployeeCumulativeComponent />}></Route>
-        
+
 
         <Route exact path="/assignEmployeeKpp" element={<AssignEmployeeKppComponent />}></Route>
         <Route exact path="/viewSingleEmployeeRatings" element={<SingleEmployeeCumulativeComponent />}></Route>
         <Route exact path="/viewSingleHODRatings" element={<SingleHODCumulativeComponent />}></Route>
         <Route exact path="/transferemployeetohod" element={<ViewAllEmpTransferToOtherHODComponent />}></Route>
         <Route exact path="/viewHODCumulativeKpp" element={<ViewAllHODCumulativeComponent />}></Route>
-        
+
         <Route exact path="/othersPendingComplaint" element={<OthersPendingComplaintComponent />}></Route>
         <Route exact path="/othersInProgressComplaint" element={<OthersInProgressComplaintComponent />}></Route>
         <Route exact path="/othersResolveComplaint" element={<OthersResolveComplaintComponent />}></Route>
 
-        <Route exact path="/meetingMaster" element={<MeetingMasterComponent />}></Route>
+
         <Route exact path="/announcementType" element={<AnnouncementTypeComponent />}></Route>
         <Route exact path="/announcement" element={<AnnouncementComponent />}></Route>
       </Routes>

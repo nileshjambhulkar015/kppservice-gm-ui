@@ -11,19 +11,15 @@ export default function ComplaintTypeComponent() {
     const [compTypeId, setCompTypeId] = useState('');
     const [compTypeName, setCompTypeName] = useState('');
     const [remark, setRemark] = useState('');
-
     const [deptId, setDeptId] = useState('');
     const [deptName, setDeptName] = useState('');
-
-    const [departments, setDepartments] = useState([])
-
-  
-
-    const [complaintTypes, setComplaintTypes] = useState([]);
-
-    const [compDepartments, setCompDepartments] = useState([])
     const [compDeptId, setCompDeptId] = useState('');
     const [compDeptName, setCompDeptName] = useState('');
+
+    const [departments, setDepartments] = useState([])
+    const [complaintTypes, setComplaintTypes] = useState([]);
+    const [compDepartments, setCompDepartments] = useState([])
+    const [responseMessage, setResponseMessage] = useState('')
 
     const [saveComplaintTypeAlert, setSaveComplaintTypeAlert] = useState(false);
     const [deleteComplaintTypeAlert, setDeleteComplaintTypeAlert] = useState(false);
@@ -64,30 +60,31 @@ export default function ComplaintTypeComponent() {
         ComplaintTypeService.getComplaintTypeDetailsByPaging(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
-            setComplaintTypes(res.data.responseData.content);
-            setDataPageable(res.data.responseData);
-        }
-        else {
-            setIsSuccess(false);
-        }
+                setComplaintTypes(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
+            }
+            else {
+                setResponseMessage(res.data.responseMessage)
+                setIsSuccess(false);
+            }
         });
 
         // for employee except GM Role
-        ComplaintTypeService.getAllComplaintTypeDepartments().then((res) => {
+        ComplaintTypeService.ddAllComplaintTypeDepartments().then((res) => {
             console.log(res.data)
             setCompDepartments(res.data);
-           setCompDeptId(res.data?.[0]?.deptId)
+            setCompDeptId(res.data?.[0]?.deptId)
         });
 
         DesignationService.ddAllDepartmentDetails().then((res) => {
             setDepartments(res.data);
         });
- 
+
     }, [currentPage, itemsPerPage]);
 
 
     const handleCompDepartmentChange = (value) => {
-        const data = {
+        /*const data = {
             currentPage,
             itemsPerPage
         }
@@ -113,9 +110,9 @@ export default function ComplaintTypeComponent() {
        
         ComplaintTypeService.getComplaintTypeDetailsByDeptId(deptId).then((res) => {
                 setComplaintTypes(res.data.responseData.content);          
-        });       
+        });  */
     }
-  
+
     const saveComplaintType = (e) => {
         e.preventDefault()
         let statusCd = 'A';
@@ -128,14 +125,20 @@ export default function ComplaintTypeComponent() {
         ComplaintTypeService.saveComplaintTypeDetails(complaintType).then(res => {
 
             ComplaintTypeService.getComplaintTypeDetailsByPaging(data).then((res) => {
-                setComplaintTypes(res.data.responseData.content);
-                setDataPageable(res.data.responseData);
-                setCompTypeName('');
-                setRemark('');
+                if (res.data.success) {
+                    setIsSuccess(true);
+                    setComplaintTypes(res.data.responseData.content);
+                    setDataPageable(res.data.responseData);
+                    setCompTypeName('');
+                    setRemark('');
+                }
+                else {
+                    setResponseMessage(res.data.responseMessage)
+                    setIsSuccess(false);
+                }
 
-            });
-        }
-        );
+            }, [currentPage, itemsPerPage]);
+        });
         setSaveComplaintTypeAlert(false)
     }
 
@@ -159,21 +162,22 @@ export default function ComplaintTypeComponent() {
             itemsPerPage
         }
         if (window.confirm("Do you want to delete this Complaint Type ?")) {
-                ComplaintTypeService.deleteComplaintTypeById(e).then(res => {
-                    ComplaintTypeService.getComplaintTypeDetailsByPaging(data).then((res) => {
-                        if (res.data.success) {
-                            setIsSuccess(true);
-                            setComplaintTypes(res.data.responseData.content);
-                            setDataPageable(res.data.responseData);
-                        }
-                        else {
-                            setIsSuccess(false);
-                        }
-        
-                    });
-                }
-                );
-    
+            ComplaintTypeService.deleteComplaintTypeById(e).then(res => {
+                ComplaintTypeService.getComplaintTypeDetailsByPaging(data).then((res) => {
+                    if (res.data.success) {
+                        setIsSuccess(true);
+                        setComplaintTypes(res.data.responseData.content);
+                        setDataPageable(res.data.responseData);
+                    }
+                    else {
+                        setResponseMessage(res.data.responseMessage)
+                        setIsSuccess(false);
+                    }
+
+                }, [currentPage, itemsPerPage]);
+            }
+            );
+
         } else {
             // User clicked Cancel
             console.log("User canceled the action.");
@@ -192,17 +196,23 @@ export default function ComplaintTypeComponent() {
 
         ComplaintTypeService.updateComplaintTypeDetails(complaintType).then(res => {
             ComplaintTypeService.getComplaintTypeDetailsByPaging(data).then((res) => {
-                setComplaintTypes(res.data.responseData.content);
-                setDataPageable(res.data.responseData);
+                if (res.data.success) {
+                    setIsSuccess(true);
+                    setComplaintTypes(res.data.responseData.content);
+                    setDataPageable(res.data.responseData);
+                }
+                else {
+                    setResponseMessage(res.data.responseMessage)
+                    setIsSuccess(false);
+                }
+            }, [currentPage, itemsPerPage]);
 
-            });
-           
         }
         );
         setUpdateComplaintTypeAlert(false)
     }
 
-    
+
     const handleDepartmentChange = (value) => {
         if (value == "Select Department") {
             value = null;
@@ -219,20 +229,20 @@ export default function ComplaintTypeComponent() {
                     <div className="col-md-9">
                         <div className="row">
                             <div className="col-sm-5">
-                            <label className="control-label col-sm-5" htmlFor="deptNameSearch"> Select Department Name:</label>
-                            <div className="col-sm-6">
-                            <select className="form-control" id="empTypeId" onChange={(e) => handleCompDepartmentChange(e.target.value)}>
-                          
-                        {
-                            compDepartments.map(
-                                compDepartment =>
-                                    <option key={compDepartment.deptId} value={compDepartment.deptId}>{compDepartment.deptName}</option>
-                            )
-                        };
+                                <label className="control-label col-sm-5" htmlFor="deptNameSearch"> Select Department Name:</label>
+                                <div className="col-sm-6">
+                                    <select className="form-control" id="empTypeId" onChange={(e) => handleCompDepartmentChange(e.target.value)}>
 
-                    </select>
-                               
-                            </div>
+                                        {
+                                            compDepartments.map(
+                                                compDepartment =>
+                                                    <option key={compDepartment.deptId} value={compDepartment.deptId}>{compDepartment.deptName}</option>
+                                            )
+                                        };
+
+                                    </select>
+
+                                </div>
                             </div>
                             <div className="col-sm-6" align="right">
                                 <button type="button" className="btn btn-primary " data-toggle="modal" data-target="#saveComplaintType">Add Complaint Type</button>
@@ -240,42 +250,42 @@ export default function ComplaintTypeComponent() {
                             </div>
                         </div>
                         <div className="row">
-                        {isSuccess ?
-                            <table className="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th className="text-center">Sr No</th>
-                                        <th className="text-center">Department Name</th>
-                                        <th className="text-center">Complaint Type Name</th>
+                            {isSuccess ?
+                                <table className="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th className="text-center">Sr No</th>
+                                            <th className="text-center">Department Name</th>
+                                            <th className="text-center">Complaint Type Name</th>
 
-                                        <th className="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        complaintTypes.map(
-                                            (complaintType, index) =>   //index is inbuilt variable of map started with 0
-                                                <tr key={complaintType.compTypeId}>
-                                                    <td className="text-center">{index + 1}</td>
-                                                    <td>{complaintType.deptName}</td>
-                                                    <td>{complaintType.compTypeName}</td>
+                                            <th className="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            complaintTypes.map(
+                                                (complaintType, index) =>   //index is inbuilt variable of map started with 0
+                                                    <tr key={complaintType.compTypeId}>
+                                                        <td className="text-center">{index + 1}</td>
+                                                        <td>{complaintType.deptName}</td>
+                                                        <td>{complaintType.compTypeName}</td>
 
 
-                                                    <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDepartment" onClick={() => showComplaintTypeById(complaintType.compTypeId)}>Update</button>
-                                                        <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteComplaintTypeById(complaintType.compTypeId)}>Delete</button>
-                                                        <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => showComplaintTypeById(complaintType.compTypeId)}>View</button></td>
-                                                </tr>
-                                        )
-                                    }
-                                </tbody>
-                            </table>
-                            : <h4>Complaint Type name is not available</h4>}
+                                                        <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDepartment" onClick={() => showComplaintTypeById(complaintType.compTypeId)}>Update</button>
+                                                            <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteComplaintTypeById(complaintType.compTypeId)}>Delete</button>
+                                                            <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => showComplaintTypeById(complaintType.compTypeId)}>View</button></td>
+                                                    </tr>
+                                            )
+                                        }
+                                    </tbody>
+                                </table>
+                                : <h4>{responseMessage}</h4>}
                             <PaginationComponent
-                            currentPage={currentPage}
-                            totalPages={dataPageable.totalPages || 10}
-                            onPageChange={handlePageChange}
-                            onItemsPerPageChange={handleItemsPerPageChange}
-                        />
+                                currentPage={currentPage}
+                                totalPages={dataPageable.totalPages || 10}
+                                onPageChange={handlePageChange}
+                                onItemsPerPageChange={handleItemsPerPageChange}
+                            />
                         </div>
 
                     </div>
@@ -441,7 +451,7 @@ export default function ComplaintTypeComponent() {
                 />
             )}
 
-        
+
         </React.Fragment>
     );
 

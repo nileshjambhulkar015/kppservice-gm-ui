@@ -10,7 +10,7 @@ export default function ViewAllEmployeeCumulativeComponent() {
     const [fromDate, setFromDate] = useState('')
     const [toDate, setToDate] = useState('')
     const [isSuccess, setIsSuccess] = useState(true)
-
+    const [responseMessage, setResponseMessage] = useState('')
     const [employees, setEmployees] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -44,7 +44,7 @@ export default function ViewAllEmployeeCumulativeComponent() {
                 setDataPageable(res.data.responseData);
             }
             else {
-                alert("Kpp is not approved for month");
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
 
@@ -54,22 +54,45 @@ export default function ViewAllEmployeeCumulativeComponent() {
     }
 
     useEffect(() => {
-        loadCumulativeData();
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        CumulativeService.getOverallEmployeeCumulative(data).then((res) => {
+            if (res.data.success) {
+                setIsSuccess(true);
+                setEmployees(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
+            }
+            else {
+                setResponseMessage(res.data.responseMessage)
+                setIsSuccess(false);
+            }
+
+        }).catch((err) => {
+            alert(err.response.data.details)
+        });
     }, [currentPage, itemsPerPage]);
 
 
     const getKPPDetailsByDate = (e) => {
-        CumulativeService.getOverallEmployeeCumulativeByDates(fromDate, toDate).then((res) => {
+        const data = {
+            currentPage,
+            itemsPerPage,
+            fromDate,
+            toDate
+        }
+        CumulativeService.getOverallEmployeeCumulativeByDates_ADMIN(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
-                setEmployees(res.data.responseData);
+                setEmployees(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
             } else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
 
             }
-
-
-        });
+        }, [currentPage, itemsPerPage]);
 
     }
 
@@ -118,6 +141,7 @@ export default function ViewAllEmployeeCumulativeComponent() {
                             <tr>
                                 <th className="text-center">Sr No</th>
                                 <th className="text-center">Employee Name</th>
+                                <th className="text-center">Employee ID</th>
                                 <th className="text-center">Department Name</th>
                                 <th className="text-center">Employee Designation</th>
                                 <th className="text-center">Total Ratings</th>
@@ -134,6 +158,7 @@ export default function ViewAllEmployeeCumulativeComponent() {
                                             <td className="text-center">{index + 1}</td>
 
                                             <td className="text-center">{employee.empName}</td>
+                                            <td className="text-center">{employee.empEId}</td>
                                             <td className="text-center">{employee.deptName}</td>
                                             <td className="text-center">{employee.desigName}</td>
                                             <td className="text-center">{employee.totalHodKppRatings}</td>
@@ -155,7 +180,7 @@ export default function ViewAllEmployeeCumulativeComponent() {
 
                     </table>
                     : <h1>No Data Found</h1>}
-                    <PaginationComponent
+                <PaginationComponent
                     currentPage={currentPage}
                     totalPages={dataPageable.totalPages || 10}
                     onPageChange={handlePageChange}

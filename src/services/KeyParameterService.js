@@ -36,9 +36,9 @@ class KeyParameterService {
     }
 
     deleteKppById(kppId) {
-       
+
         if (null != Cookies.get('empId')) {
-            return axios.delete(BASE_URL+`/?kppId=${kppId}`)
+            return axios.delete(BASE_URL + `/?kppId=${kppId}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -48,7 +48,7 @@ class KeyParameterService {
 
     getKPPDetailsByPaging(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + `/key-perform-parameter/search?statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=dept.dept_name`);
+            return axios.get(BASE_URL_API + `/key-perform-parameter/search?statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=dept.dept_name`);
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -57,7 +57,7 @@ class KeyParameterService {
 
     searchKPPObjectiveNoPaging(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + `/key-perform-parameter/search?kppObjectiveNo=${data.kppObjectiveNo}&statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}`);
+            return axios.get(BASE_URL_API + `/key-perform-parameter/search?kppObjectiveNo=${data.kppObjectiveNo}&statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}`);
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -68,7 +68,7 @@ class KeyParameterService {
 
     getKPPDetailsForAssignKppByPaging(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + `/employee-kpp/assign-employee-kpp-search?empId=${Cookies.get('empIdForKpp')}&roleId=${Cookies.get('empKppRoleId')}&deptId=${Cookies.get('empKppDeptId')}&desigId=${Cookies.get('empKppDesigId')}&statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=dept.dept_name`);
+            return axios.get(BASE_URL_API + `/employee-kpp/assign-employee-kpp-search?empId=${Cookies.get('empIdForKpp')}&roleId=${Cookies.get('empKppRoleId')}&deptId=${Cookies.get('empKppDeptId')}&desigId=${Cookies.get('empKppDesigId')}&statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=dept.dept_name`);
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -80,7 +80,7 @@ class KeyParameterService {
     //advance search of kpp
     advanceSearchEmployeeKPP(data) {
         if (null != Cookies.get('empId')) {
-            return axios.post(BASE_URL_API + `/employee-kpp/assign-employee-kpp-advance-search?empId=${Cookies.get('empIdForKpp')}&page=${data.currentPage-1}&size=${data.itemsPerPage}`, data.advanceKppSearch)
+            return axios.post(BASE_URL_API + `/employee-kpp/assign-employee-kpp-advance-search?empId=${Cookies.get('empIdForKpp')}&page=${data.currentPage - 1}&size=${data.itemsPerPage}`, data.advanceKppSearch)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -111,7 +111,7 @@ class KeyParameterService {
 
     getKPPDetailsByKppObjectiveNoPaging(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + `/key-perform-parameter/search?kppObjectiveNo=${data.kppObjectiveNo}&statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=dept.dept_name`)
+            return axios.get(BASE_URL_API + `/key-perform-parameter/search?kppObjectiveNo=${data.kppObjectiveNo}&statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=dept.dept_name`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -146,14 +146,14 @@ class KeyParameterService {
         }
     }
 
-   /* getAllDepartment() {
-        if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + "/department/all-dd-dept-except-gm")
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }
-    }*/
+    /* getAllDepartment() {
+         if (null != Cookies.get('empId')) {
+             return axios.get(BASE_URL_API + "/department/all-dd-dept-except-gm")
+         } else {
+             alert("You need to login first")
+             window.location.replace(LOGIN_UI_BASE_URL);
+         }
+     }*/
 }
 
 export default new KeyParameterService()

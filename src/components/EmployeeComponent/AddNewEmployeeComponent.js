@@ -88,7 +88,7 @@ export default function AddNewEmployeeComponent() {
         let employeeId = Cookies.get('empEId');
 
         let employee = { empEId, roleId, deptId, desigId, empTypeId, reportingEmpId, regionId, siteId, companyId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd, employeeId };
-   
+
 
         EmployeeService.saveEmployeeDetails(employee).then(res => {
             if (res.data.success) {
@@ -108,7 +108,7 @@ export default function AddNewEmployeeComponent() {
     const searchEmployeeFirstName = (e) => {
         EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
             setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
-           
+
         });
     }
 
@@ -117,13 +117,13 @@ export default function AddNewEmployeeComponent() {
         ///
         EmployeeService.ddRegionsFromCompany().then((res) => {
             setRegions(res.data);
-          
-            setRegionId(res.data?.[0].regionId)
-            let regionId = res.data?.[0].regionId;
+
+            setRegionId(res.data?.[0]?.regionId)
+            let regionId = res.data?.[0]?.regionId;
             EmployeeService.ddSitesByRegionIdFromCompany(regionId).then((res1) => {
                 setSites(res1.data);
-                setSiteId(res1.data?.[0].siteId)
-                let siteId = res1.data?.[0].siteId;
+                setSiteId(res1.data?.[0]?.siteId)
+                let siteId = res1.data?.[0]?.siteId;
                 EmployeeService.ddCompanyFromComany({ regionId, siteId }).then((res2) => {
                     setCompanys(res2.data);
                     setCompanyId(res2.data?.[0]?.companyId)
@@ -136,18 +136,18 @@ export default function AddNewEmployeeComponent() {
         // for employee except GM Role
         RoleService.ddRolesExceptGM().then((res) => {
             setRoles(res.data);
-            setRoleId(res.data?.[0].roleId)
+            setRoleId(res.data?.[0]?.roleId)
         });
 
         EmployeeTypeService.ddEmployeeType().then((res) => {
             setEmpTypes(res.data.responseData);
             setEmpTypeId(res.data.responseData?.[0]?.empTypeId)
-            
+
         });
 
         DepartmentService.ddAllDepartmentExceptGM().then((res1) => {
             setDepartments(res1.data);
-            setDeptId(res1.data?.[0].deptId)
+            setDeptId(res1.data?.[0]?.deptId)
             let deptId = res1.data?.[0]?.deptId;
             DesignationService.ddDesignationDetailsForKpp(deptId).then((res2) => {
                 setDesignations(res2.data);
@@ -159,7 +159,7 @@ export default function AddNewEmployeeComponent() {
 
         EmployeeService.ddRolesExceptEmployee().then((res) => {
             setReportingRoles(res.data);
-          
+
             setReportingEmpRoleId(res.data?.[0]?.roleId)
             let roleId = res.data?.[0]?.roleId;
             EmployeeService.ddDepartmentFromEmployee(roleId).then((res1) => {
@@ -170,10 +170,10 @@ export default function AddNewEmployeeComponent() {
                     setReportingDesignations(res2.data);
                     setReportingEmpDesigId(res2.data?.[0]?.desigId)
                     let desigId = res2.data?.[0]?.desigId
-                    EmployeeService.ddEmployeeName({ roleId, deptId,desigId }).then((res3) => {
+                    EmployeeService.ddEmployeeName({ roleId, deptId, desigId }).then((res3) => {
                         setReportingEmpId(res3.data?.[0]?.empId)
                         setReportingEmpName(res3.data);
-                       
+
                     });
 
                 });
@@ -190,8 +190,8 @@ export default function AddNewEmployeeComponent() {
         let regionId = value;
         EmployeeService.ddSitesByRegionIdFromCompany(regionId).then((res1) => {
             setSites(res1.data);
-            setSiteId(res1.data?.[0].siteId)
-            let siteId = res1.data?.[0].siteId;
+            setSiteId(res1.data?.[0]?.siteId)
+            let siteId = res1.data?.[0]?.siteId;
             EmployeeService.ddCompanyFromComany({ regionId, siteId }).then((res2) => {
                 setCompanys(res2.data);
                 setCompanyId(res2.data?.[0]?.companyId)
@@ -255,10 +255,10 @@ export default function AddNewEmployeeComponent() {
                 setReportingDesignations(res2.data);
                 setReportingEmpDesigId(res2.data?.[0]?.desigId)
                 let desigId = res2.data?.[0]?.desigId
-                EmployeeService.ddEmployeeName({ roleId, deptId,desigId }).then((res3) => {
+                EmployeeService.ddEmployeeName({ roleId, deptId, desigId }).then((res3) => {
                     setReportingEmpId(res3.data?.[0]?.empId)
                     setReportingEmpName(res3.data);
-                   
+
                 });
             });
         });
@@ -267,10 +267,10 @@ export default function AddNewEmployeeComponent() {
     const handleReportingDesigIdChange = (value) => {
         setReportingEmpDesigId(value)
         let desigId = value
-        EmployeeService.ddEmployeeName({ roleId, deptId,desigId }).then((res3) => {
+        EmployeeService.ddEmployeeName({ roleId, deptId, desigId }).then((res3) => {
             setReportingEmpId(res3.data?.[0]?.empId)
             setReportingEmpName(res3.data);
-          
+
         });
     }
 
@@ -282,10 +282,10 @@ export default function AddNewEmployeeComponent() {
             setReportingDesignations(res2.data);
             setReportingEmpDesigId(res2.data?.[0]?.desigId)
             let desigId = res2.data?.[0]?.desigId
-            EmployeeService.ddEmployeeName({ roleId, deptId,desigId }).then((res3) => {
+            EmployeeService.ddEmployeeName({ roleId, deptId, desigId }).then((res3) => {
                 setReportingEmpId(res3.data?.[0]?.empId)
                 setReportingEmpName(res3.data);
-               
+
             });
 
         });

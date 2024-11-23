@@ -10,7 +10,7 @@ class AnnouncementTypeService {
     //at page load call all the departments load all departments
     getAnnouncementTypeDetailsByPaging(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL + `/search?statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}`)
+            return axios.get(BASE_URL + `/search?statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -18,9 +18,9 @@ class AnnouncementTypeService {
     }
 
     deleteAnnouncementTypeById(announTypeId) {
-       
+
         if (null != Cookies.get('empId')) {
-            return axios.delete(BASE_URL+`/?announTypeId=${announTypeId}`)
+            return axios.delete(BASE_URL + `/?announTypeId=${announTypeId}`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -40,7 +40,7 @@ class AnnouncementTypeService {
 
     getAnnouncementTypeById(announTypeId) {
         if (null != Cookies.get('empId')) {
-          
+
             return axios.get(BASE_URL + `/by-announcement-type-id?announTypeId=${announTypeId}`)
         } else {
             alert("You need to login first")

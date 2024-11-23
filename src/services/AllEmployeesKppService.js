@@ -8,7 +8,7 @@ class AllEmployeesKppService {
 
     getEmployeeDetailsByPagination(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/employee/employee-kpp-status?roleId=3&gmKppStatus=In-Progress&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=desig.desig_name`)
+            return axios.get(BASE_URL_API + `/employee/employee-kpp-status?roleId=3&gmKppStatus=In-Progress&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=desig.desig_name`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -18,8 +18,8 @@ class AllEmployeesKppService {
 
     getEmployeeByStatusByPagination(data) {
         if (null != Cookies.get('empId')) {
-         console.log("data.empKppStaus : ",data.empKppStatus)
-            return axios.get(BASE_URL_API+`/employee/employee-kpp-status?roleId=3&empKppStatus=${data.empKppStatus}&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=desig.desig.name`)
+            console.log("data.empKppStaus : ", data.empKppStatus)
+            return axios.get(BASE_URL_API + `/employee/employee-kpp-status?roleId=3&empKppStatus=${data.empKppStatus}&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=desig.desig.name`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -27,10 +27,10 @@ class AllEmployeesKppService {
 
     }
 
-    
+
     completeEmpKppGM(empId) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API+`/gm-approval/report?empId=${empId}&statusCd=A`)
+            return axios.get(BASE_URL_API + `/gm-approval/report?empId=${empId}&statusCd=A`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

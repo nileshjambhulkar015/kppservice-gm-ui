@@ -52,6 +52,7 @@ export default function OthersPendingComplaintComponent() {
     const [asCompId, setAsCompId] = useState('')
     const [asCompStatus, setAsCompStatus] = useState('')
     const [empCompDeptId, setEmpCompDeptId] = useState('')
+    const [responseMessage, setResponseMessage] = useState('')
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -77,12 +78,13 @@ export default function OthersPendingComplaintComponent() {
         OthersPendingComplaintService.getEmployeeCompaintsDetailsByPaging(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
-            setComplaints(res.data.responseData.content);
-            setDataPageable(res.data.responseData);
-        }
-        else {
-            setIsSuccess(false);
-        }
+                setComplaints(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
+            }
+            else {
+                setResponseMessage(res.data.responseMessage)
+                setIsSuccess(false);
+            }
         });
 
         OthersPendingComplaintService.getAllDepartmentDetails().then((res) => {
@@ -90,7 +92,7 @@ export default function OthersPendingComplaintComponent() {
         });
 
 
-    }, [currentPage,itemsPerPage]);
+    }, [currentPage, itemsPerPage]);
 
 
     const handleDepartmentChange = (value) => {
@@ -104,22 +106,27 @@ export default function OthersPendingComplaintComponent() {
     const advSearchEmployeeComplaints = (e) => {
         let empId = null;
         let asCompStatus = 'Pending';
-       // let asCompTypeDeptId = Cookies.get('deptId')
+
 
         e.preventDefault()
         let advComplaintSearch = { compFromDate, compToDate, empId, empCompDeptId, asCompId, asCompStatus };
 
-        OthersPendingComplaintService.advanceSearchComplaintDetails(advComplaintSearch).then(res => {
+        const data = {
+            currentPage,
+            itemsPerPage,
+            advComplaintSearch
+        }
+        OthersPendingComplaintService.advanceSearchComplaintDetails(data).then(res => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setComplaints(res.data.responseData.content);
-
+                setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
-        }
-        );
+        }, [currentPage, itemsPerPage]);
     }
 
 
@@ -132,8 +139,6 @@ export default function OthersPendingComplaintComponent() {
 
             setEmpId(complaint.empId)
             setEmpEId(complaint.empEId)
-
-
             setEmpName(complaint.empName)
             setEmpMobileNo(complaint.empMobileNo)
             setRoleId(complaint.roleId)
@@ -142,8 +147,6 @@ export default function OthersPendingComplaintComponent() {
             setDeptName(complaint.deptName)
             setDesigId(complaint.desigId)
             setDesigName(complaint.desigName)
-
-
             setEmpCompId(complaint.empCompId)
             setCompId(complaint.compId)
             setCompTypeId(complaint.compTypeId)
@@ -174,13 +177,15 @@ export default function OthersPendingComplaintComponent() {
                 setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
-        },  [currentPage, itemsPerPage]);
+        }, [currentPage, itemsPerPage]);
     }
 
 
     const clearSearchData = () => {
+        setEmpCompIdSearch('')
         const data = {
             currentPage,
             itemsPerPage
@@ -192,10 +197,11 @@ export default function OthersPendingComplaintComponent() {
                 setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
 
-        },  [currentPage, itemsPerPage]);
+        }, [currentPage, itemsPerPage]);
 
     }
 
@@ -207,32 +213,33 @@ export default function OthersPendingComplaintComponent() {
             itemsPerPage
         }
         if (window.confirm("Do you want to assign this complaint ?")) {
-        e.preventDefault()
-        let compStatus = "In Progress";
-        let compResolveEmpId = Cookies.get('empId');
-        let compResolveEmpName = Cookies.get('empFirstName') + " " + Cookies.get('empMiddleName') + " " + Cookies.get('empLastName');
-        let compResolveEmpEId = Cookies.get('empEId');
+            e.preventDefault()
+            let compStatus = "In Progress";
+            let compResolveEmpId = Cookies.get('empId');
+            let compResolveEmpName = Cookies.get('empFirstName') + " " + Cookies.get('empMiddleName') + " " + Cookies.get('empLastName');
+            let compResolveEmpEId = Cookies.get('empEId');
 
-        let complaint = { empCompId, compStatus, compResolveEmpId, compResolveEmpName, compResolveEmpEId };
+            let complaint = { empCompId, compStatus, compResolveEmpId, compResolveEmpName, compResolveEmpEId };
 
-        OthersPendingComplaintService.updateComplaintDetails(complaint).then(res => {
-            OthersPendingComplaintService.getEmployeeCompaintsDetailsByPaging(data).then((res) => {
-                if (res.data.success) {
-                    setIsSuccess(true);
-                setComplaints(res.data.responseData.content?.filter((item) => item.compStatus == 'Pending'));
-                setDataPageable(res.data.responseData);
+            OthersPendingComplaintService.updateComplaintDetails(complaint).then(res => {
+                OthersPendingComplaintService.getEmployeeCompaintsDetailsByPaging(data).then((res) => {
+                    if (res.data.success) {
+                        setIsSuccess(true);
+                        setComplaints(res.data.responseData.content?.filter((item) => item.compStatus == 'Pending'));
+                        setDataPageable(res.data.responseData);
+                    }
+                    else {
+                        setResponseMessage(res.data.responseMessage)
+                        setIsSuccess(false);
+                    }
+                }, [currentPage, itemsPerPage]);
+
             }
-            else {
-                setIsSuccess(false);
-            }
-            },  [currentPage, itemsPerPage]);
-           
+            );
+        } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
         }
-        );
-    } else {
-        // User clicked Cancel
-        console.log("User canceled the action.");
-    }
 
     }
 
@@ -262,7 +269,7 @@ export default function OthersPendingComplaintComponent() {
                                     <div className="col-sm-7" align="right">
                                         <button type="button" className="btn btn-primary col-sm-offset-1" data-toggle="modal" data-target="#advanceSearchEmployee">Advance Search</button>
                                         <button type="button" className="btn btn-primary col-sm-offset-1" onClick={() => clearSearchData()}>Clear Search</button>
-                                        </div>
+                                    </div>
                                 </form>
 
                             </div>
@@ -299,34 +306,26 @@ export default function OthersPendingComplaintComponent() {
                                                     <td className="text-center">{index + 1}</td>
                                                     <td> <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => getComplaintById(complaint.empCompId)}>View</button></td>
                                                     <td>{complaint.compId}</td>
-
-
                                                     <td>{complaint.empName}</td>
                                                     <td>{complaint.empEId}</td>
                                                     <td>{complaint.roleName}</td>
                                                     <td>{complaint.deptName}</td>
                                                     <td>{complaint.desigName}</td>
-
-
                                                     <td>{complaint.compDate}</td>
                                                     <td>{complaint.compTypeName}</td>
                                                     <td>{complaint.compStatus}</td>
-
-
-
-
                                                 </tr>
                                         )
                                     }
                                 </tbody>
                             </table>
-                            : <h1>No Data Found</h1>}
-                            <PaginationComponent
-                                currentPage={currentPage}
-                                totalPages={dataPageable.totalPages || 10}
-                                onPageChange={handlePageChange}
-                                onItemsPerPageChange={handleItemsPerPageChange}
-                            />
+                            : <h1>{responseMessage}</h1>}
+                        <PaginationComponent
+                            currentPage={currentPage}
+                            totalPages={dataPageable.totalPages || 10}
+                            onPageChange={handlePageChange}
+                            onItemsPerPageChange={handleItemsPerPageChange}
+                        />
                     </div>
 
                 </div>

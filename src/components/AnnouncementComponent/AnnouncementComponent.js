@@ -39,7 +39,7 @@ export default function AnnouncementComponent() {
     const [remark, setRemark] = useState('');
 
 
-
+    const [responseMessage, setResponseMessage] = useState('')
     const [announcements, setAnnouncements] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -69,6 +69,7 @@ export default function AnnouncementComponent() {
                 setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
 
@@ -79,9 +80,9 @@ export default function AnnouncementComponent() {
             setAnnounTypeId(res.data?.[0].announTypeId)
         });
 
-        AnnouncementService.getAllAnnouncementTypeFromAnnoun().then((res) => {
+        AnnouncementService.ddAllAnnouncementTypeFromAnnoun().then((res) => {
             setAsAnnounTypes(res.data);
-            setAsAnnounTypeId(res.data?.[0].announTypeId)
+            setAsAnnounTypeId(res.data?.[0]?.announTypeId)
         });
 
 
@@ -100,18 +101,21 @@ export default function AnnouncementComponent() {
         if (asAnnounStatus == "Select Announcement Status") {
             asAnnounStatus = 'null';
         }
-        let advComplaintSearch = { asAnnounFromDate, asAnnounToDate, asAnnounStatus, asAnnounTypeId, statusCd };
+        let announcementAdvSearch = { asAnnounFromDate, asAnnounToDate, asAnnounStatus, asAnnounTypeId, statusCd };
+        const data = {
+            currentPage,
+            itemsPerPage,
+            announcementAdvSearch
+        }
 
-
-        AnnouncementService.advanceSearchAnnouncementDetails(advComplaintSearch).then(res => {
+        AnnouncementService.advanceSearchAnnouncementDetails(data).then(res => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setAnnouncements(res.data.responseData.content);
-
-
-                //setAsAnnounTypes(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
         }
@@ -152,25 +156,31 @@ export default function AnnouncementComponent() {
     }
 
     const cancelAnnouncement = (e) => {
-
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         if (window.confirm("Do you want to cancel this Announcement ?")) {
             AnnouncementService.getAnnouncementById(e).then(res => {
 
                 let exsitingAnnouncement = res.data;
-
                 let announId = exsitingAnnouncement.announId;
-
-
-
                 let announStatus = 'Cancel'
                 let statusCd = 'I';
                 let announcement = { announId, announStatus, statusCd };
 
                 AnnouncementService.cancelAnnouncement(announcement).then(res => {
                     AnnouncementService.getAnnouncementByPaging().then((res) => {
-                        setAnnouncements(res.data.responseData.content);
-
-                    });
+                        if (res.data.success) {
+                            setIsSuccess(true);
+                            setAnnouncements(res.data.responseData.content);
+                            setDataPageable(res.data.responseData);
+                        }
+                        else {
+                            setResponseMessage(res.data.responseMessage)
+                            setIsSuccess(false);
+                        }
+                    }, [currentPage, itemsPerPage]);
 
                 }
                 );
@@ -215,6 +225,7 @@ export default function AnnouncementComponent() {
 
                 }
                 else {
+                    setResponseMessage(res.data.responseMessage)
                     setIsSuccess(false);
                 }
             }, [currentPage, itemsPerPage]);
@@ -225,17 +236,22 @@ export default function AnnouncementComponent() {
 
 
     const clearSearchData = () => {
-
-        AnnouncementService.getAnnouncementByPaging().then((res) => {
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        AnnouncementService.getAnnouncementByPaging(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setAnnouncements(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
 
-        });
+        }, [currentPage, itemsPerPage]);
 
     }
     return (

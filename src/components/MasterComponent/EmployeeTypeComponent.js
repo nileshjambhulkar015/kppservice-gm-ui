@@ -74,7 +74,7 @@ export default function EmployeeTypeComponent() {
 
         EmployeeTypeService.getEmployeeTypeById(e).then(res => {
             let employeeType = res.data;
-        console.log("employeeType :", employeeType)
+            console.log("employeeType :", employeeType)
 
             setEmpTypeId(employeeType.empTypeId)
             setEmpTypeName(employeeType.empTypeName)
@@ -240,7 +240,7 @@ export default function EmployeeTypeComponent() {
                                     <div> <input type="hidden" id="deptId" name="empTypeId" value={empTypeId} /></div>
                                     <div className="form-group">
                                         <label className="control-label col-sm-4" htmlFor="empTypeName">Enter Employee Type Name:</label>
-                                        <div className="col-sm-8">                                      
+                                        <div className="col-sm-8">
 
                                             <input type="text" className="form-control" id="empTypeName" placeholder="Enter Employee Type Name here" value={empTypeName} onChange={(e) => setEmpTypeName(e.target.value)} />
                                         </div>

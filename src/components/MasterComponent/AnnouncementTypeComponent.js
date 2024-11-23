@@ -26,7 +26,7 @@ export default function AnnouncementComponent() {
     const [deleteAnnTypeAlert, setDeleteAnnTypeAlert] = useState(false);
     const [updatAnnTypeAlert, setUpdateAnnTypeAlert] = useState(false);
     const [isSuccess, setIsSuccess] = useState(true)
-
+    const [responseMessage, setResponseMessage] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [dataPageable, setDataPageable] = useState([])
@@ -64,15 +64,12 @@ export default function AnnouncementComponent() {
                 setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
 
         });
     }, [currentPage, itemsPerPage]);
-
-
-
-
 
     const saveAnnouncementType = (e) => {
         e.preventDefault()
@@ -87,12 +84,18 @@ export default function AnnouncementComponent() {
         AnnouncementTypeService.saveAnnouncementTypeDetails(department).then(res => {
             if (res.data.success) {
                 AnnouncementTypeService.getAnnouncementTypeDetailsByPaging(data).then((res) => {
-                    setAnnonTypes(res.data.responseData.content);
-                    setDataPageable(res.data.responseData);
-                    setAnnounTypeName('');
-                    setRemark('');
+                    if (res.data.success) {
+                        setAnnonTypes(res.data.responseData.content);
+                        setDataPageable(res.data.responseData);
+                        setAnnounTypeName('');
+                        setRemark('');
+                    }
+                    else {
+                        setResponseMessage(res.data.responseMessage)
+                        setIsSuccess(false);
+                    }
 
-                });
+                }, [currentPage, itemsPerPage]);
             }
             else {
                 alert(res.data.responseMessage)
@@ -131,10 +134,11 @@ export default function AnnouncementComponent() {
                         setDataPageable(res.data.responseData);
                     }
                     else {
+                        setResponseMessage(res.data.responseMessage)
                         setIsSuccess(false);
                     }
 
-                });
+                }, [currentPage, itemsPerPage]);
             }
             );
 
@@ -157,10 +161,18 @@ export default function AnnouncementComponent() {
 
         AnnouncementTypeService.updateDepartmentDetails(department).then(res => {
             AnnouncementTypeService.getDepartmentDetailsByPaging(data).then((res) => {
-                setAnnonTypes(res.data.responseData.content);
-                setDataPageable(res.data.responseData);
+                if (res.data.success) {
+                    setIsSuccess(true);
+                    setAnnonTypes(res.data.responseData.content);
+                    setDataPageable(res.data.responseData);
+                    setDataPageable(res.data.responseData);
+                }
+                else {
+                    setResponseMessage(res.data.responseMessage)
+                    setIsSuccess(false);
+                }
 
-            });
+            }, [currentPage, itemsPerPage]);
 
         }
         );
@@ -212,7 +224,7 @@ export default function AnnouncementComponent() {
                                         }
                                     </tbody>
                                 </table>
-                                : <h4>Announcement Type name is not available</h4>}
+                                : <h4>{responseMessage}</h4>}
                             <PaginationComponent
                                 currentPage={currentPage}
                                 totalPages={dataPageable.totalPages || 10}

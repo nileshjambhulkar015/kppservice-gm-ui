@@ -10,7 +10,7 @@ class OthersPendingComplaintService {
     //at page load call all the departments load all departments
     getEmployeeCompaintsDetailsByPaging(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + `/complaint/complaint-search?compStatus=Pending&statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=empCompId asc`)
+            return axios.get(BASE_URL_API + `/complaint/complaint-search?compStatus=Pending&statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=empCompId asc`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -31,7 +31,7 @@ class OthersPendingComplaintService {
     //search complaint by complaint id
     getEmployeeCompaintsByComplaintId(data) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL_API + `/complaint/complaint-search?compStatus=Pending&compId=${data.empCompIdSearch}&statusCd=A&page=${data.currentPage-1}&size=${data.itemsPerPage}&sort=empCompId asc`)
+            return axios.get(BASE_URL_API + `/complaint/complaint-search?compStatus=Pending&compId=${data.empCompIdSearch}&statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=empCompId asc`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -61,9 +61,10 @@ class OthersPendingComplaintService {
     }
 
     //advance search of employee
-    advanceSearchComplaintDetails(advSearchComplaints) {
+    advanceSearchComplaintDetails(data) {
         if (null != Cookies.get('empId')) {
-            return axios.post(BASE_URL_API + "/complaint/complaint-adv-search?page=0&size=200", advSearchComplaints)
+            console.log(data)
+            return axios.post(BASE_URL_API + `/complaint/complaint-adv-search?page=${data.currentPage - 1}&size=${data.itemsPerPage}`, data.advComplaintSearch)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);

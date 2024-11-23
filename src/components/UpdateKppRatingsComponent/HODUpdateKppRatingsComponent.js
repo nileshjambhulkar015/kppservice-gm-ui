@@ -135,7 +135,7 @@ const HODUpdateKppRatingsComponent = () => {
                     {({ values, setFieldValue }) => {
 
                         const handleTodoChange = (e, i, kppId, kppOverallWeightage, empOverallAchieve) => {
-                           
+
                             const field = e.target.name?.split(".")[1];
 
 
@@ -150,7 +150,7 @@ const HODUpdateKppRatingsComponent = () => {
                                 "gmOverallTaskComp": field === "gmOverallAchieve" && !!e.target.value ? (Number(e.target.value) / 5 * 100).toFixed(1) : 0,
                                 "gmAchivedWeight": field === "gmOverallAchieve" && !!e.target.value ? ((kppOverallWeightage * (Number(e.target.value) / 5 * 100).toFixed(1)) / 100).toFixed(1) : 0,
 
-                                "overallRatings": field === "gmOverallAchieve" && !!e.target.value ? ((Number(empOverallAchieve) +  (Number(e.target.value))) / 2).toFixed(1) : 0,
+                                "overallRatings": field === "gmOverallAchieve" && !!e.target.value ? ((Number(empOverallAchieve) + (Number(e.target.value))) / 2).toFixed(1) : 0,
                                 "overallPercentage": field === "gmOverallAchieve" && !!e.target.value ? ((((Number(empOverallAchieve) + (Number(e.target.value))) / 2) / 5) * 100).toFixed(1) : 0,
 
                                 "ekppMonth": ekppMonth,
@@ -257,7 +257,7 @@ const HODUpdateKppRatingsComponent = () => {
                                                             max={5}
                                                             defaultValue={values?.fields?.[index]?.gmOverallAchieve}
 
-                                                            onKeyDown={event => handleTodoChange(event, index, kppResponse.kppId, kppResponse.kppOverallWeightage,  kppResponse.empOverallAchieve)}
+                                                            onKeyDown={event => handleTodoChange(event, index, kppResponse.kppId, kppResponse.kppOverallWeightage, kppResponse.empOverallAchieve)}
                                                             onChange={event => handleTodoChange(event, index, kppResponse.kppId, kppResponse.kppOverallWeightage, kppResponse.empOverallAchieve)}
                                                         />
                                                     </td>
@@ -298,7 +298,7 @@ const HODUpdateKppRatingsComponent = () => {
 
                                             <td className='text-center'> <label className="control-label text-right">{values?.totalOverallRatings === 0 ? getAvgTotalOverallRatings(values?.fields) : values?.totalOverallRatings}</label></td>
                                             <td className='text-center'> <label className="control-label text-right">{values?.totalOverallPercentage === 0 ? getAvgTotalOverallPercetage(values?.fields) : values?.totalOverallPercentage}</label></td>
-                                           
+
                                         </tr>
                                     </tbody>
                                 </table>

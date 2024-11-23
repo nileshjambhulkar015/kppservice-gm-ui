@@ -38,14 +38,9 @@ export default function OthersInProgressComplaintComponent() {
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
-
-
-
     const [complaints, setComplaints] = useState([])
     const [ekppMonth, setEkppMonth] = useState('');
     const [compResolveDateTime, setCompResolveDateTime] = useState('');
-
-
 
     const [departments, setDepartments] = useState([])
     const [compFromDate, setCompFromDate] = useState('')
@@ -54,7 +49,7 @@ export default function OthersInProgressComplaintComponent() {
     const [asCompId, setAsCompId] = useState('')
     const [asCompStatus, setAsCompStatus] = useState('')
     const [empCompDeptId, setEmpCompDeptId] = useState('')
-
+    const [responseMessage, setResponseMessage] = useState('')
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -79,14 +74,14 @@ export default function OthersInProgressComplaintComponent() {
         OthersInProgressComplaintService.getEmployeeCompaintsDetailsByPaging(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
-            setComplaints(res.data.responseData.content);
-            setDataPageable(res.data.responseData);
+                setComplaints(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
+            }
+            else {
+                setResponseMessage(res.data.responseMessage)
+                setIsSuccess(false);
+            }
 
-        }
-        else {
-            setIsSuccess(false);
-        }
-         
         });
 
         OthersInProgressComplaintService.getAllDepartmentDetails().then((res) => {
@@ -107,8 +102,8 @@ export default function OthersInProgressComplaintComponent() {
 
 
     // Advance search employee
-    const advSearchEmployeeComplaints = (e) => {        
-        let asCompStatus = 'In Progress';      
+    const advSearchEmployeeComplaints = (e) => {
+        let asCompStatus = 'In Progress';
 
         e.preventDefault()
         let advComplaintSearch = { compFromDate, compToDate, empCompDeptId, asCompId, asCompStatus };
@@ -124,22 +119,29 @@ export default function OthersInProgressComplaintComponent() {
                 setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
-        },  [currentPage, itemsPerPage]);
+        }, [currentPage, itemsPerPage]);
     }
 
     const searchComplaintById = (e) => {
         setEmpCompIdSearch(e.target.value)
-
-        OthersInProgressComplaintService.getEmployeeCompaintsByComplaintId(e.target.value).then((res) => {
+        let empCompIdSearch = e.target.value
+        const data = {
+            currentPage,
+            itemsPerPage,
+            empCompIdSearch
+        }
+        OthersInProgressComplaintService.getEmployeeCompaintsByComplaintId(data).then((res) => {
 
             if (res.data.success) {
                 setIsSuccess(true);
                 setComplaints(res.data.responseData.content);
-                // setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 1));
+                setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
         });
@@ -189,49 +191,56 @@ export default function OthersInProgressComplaintComponent() {
             itemsPerPage
         }
         if (window.confirm("Do you want to resolve this complaint ?")) {
-        e.preventDefault()
+            e.preventDefault()
 
-        let compResolveEmpId = Cookies.get('empId');
-        let compResolveEmpName = Cookies.get('empFirstName') + " " + Cookies.get('empMiddleName') + " " + Cookies.get('empLastName');
-        let compResolveEmpEId = Cookies.get('empEId');
+            let compResolveEmpId = Cookies.get('empId');
+            let compResolveEmpName = Cookies.get('empFirstName') + " " + Cookies.get('empMiddleName') + " " + Cookies.get('empLastName');
+            let compResolveEmpEId = Cookies.get('empEId');
 
-        let complaint = { empCompId, compStatus, compResolveDateTime, compResolveEmpId, compResolveEmpName, compResolveEmpEId, remark };
+            let complaint = { empCompId, compStatus, compResolveDateTime, compResolveEmpId, compResolveEmpName, compResolveEmpEId, remark };
 
-        
-        OthersInProgressComplaintService.updateComplaintDetails(complaint).then(res => {
-            OthersInProgressComplaintService.getEmployeeCompaintsDetailsByPaging(data).then((res) => {
-                if (res.data.success) {
-                    setIsSuccess(true);
-                setComplaints(res.data.responseData.content?.filter((item) => item.compStatus != 'Pending'));
-                setDataPageable(res.data.responseData);
+
+            OthersInProgressComplaintService.updateComplaintDetails(complaint).then(res => {
+                OthersInProgressComplaintService.getEmployeeCompaintsDetailsByPaging(data).then((res) => {
+                    if (res.data.success) {
+                        setIsSuccess(true);
+                        setComplaints(res.data.responseData.content?.filter((item) => item.compStatus != 'Pending'));
+                        setDataPageable(res.data.responseData);
+
+                    }
+                    else {
+                        setResponseMessage(res.data.responseMessage)
+                        setIsSuccess(false);
+                    }
+                }, [currentPage, itemsPerPage]);
 
             }
-            else {
-                setIsSuccess(false);
-            }
-            },[currentPage, itemsPerPage]);
-      
+            );
+        } else {
+            // User clicked Cancel
+            console.log("User canceled the action.");
         }
-        );
-    } else {
-        // User clicked Cancel
-        console.log("User canceled the action.");
-    }
     }
 
 
     const clearSearchData = () => {
-        
-        OthersInProgressComplaintService.getEmployeeCompaintsDetailsByPaging().then((res) => {
+        setEmpCompIdSearch('')
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        OthersInProgressComplaintService.getEmployeeCompaintsDetailsByPaging(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setComplaints(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
 
-        });
+        }, [currentPage, itemsPerPage]);
 
     }
 
@@ -314,8 +323,8 @@ export default function OthersInProgressComplaintComponent() {
                                     }
                                 </tbody>
                             </table>
-                            : <h1>No Data Found</h1>}
-                            <PaginationComponent
+                            : <h1>{responseMessage}</h1>}
+                        <PaginationComponent
                             currentPage={currentPage}
                             totalPages={dataPageable.totalPages || 10}
                             onPageChange={handlePageChange}

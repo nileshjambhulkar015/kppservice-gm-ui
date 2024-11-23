@@ -20,22 +20,22 @@ export default function DesignationComponent() {
     const [updatDesignationAlert, setUpdateDesignationAlert] = useState(false);
 
     const [isSuccess, setIsSuccess] = useState(true)
-
+    const [responseMessage, setResponseMessage] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [dataPageable, setDataPageable] = useState([])
 
     const handlePageChange = (page) => {
-      setCurrentPage(page);
-      // Handle data fetching or any other logic here
-    };    
+        setCurrentPage(page);
+        // Handle data fetching or any other logic here
+    };
 
-    
- // Handle items per page change
- const handleItemsPerPageChange = (newItemsPerPage) => {
-    setItemsPerPage(newItemsPerPage);
-    setCurrentPage(1); // Reset to first page when items per page changes
-  };
+
+    // Handle items per page change
+    const handleItemsPerPageChange = (newItemsPerPage) => {
+        setItemsPerPage(newItemsPerPage);
+        setCurrentPage(1); // Reset to first page when items per page changes
+    };
 
     const handleClose = () => {
 
@@ -47,35 +47,56 @@ export default function DesignationComponent() {
     };
     useEffect(() => {
 
+        setDesigName('')
+        setRemark('')
         const data = {
             currentPage,
             itemsPerPage
         }
 
         DesignationService.getDesignationDetailsByPaging(data).then((res) => {
-            setDesignations(res.data.responseData.content);
-            setDataPageable(res.data.responseData);
+            if (res.data.success) {
+                setIsSuccess(true);
+                setDesignations(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
+            }
+            else {
+                setResponseMessage(res.data.responseMessage)
+                setIsSuccess(false);
+            }
         });
 
-        DepartmentService.ddAllDepartmentExceptGM().then((res) => {
+        /* DepartmentService.ddAllDepartmentExceptGM().then((res) => {
+             setDepartments(res.data);
+             setDeptId(res.data?.[0].deptId)
+ 
+         });*/
+        DesignationService.ddAllDepartmentDetails().then((res) => {
             setDepartments(res.data);
             setDeptId(res.data?.[0].deptId)
-
         });
     }, [currentPage, itemsPerPage]);
 
     const searchDesigName = (e) => {
+        let desigName = e.target.value
         setDesigNameSearch(e.target.value)
-        DesignationService.getDesignationDetailsByDesigNamePaging(e.target.value).then((res) => {
+        const data = {
+            currentPage,
+            itemsPerPage,
+            desigName
+        }
+        DesignationService.getDesignationDetailsByDesigNamePaging(data).then((res) => {
 
             if (res.data.success) {
                 setIsSuccess(true);
                 setDesignations(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
             }
             else {
+                setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
             }
-        });
+        }, [currentPage, itemsPerPage]);
     }
     //for all department by role id
 
@@ -94,8 +115,11 @@ export default function DesignationComponent() {
                     setIsSuccess(true);
                     setDesignations(res.data.responseData.content);
                     setDataPageable(res.data.responseData);
+                    setDesigName('')
+                    setRemark('')
                 }
                 else {
+                    setResponseMessage(res.data.responseMessage)
                     setIsSuccess(false);
                 }
 
@@ -135,11 +159,13 @@ export default function DesignationComponent() {
                 if (res.data.success) {
                     setIsSuccess(true);
                     setDesignations(res.data.responseData.content);
+                    setDataPageable(res.data.responseData);
                 }
                 else {
+                    setResponseMessage(res.data.responseMessage)
                     setIsSuccess(false);
                 }
-            });
+            }, [currentPage, itemsPerPage]);
 
         }
         );
@@ -156,12 +182,14 @@ export default function DesignationComponent() {
                     if (res.data.success) {
                         setIsSuccess(true);
                         setDesignations(res.data.responseData.content);
+                        setDataPageable(res.data.responseData);
                     }
                     else {
+                        setResponseMessage(res.data.responseMessage)
                         setIsSuccess(false);
                     }
 
-                });
+                }, [currentPage, itemsPerPage]);
             }
             );
 
@@ -188,7 +216,7 @@ export default function DesignationComponent() {
                 alert("Designation uploaded successfully")
                 DesignationService.getDesignationDetailsByPaging().then((res) => {
                     setDesignations(res.data.responseData.content);
-                    
+
                 });
 
             })
@@ -254,8 +282,8 @@ export default function DesignationComponent() {
                                         }
                                     </tbody>
                                 </table>
-                                : <h4>Designation name is not available</h4>}
-                                <PaginationComponent
+                                : <h4>{responseMessage}</h4>}
+                            <PaginationComponent
                                 currentPage={currentPage}
                                 totalPages={dataPageable.totalPages || 10}
                                 onPageChange={handlePageChange}

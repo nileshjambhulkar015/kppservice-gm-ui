@@ -11,7 +11,7 @@ export default function RoleComponent() {
         });
     }, []);
 
-    
+
     return (
 
         <div>
@@ -19,7 +19,7 @@ export default function RoleComponent() {
                 <h2 className="text-center">Role List</h2>
                 <div className="col-md-2"></div>
                 <div className="col-md-8">
-                  
+
 
                     <div className="row">
 
@@ -28,7 +28,6 @@ export default function RoleComponent() {
                                 <tr>
                                     <th className="text-center">Sr No</th>
                                     <th className="text-center">Role Name</th>
-                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,8 +37,7 @@ export default function RoleComponent() {
                                             <tr key={role.roleId}>
                                                 <td className="text-center">{index + 1}</td>
                                                 <td>{role.roleName}</td>
-                                                
-                                                </tr>
+                                            </tr>
                                     )
                                 }
                             </tbody>
@@ -51,7 +49,7 @@ export default function RoleComponent() {
 
             </div>
 
-        
+
         </div>
     );
 }
