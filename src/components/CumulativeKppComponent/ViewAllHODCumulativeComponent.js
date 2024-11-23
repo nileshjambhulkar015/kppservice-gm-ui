@@ -65,7 +65,7 @@ export default function ViewAllHODCumulativeComponent() {
             fromDate,
             toDate
         }
-        CumulativeService.getOverallHODCumulativeByDates_ADMIN(data).then((res) => {
+        CumulativeService.getOverallHODCumulativeByDates(data).then((res) => {
             if (res.data.success) {
                 setEmployees(res.data.responseData.content);
                 setDataPageable(res.data.responseData);

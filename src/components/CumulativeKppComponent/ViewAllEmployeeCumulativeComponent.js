@@ -82,7 +82,7 @@ export default function ViewAllEmployeeCumulativeComponent() {
             fromDate,
             toDate
         }
-        CumulativeService.getOverallEmployeeCumulativeByDates_ADMIN(data).then((res) => {
+        CumulativeService.getOverallEmployeeCumulativeByDates(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setEmployees(res.data.responseData.content);

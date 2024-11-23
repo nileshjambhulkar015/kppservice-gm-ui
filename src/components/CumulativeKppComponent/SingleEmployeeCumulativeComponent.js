@@ -98,7 +98,7 @@ export default function SingleEmployeeCumulativeComponent() {
             fromDate,
             toDate
         }
-        CumulativeService.getSingleEmployeeKppReportByDates_ADMIN(data).then((res) => {
+        CumulativeService.getSingleEmployeeKppReportByDates(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setSumOfEmployeeRatings(res.data.responseData.sumOfEmployeeRatings)
