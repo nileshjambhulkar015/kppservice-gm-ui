@@ -36,6 +36,7 @@ import OthersInProgressComplaintComponent from './components/ComplaintManagement
 
 import AnnouncementTypeComponent from "./components/MasterComponent/AnnouncementTypeComponent";
 import AnnouncementComponent from "./components/AnnouncementComponent/AnnouncementComponent";
+import FinancialYearComponent from "./components/MasterComponent/FinancialYearComponent";
 
 function App() {
 
@@ -125,6 +126,7 @@ function App() {
                 <span className="caret"></span></a>
               <ul className="dropdown-menu">
                 <li><Link to="/role">Role Master</Link></li>
+                <li><Link to="/financialYear">Financial Year Master</Link></li>
                 <li><Link to="/department">Department Master</Link></li>
                 <li><Link to="/designation">Designation Master</Link></li>
                 <li><Link to="/uomMaster">UoM Master</Link></li>
@@ -151,6 +153,7 @@ function App() {
 
         <Route exact path="/newEmployee" element={<AddNewEmployeeComponent />}></Route>
         <Route exact path="/role" element={<RoleComponent />}></Route>
+        <Route exact path="/financialYear" element={<FinancialYearComponent />}></Route>
         <Route exact path="/department" element={<DepartmentComponent />}></Route>
         <Route exact path="/designation" element={<DesignationComponent />}></Route>
         <Route exact path="/regionMaster" element={<RegionComponent />}></Route>
