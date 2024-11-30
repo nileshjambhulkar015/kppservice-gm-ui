@@ -314,13 +314,15 @@ export default function AnnouncementComponent() {
                                     }
                                 </tbody>
                             </table>
-                            : <h1>No Data Found</h1>}
-                        <PaginationComponent
-                            currentPage={currentPage}
-                            totalPages={dataPageable.totalPages || 10}
-                            onPageChange={handlePageChange}
-                            onItemsPerPageChange={handleItemsPerPageChange}
-                        />
+                            : <h4>{responseMessage}</h4>}
+                        {announcements?.length > 0 && (
+                            <PaginationComponent
+                                currentPage={currentPage}
+                                totalPages={dataPageable.totalPages || 10}
+                                onPageChange={handlePageChange}
+                                onItemsPerPageChange={handleItemsPerPageChange}
+                            />
+                        )}
                     </div>
 
                 </div>

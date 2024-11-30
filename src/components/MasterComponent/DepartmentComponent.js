@@ -201,28 +201,40 @@ export default function DepartmentComponent() {
         );
         setUpdateDeptAlert(false);
     }
-
-    //upload excel data for department
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        fetch(BASE_URL_API + '/department/upload-department', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
-                // Handle response
-                alert("Department uploaded successfully")
-                DepartmentService.getDepartmentDetailsByPaging().then((res) => {
+//upload excel data for department
+const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = {
+        currentPage,
+        itemsPerPage
+    }
+    const formData = new FormData(event.target);
+    fetch(BASE_URL_API + '/department/upload-department', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => {
+            // Handle response
+            alert("Department uploaded successfully")
+          
+            DepartmentService.getDepartmentDetailsByPaging(data).then((res) => {
+                if (res.data.success) {
+                    setIsSuccess(true);
                     setDepartments(res.data.responseData.content);
+                    setDataPageable(res.data.responseData);
+                }
+                else {
+                    setResponseMessage(res.data.responseMessage)
+                    setIsSuccess(false);
+                }
 
-                });
-            })
-            .catch(error => {
-                // Handle error
-                setMessage('An error occurred while uploading the file.');
-            });
-    };
+            }, [currentPage, itemsPerPage]);
+        })
+        .catch(error => {
+            // Handle error
+            setMessage('An error occurred while uploading the file.');
+        });
+};
 
     return (
         <React.Fragment>

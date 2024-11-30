@@ -335,29 +335,41 @@ export default function MainEmployeeComponent() {
         );
     }
 
+//upload excel data for department
+const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = {
+        currentPage,
+        itemsPerPage
+    }
+    const formData = new FormData(event.target);
+    fetch(BASE_URL_API + '/employee/upload-employee', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => {
+            // Handle response
 
-    //upload excel data for department
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        fetch(BASE_URL_API + '/employee/upload-employee', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
-                // Handle response
-
-                alert("Employee uploaded successfully")
-                EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+            alert("Employee uploaded successfully")
+            EmployeeService.getEmployeeDetailsByPaging(data).then((res) => {
+                if (res.data.success) {
+                    setIsSuccess(true);
                     setEmployees(res.data.responseData.content);
-                });
+                    setDataPageable(res.data.responseData);
+                }
+                else {
+                    setResponseMessage(res.data.responseMessage)
+                    setIsSuccess(false);
+                }
+            }, [currentPage, itemsPerPage]);
 
-            })
-            .catch(error => {
-                // Handle error
-                alert('An error occurred while uploading the file.');
-            });
-    };
+        })
+        .catch(error => {
+            // Handle error
+            alert('An error occurred while uploading the file.');
+        });
+};
+
 
 
 

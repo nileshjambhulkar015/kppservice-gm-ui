@@ -71,7 +71,7 @@ export default function ComplaintTypeComponent() {
 
         // for employee except GM Role
         ComplaintTypeService.ddAllComplaintTypeDepartments().then((res) => {
-     
+
             setCompDepartments(res.data);
             setCompDeptId(res.data?.[0]?.deptId)
         });
@@ -280,12 +280,14 @@ export default function ComplaintTypeComponent() {
                                     </tbody>
                                 </table>
                                 : <h4>{responseMessage}</h4>}
-                            <PaginationComponent
-                                currentPage={currentPage}
-                                totalPages={dataPageable.totalPages || 10}
-                                onPageChange={handlePageChange}
-                                onItemsPerPageChange={handleItemsPerPageChange}
-                            />
+                            {complaintTypes?.length > 0 && (
+                                <PaginationComponent
+                                    currentPage={currentPage}
+                                    totalPages={dataPageable.totalPages || 10}
+                                    onPageChange={handlePageChange}
+                                    onItemsPerPageChange={handleItemsPerPageChange}
+                                />
+                            )}
                         </div>
 
                     </div>

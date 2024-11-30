@@ -7,7 +7,7 @@ export default function FinancialYearComponent() {
 
 
     const [finYearId, setFinYearId] = useState('');
-    const [finYearName, setFinYearName] = useState('');
+    const [finYear, setFinYear] = useState('');
 
     const [remark, setRemark] = useState('');
 
@@ -24,7 +24,7 @@ export default function FinancialYearComponent() {
         setSaveFinancialYearAlert(false);
         setDeleteFinancialYearAlert(false)
         setUpdateFinancialYearAlert(false)
-        setFinYearName('');
+        setFinYear('');
 
         setRemark('');
     };
@@ -56,7 +56,7 @@ export default function FinancialYearComponent() {
 
 
             setFinYearId(financeYear.finYearId)
-            setFinYearName(financeYear.finYearName)
+            setFinYear(financeYear.finYear)
             setRemark(financeYear.remark)
 
 
@@ -69,7 +69,7 @@ export default function FinancialYearComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let financialYearUpdateRequest = { finYearId, finYearName, remark, statusCd };
+        let financialYearUpdateRequest = { finYearId, finYear, remark, statusCd };
 
         FinancialYearService.updateFinancialYearDetails(financialYearUpdateRequest).then(res => {
             FinancialYearService.getFinancialYearDetailsByPaging(e).then((res) => {
@@ -110,7 +110,7 @@ export default function FinancialYearComponent() {
                                                 (financialYear, index) =>   //index is inbuilt variable of map started with 0
                                                     <tr key={financialYear.finYearId}>
                                                         <td className="text-center">{index + 1}</td>
-                                                        <td>{financialYear.finYearName}</td>
+                                                        <td>{financialYear.finYear}</td>
 
 
                                                         <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateFinancialYearModal" onClick={() => getFinancialYearById(financialYear.finYearId)}>Update</button>
@@ -146,7 +146,7 @@ export default function FinancialYearComponent() {
                                         <label className="control-label col-sm-4" htmlFor="finYearName">Enter Financial Year:</label>
                                         <div className="col-sm-8">
 
-                                            <input type="text" className="form-control" id="finYearName" placeholder="Enter Financial Year here" value={finYearName} onChange={(e) => setFinYearName(e.target.value)} />
+                                            <input type="text" className="form-control" id="finYearName" placeholder="Enter Financial Year here" value={finYear} onChange={(e) => setFinYear(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="form-group">

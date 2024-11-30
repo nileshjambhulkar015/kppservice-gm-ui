@@ -202,10 +202,15 @@ export default function DesignationComponent() {
     }
 
 
+   
     //upload excel data for designation
     const handleSubmit = (event) => {
 
         event.preventDefault();
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         const formData = new FormData(event.target);
         fetch(BASE_URL_API + '/designation/upload-designation', {
             method: 'POST',
@@ -214,10 +219,18 @@ export default function DesignationComponent() {
             .then(response => {
                 // Handle response
                 alert("Designation uploaded successfully")
-                DesignationService.getDesignationDetailsByPaging().then((res) => {
-                    setDesignations(res.data.responseData.content);
+                DesignationService.getDesignationDetailsByPaging(data).then((res) => {
+                    if (res.data.success) {
+                        setIsSuccess(true);
+                        setDesignations(res.data.responseData.content);
+                        setDataPageable(res.data.responseData);
+                    }
+                    else {
+                        setResponseMessage(res.data.responseMessage)
+                        setIsSuccess(false);
+                    }
 
-                });
+                }, [currentPage, itemsPerPage]);
 
             })
             .catch(error => {
@@ -225,8 +238,7 @@ export default function DesignationComponent() {
                 alert('An error occurred while uploading the file.');
             });
     };
-
-
+    
     return (
         <React.Fragment>
             <div>

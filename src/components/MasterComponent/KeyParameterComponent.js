@@ -238,9 +238,14 @@ export default function KeyParameterComponent() {
 
     }
 
+    
     //upload excel data for KPP
     const handleSubmit = (event) => {
         event.preventDefault();
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         const formData = new FormData(event.target);
         fetch(BASE_URL_API + '/key-perform-parameter/upload-kpp', {
             method: 'POST',
@@ -249,9 +254,17 @@ export default function KeyParameterComponent() {
             .then(response => {
                 // Handle response
                 alert("KPP uploaded successfully")
-                KeyParameterService.getKPPDetailsByPaging().then((res) => {
-                    setKpps(res.data.responseData.content);
-                });
+                KeyParameterService.getKPPDetailsByPaging(data).then((res) => {
+                    if (res.data.success) {
+                        setIsSuccess(true);
+                        setKpps(res.data.responseData.content);
+                        setDataPageable(res.data.responseData);
+                    }
+                    else {
+                        setResponseMessage(res.data.responseMessage)
+                        setIsSuccess(false);
+                    }
+                }, [currentPage, itemsPerPage]);
             })
             .catch(error => {
                 // Handle error

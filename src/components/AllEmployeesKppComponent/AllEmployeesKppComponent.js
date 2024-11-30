@@ -11,7 +11,7 @@ export default function AllEmployeesKppComponent() {
     const [isSuccess, setIsSuccess] = useState(true)
     const [empKppStatus, setEmpKppStatus] = useState('In-Progress')
     const [empResponses, setEmpResponses] = useState([])
-
+    const [responseMessage, setResponseMessage] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [dataPageable, setDataPageable] = useState([])
@@ -40,6 +40,7 @@ export default function AllEmployeesKppComponent() {
 
         }
         else {
+            setResponseMessage(res.data.responseMessage)
             setIsSuccess(false);
         }
         });
@@ -65,6 +66,7 @@ export default function AllEmployeesKppComponent() {
 
         }
         else {
+            setResponseMessage(res.data.responseMessage)
             setIsSuccess(false);
         }    
         }, [currentPage, itemsPerPage]);
@@ -143,14 +145,15 @@ export default function AllEmployeesKppComponent() {
                             }
                         </tbody>
                     </table>
-                    : <h4>Employee KPP is not available</h4>}
+                    : <h4>{responseMessage}</h4>}
+                    { empResponses?.length>0 && (
                     <PaginationComponent
                         currentPage={currentPage}
                         totalPages={dataPageable.totalPages || 10}
                         onPageChange={handlePageChange}
                         onItemsPerPageChange={handleItemsPerPageChange}
                     />
-
+                    )}
                 </form>
 
             </div>
