@@ -74,8 +74,7 @@ export default function EmployeeTypeComponent() {
 
         EmployeeTypeService.getEmployeeTypeById(e).then(res => {
             let employeeType = res.data;
-            console.log("employeeType :", employeeType)
-
+    
             setEmpTypeId(employeeType.empTypeId)
             setEmpTypeName(employeeType.empTypeName)
             setRemark(employeeType.remark)

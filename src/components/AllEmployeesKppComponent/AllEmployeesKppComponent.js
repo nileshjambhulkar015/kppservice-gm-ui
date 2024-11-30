@@ -55,7 +55,7 @@ export default function AllEmployeesKppComponent() {
             itemsPerPage,
             empKppStatus
         }
-        console.log("Data ", data)
+    
     
         AllEmployeesKppService.getEmployeeByStatusByPagination(data).then((res) => {
             if (res.data.success) {

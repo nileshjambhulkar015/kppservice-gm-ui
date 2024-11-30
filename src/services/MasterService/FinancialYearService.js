@@ -30,7 +30,7 @@ class FinancialYearService {
 
     updateFinancialYearDetails(financialYearUpdateRequest) {
         if (null != Cookies.get('empId')) {
-            console.log("financialYearUpdateRequest ", financialYearUpdateRequest)
+           
             return axios.put(BASE_URL, financialYearUpdateRequest)
         } else {
             alert("You need to login first")

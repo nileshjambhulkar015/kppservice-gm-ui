@@ -42,7 +42,7 @@ class DepartmentService {
 
     updateDepartmentDetails(department) {
         if (null != Cookies.get('empId')) {
-            console.log("department : ", department)
+     
             return axios.put(BASE_URL, department)
         } else {
             alert("You need to login first")

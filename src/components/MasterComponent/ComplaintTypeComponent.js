@@ -71,7 +71,7 @@ export default function ComplaintTypeComponent() {
 
         // for employee except GM Role
         ComplaintTypeService.ddAllComplaintTypeDepartments().then((res) => {
-            console.log(res.data)
+     
             setCompDepartments(res.data);
             setCompDeptId(res.data?.[0]?.deptId)
         });

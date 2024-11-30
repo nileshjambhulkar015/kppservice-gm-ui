@@ -53,7 +53,7 @@ class AnnouncementService {
     //advance search of employee
     advanceSearchAnnouncementDetails(data) {
         if (null != Cookies.get('empId')) {
-            console.log("dd ", data)
+         
             return axios.post(BASE_URL + `/announ-adv-search?page=${data.currentPage - 1}&size=${data.itemsPerPage}`, data.announcementAdvSearch)
         } else {
             alert("You need to login first")

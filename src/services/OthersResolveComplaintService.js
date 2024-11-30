@@ -26,7 +26,7 @@ class OthersResolveComplaintService {
     //search complaint by complaint id
     getEmployeeCompaintsByComplaintId(data) {
         if (null != Cookies.get('empId')) {
-            console.log("d", data)
+       
             return axios.get(BASE_URL_API + `/complaint/complaint-search?compStatus=Resolved&compId=${data.empCompIdSearch}&statusCd=A&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=empCompId asc`)
         } else {
             alert("You need to login first")
@@ -79,7 +79,7 @@ class OthersResolveComplaintService {
     //advance search of employee
     advanceSearchComplaintDetails(data) {
         if (null != Cookies.get('empId')) {
-            console.log("d ", data)
+ 
             return axios.post(BASE_URL_API + `/complaint/complaint-adv-search?page=${data.currentPage - 1}&size=${data.itemsPerPage}`, data.advComplaintSearch)
         } else {
             alert("You need to login first")

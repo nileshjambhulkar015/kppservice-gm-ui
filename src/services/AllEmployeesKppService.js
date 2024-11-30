@@ -18,7 +18,7 @@ class AllEmployeesKppService {
 
     getEmployeeByStatusByPagination(data) {
         if (null != Cookies.get('empId')) {
-            console.log("data.empKppStaus : ", data.empKppStatus)
+     
             return axios.get(BASE_URL_API + `/employee/employee-kpp-status?roleId=3&empKppStatus=${data.empKppStatus}&page=${data.currentPage - 1}&size=${data.itemsPerPage}&sort=desig.desig.name`)
         } else {
             alert("You need to login first")
