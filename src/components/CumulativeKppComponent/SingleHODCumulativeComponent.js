@@ -19,7 +19,7 @@ export default function SingleHODCumulativeComponent() {
     const [cummulativeRatings, setCummulativeRatings] = useState()
     const [avgCummulativeRatings, setAvgCummulativeRatings] = useState()
     const [isSuccess, setIsSuccess] = useState(true)
-    const [employees, setEmployees] = useState([])
+    const [hodCumulatives, setHodCumulatives] = useState([])
 
     const [empId, setEmpId] = useState('');
     const [empEId, setEmpEId] = useState('');
@@ -66,7 +66,7 @@ export default function SingleHODCumulativeComponent() {
                 setTotalMonths(res.data.responseData.totalMonths)
                 setAvgCummulativeRatings(res.data.responseData.avgCummulativeRatings)
 
-                setEmployees(res.data.responseData.employeeKppStatusResponses.content);
+                setHodCumulatives(res.data.responseData.employeeKppStatusResponses.content);
             }
             else {
                 alert("Kpp is not approved for month");
@@ -74,9 +74,9 @@ export default function SingleHODCumulativeComponent() {
                 setIsSuccess(false);
             }
 
-        }, [currentPage, itemsPerPage]).catch((err) => {
+        }).catch((err) => {
             alert(err.response.data.details)
-        });
+        }, [currentPage, itemsPerPage]);
 
 
         //for employee basic details
@@ -106,7 +106,7 @@ export default function SingleHODCumulativeComponent() {
                 setTotalMonths(res.data.responseData.totalMonths)
                 setAvgCummulativeRatings(res.data.responseData.avgCummulativeRatings)
 
-                setEmployees(res.data.responseData.employeeKppStatusResponses.content);
+                setHodCumulatives(res.data.responseData.employeeKppStatusResponses.content);
             }
             else {
                 //alert("Kpp is not approved for month");
@@ -147,7 +147,7 @@ export default function SingleHODCumulativeComponent() {
                 setCummulativeRatings(res.data.responseData.cummulativeRatings)
                 setAvgCummulativeRatings(res.data.responseData.avgCummulativeRatings)
                 setTotalMonths(res.data.responseData.totalMonths)
-                setEmployees(res.data.responseData.employeeKppStatusResponses.content);
+                setHodCumulatives(res.data.responseData.employeeKppStatusResponses.content);
             } else {
                 setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
@@ -255,24 +255,24 @@ export default function SingleHODCumulativeComponent() {
                         </thead>
                         <tbody>
                             {
-                                employees.map(
-                                    (employee, index) =>   //index is inbuilt variable of map started with 0
-                                        <tr key={employee.empId}>
+                                hodCumulatives.map(
+                                    (hodCumulative, index) =>   //index is inbuilt variable of map started with 0
+                                        <tr key={hodCumulative.empId}>
                                             <td className="text-center">{index + 1}</td>
-                                            <td className="text-justify">{YYYY_MM_DD_Formater(employee.ekppMonth)}</td>
-                                            <td className="text-center">{employee.empOverallAchive}</td>
+                                            <td className="text-justify">{YYYY_MM_DD_Formater(hodCumulative.ekppMonth)}</td>
+                                            <td className="text-center">{hodCumulative.empOverallAchive}</td>
 
-                                            <td className="text-center">{employee.gmOverallAchieve}</td>
-                                            <td className="text-center">{employee.sumOfRatings}</td>
+                                            <td className="text-center">{hodCumulative.gmOverallAchieve}</td>
+                                            <td className="text-center">{hodCumulative.sumOfRatings}</td>
 
                                             <td className="text-center">
                                                 <div className="col-sm-3">
-                                                    <a href={BASE_URL_API + `/report-evidence?empId=${employee.empId}&evMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
+                                                    <a href={BASE_URL_API + `/report-evidence?empId=${hodCumulative.empId}&evMonth=${YYYY_MM_DD_Formater(hodCumulative.ekppMonth)}`}>
                                                         View</a>
                                                 </div>
                                             </td>
                                             <td className="text-center">
-                                                <a href={BASE_URL_API + `/report/completed-hod-kpp-status?empId=${employee.empId}&ekppMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
+                                                <a href={BASE_URL_API + `/report/completed-hod-kpp-status?empId=${hodCumulative.empId}&ekppMonth=${YYYY_MM_DD_Formater(hodCumulative.ekppMonth)}`}>
                                                     <button type="submit" className="btn btn-info">Download</button>
                                                 </a>
                                             </td>
@@ -307,19 +307,16 @@ export default function SingleHODCumulativeComponent() {
                         </tbody>
 
                     </table>
-                    : <h1>{responseMessage}</h1>}
-                <PaginationComponent
-                    currentPage={currentPage}
-                    totalPages={dataPageable.totalPages || 10}
-                    onPageChange={handlePageChange}
-                    onItemsPerPageChange={handleItemsPerPageChange}
-                />
+                    : <h4>{responseMessage}</h4>}
+                {hodCumulatives?.length > 0 && (
+                    <PaginationComponent
+                        currentPage={currentPage}
+                        totalPages={dataPageable.totalPages || 10}
+                        onPageChange={handlePageChange}
+                        onItemsPerPageChange={handleItemsPerPageChange}
+                    />
+                )}
             </div>
-
-
-
-
-
         </div>
 
     );

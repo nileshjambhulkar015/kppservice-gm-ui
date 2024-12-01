@@ -10,10 +10,10 @@ export default function ViewAllHODCumulativeComponent() {
     const [fromDate, setFromDate] = useState('')
     const [toDate, setToDate] = useState('')
     const [isSuccess, setIsSuccess] = useState(true)
-    const [employees, setEmployees] = useState([])
+    const [hodCumulatives, setHodCumulatives] = useState([])
     const [responseMessage, setResponseMessage] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(12);
     const [dataPageable, setDataPageable] = useState([])
 
     const handlePageChange = (page) => {
@@ -39,7 +39,7 @@ export default function ViewAllHODCumulativeComponent() {
         CumulativeService.getOverallHODCumulative(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
-                setEmployees(res.data.responseData.content);
+                setHodCumulatives(res.data.responseData.content);
                 setDataPageable(res.data.responseData);
             }
             else {
@@ -54,7 +54,25 @@ export default function ViewAllHODCumulativeComponent() {
     }
 
     useEffect(() => {
-        loadCumulativeData();
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        CumulativeService.getOverallHODCumulative(data).then((res) => {
+            if (res.data.success) {
+                setIsSuccess(true);
+                setHodCumulatives(res.data.responseData.content);
+                setDataPageable(res.data.responseData);
+            }
+            else {
+                //  alert("Kpp is not approved for month");
+                setResponseMessage(res.data.responseMessage)
+                setIsSuccess(false);
+            }
+
+        }).catch((err) => {
+            alert(err.response.data.details)
+        });
     }, [currentPage, itemsPerPage]);
 
 
@@ -67,7 +85,7 @@ export default function ViewAllHODCumulativeComponent() {
         }
         CumulativeService.getOverallHODCumulativeByDates(data).then((res) => {
             if (res.data.success) {
-                setEmployees(res.data.responseData.content);
+                setHodCumulatives(res.data.responseData.content);
                 setDataPageable(res.data.responseData);
                 setIsSuccess(true);
             } else {
@@ -134,7 +152,7 @@ export default function ViewAllHODCumulativeComponent() {
                         </thead>
                         <tbody>
                             {
-                                employees.map(
+                                hodCumulatives.map(
                                     (employee, index) =>   //index is inbuilt variable of map started with 0
                                         <tr key={employee.empId}>
                                             <td className="text-center">{index + 1}</td>
@@ -162,7 +180,7 @@ export default function ViewAllHODCumulativeComponent() {
 
                     </table>
                     : <h4>{responseMessage}</h4>}
-                    {employees?.length > 0 && (
+                    {hodCumulatives?.length > 0 && (
                 <PaginationComponent
                     currentPage={currentPage}
                     totalPages={dataPageable.totalPages || 10}
