@@ -32,7 +32,9 @@ import OthersPendingComplaintComponent from './components/ComplaintManagementCom
 import OthersResolveComplaintComponent from './components/ComplaintManagementComponent/OthersResolveComplaintComponent';
 import OthersInProgressComplaintComponent from './components/ComplaintManagementComponent/OthersInProgressComplaintComponent';
 
+import FreezeYearlyViewAllHODCumulativeComponent from "./components/CumulativeKppComponent/FreezeYearlyViewAllHODCumulativeComponent";
 
+import FreezeYearlySingleHODCumulativeComponent from "./components/CumulativeKppComponent/FreezeYearlySingleHODCumulativeComponent";
 
 import AnnouncementTypeComponent from "./components/MasterComponent/AnnouncementTypeComponent";
 import AnnouncementComponent from "./components/AnnouncementComponent/AnnouncementComponent";
@@ -105,7 +107,8 @@ function App() {
               <ul className="dropdown-menu">
                 <li><Link to="/viewHODCumulativeKpp">View HOD Cumulative Ratings</Link></li>
                 <li><Link to="/viewEmployeeCumulativeKpp">View Employee Cumulative Ratings</Link></li>
-
+                <li><Link to="/freezeYearlyViewHODCumulativeKpp">Freeze Yearly HOD Cumulative Ratings</Link></li>
+                
               </ul>
             </li>
 
@@ -171,15 +174,19 @@ function App() {
 
         <Route exact path="/allEmployeeKppStatus" element={<AllEmployeesKppComponent />}></Route>
         <Route exact path="/addEmployeeKppRating" element={<EmplyeeUpdateKppRatingsComponent />}></Route>
-        <Route exact path="/viewEmployeeCumulativeKpp" element={<ViewAllEmployeeCumulativeComponent />}></Route>
+      
 
 
         <Route exact path="/assignEmployeeKpp" element={<AssignEmployeeKppComponent />}></Route>
         <Route exact path="/viewSingleEmployeeRatings" element={<SingleEmployeeCumulativeComponent />}></Route>
         <Route exact path="/viewSingleHODRatings" element={<SingleHODCumulativeComponent />}></Route>
         <Route exact path="/transferemployeetohod" element={<ViewAllEmpTransferToOtherHODComponent />}></Route>
+        <Route exact path="/viewEmployeeCumulativeKpp" element={<ViewAllEmployeeCumulativeComponent />}></Route>
         <Route exact path="/viewHODCumulativeKpp" element={<ViewAllHODCumulativeComponent />}></Route>
 
+        <Route exact path="/freezeYearlyViewHODCumulativeKpp" element={<FreezeYearlyViewAllHODCumulativeComponent />}></Route>
+        <Route exact path="/freezeYearlyViewSingleHODRatings" element={<FreezeYearlySingleHODCumulativeComponent />}></Route>
+      
         <Route exact path="/othersPendingComplaint" element={<OthersPendingComplaintComponent />}></Route>
         <Route exact path="/othersInProgressComplaint" element={<OthersInProgressComplaintComponent />}></Route>
         <Route exact path="/othersResolveComplaint" element={<OthersResolveComplaintComponent />}></Route>

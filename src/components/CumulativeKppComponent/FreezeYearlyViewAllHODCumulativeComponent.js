@@ -3,20 +3,17 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import CumulativeService from '../../services/CumulativeService';
 import PaginationComponent from '../PaginationComponent/PaginationComponent';
-import FinancialYearService from '../../services/MasterService/FinancialYearService';
-export default function ViewAllHODCumulativeComponent() {
+export default function FreezeYearlyViewAllHODCumulativeComponent() {
 
     const navigate = useNavigate();
-
-    const [finYear, setFinYear] = useState('');
 
     const [fromDate, setFromDate] = useState('')
     const [toDate, setToDate] = useState('')
     const [isSuccess, setIsSuccess] = useState(true)
-    const [hodCumulatives, setHodCumulatives] = useState([])
+    const [employees, setEmployees] = useState([])
     const [responseMessage, setResponseMessage] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(12);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     const [dataPageable, setDataPageable] = useState([])
 
     const handlePageChange = (page) => {
@@ -42,7 +39,7 @@ export default function ViewAllHODCumulativeComponent() {
         CumulativeService.getOverallHODCumulative(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
-                setHodCumulatives(res.data.responseData.content);
+                setEmployees(res.data.responseData.content);
                 setDataPageable(res.data.responseData);
             }
             else {
@@ -57,31 +54,7 @@ export default function ViewAllHODCumulativeComponent() {
     }
 
     useEffect(() => {
-
-        FinancialYearService.getFinancialYearById(1).then((res) => {
-            setFinYear(res.data.finYear)
-        });
-
-
-        const data = {
-            currentPage,
-            itemsPerPage
-        }
-        CumulativeService.getOverallHODCumulative(data).then((res) => {
-            if (res.data.success) {
-                setIsSuccess(true);
-                setHodCumulatives(res.data.responseData.content);
-                setDataPageable(res.data.responseData);
-            }
-            else {
-                //  alert("Kpp is not approved for month");
-                setResponseMessage(res.data.responseMessage)
-                setIsSuccess(false);
-            }
-
-        }).catch((err) => {
-            alert(err.response.data.details)
-        });
+        loadCumulativeData();
     }, [currentPage, itemsPerPage]);
 
 
@@ -92,9 +65,9 @@ export default function ViewAllHODCumulativeComponent() {
             fromDate,
             toDate
         }
-        CumulativeService.getOverallHODCumulativeByDates(data).then((res) => {
+        CumulativeService.getOverallHODCumulativeByDates_ADMIN(data).then((res) => {
             if (res.data.success) {
-                setHodCumulatives(res.data.responseData.content);
+                setEmployees(res.data.responseData.content);
                 setDataPageable(res.data.responseData);
                 setIsSuccess(true);
             } else {
@@ -111,7 +84,7 @@ export default function ViewAllHODCumulativeComponent() {
     const navigateToViewEmployeeRating = (empId) => {
 
         Cookies.set('viewSingleHODIdForKppRatings', empId);
-        navigate(`/viewSingleHODRatings`, { replace: true })
+        navigate(`/freezeYearlyViewSingleHODRatings`, { replace: true })
     }
 
     function clearDates() {
@@ -122,7 +95,7 @@ export default function ViewAllHODCumulativeComponent() {
 
     return (
         <div className="row">
-            <h3 className="text-center">View Monthly HOD KPP Cumulative for Financial Year {finYear}</h3>
+            <h3 className="text-center">View Yearly HOD KPP Cumulative</h3>
             <div className="form-group">
                 <form className="form-horizontal" encType="multipart/form-data">
                     <label className="control-label col-sm-1" htmlFor="deptNameSearch"> From Date:</label>
@@ -161,7 +134,7 @@ export default function ViewAllHODCumulativeComponent() {
                         </thead>
                         <tbody>
                             {
-                                hodCumulatives.map(
+                                employees.map(
                                     (employee, index) =>   //index is inbuilt variable of map started with 0
                                         <tr key={employee.empId}>
                                             <td className="text-center">{index + 1}</td>
@@ -189,7 +162,7 @@ export default function ViewAllHODCumulativeComponent() {
 
                     </table>
                     : <h4>{responseMessage}</h4>}
-                    {hodCumulatives?.length > 0 && (
+                    { employees?.length>0 && (
                 <PaginationComponent
                     currentPage={currentPage}
                     totalPages={dataPageable.totalPages || 10}

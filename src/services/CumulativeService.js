@@ -164,6 +164,17 @@ class CumulativeService {
     }
 
 
+    updateOverallEmployeeKppReportRemark(cumulativeUpdateRequest) {
+        if (null != Cookies.get('empId')) {
+          
+            return axios.put(BASE_URL_API + "/cumulative/add-employee-remark", cumulativeUpdateRequest)
+        } else {
+            alert("You need to login first")
+            window.location.replace(LOGIN_UI_BASE_URL);
+        }
+
+    }
+
 }
 
 
