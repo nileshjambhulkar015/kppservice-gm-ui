@@ -12,6 +12,7 @@ export default function AllEmployeesKppComponent() {
     const [empKppStatus, setEmpKppStatus] = useState('In-Progress')
     const [empResponses, setEmpResponses] = useState([])
     const [responseMessage, setResponseMessage] = useState('')
+
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [dataPageable, setDataPageable] = useState([])
@@ -56,7 +57,7 @@ export default function AllEmployeesKppComponent() {
             itemsPerPage,
             empKppStatus
         }
-    
+        
     
         AllEmployeesKppService.getEmployeeByStatusByPagination(data).then((res) => {
             if (res.data.success) {
@@ -111,6 +112,7 @@ export default function AllEmployeesKppComponent() {
                         <thead>
                             <tr>
                                 <th className='text-center'>Sr No</th>
+                                <th className='text-center'>KPP Month</th>
                                 <th className='text-center'>Employee Name</th>
                                 <th className='text-center'>Employee Id</th>
                                 <th className='text-center'>Department Name</th>
@@ -128,6 +130,7 @@ export default function AllEmployeesKppComponent() {
                                     (empResponse, index) =>
                                         <tr key={empResponse.empId} className="text-justify">
                                             <td className='text-center'>{index + 1}</td>
+                                            <td className='text-center'>{empResponse.ekppMonth}</td>
                                             <td>{empResponse.empFirstName + ' ' + empResponse.empMiddleName + ' ' + empResponse.empLastName}</td>
                                             <td className='text-center'>{empResponse.empEId}</td>
                                             <td className='text-center'>{empResponse.deptName}</td>
@@ -154,6 +157,7 @@ export default function AllEmployeesKppComponent() {
                         onItemsPerPageChange={handleItemsPerPageChange}
                     />
                     )}
+
                 </form>
 
             </div>

@@ -65,6 +65,8 @@ export default function UoMComponent() {
 
     const saveUoM = (e) => {
         e.preventDefault()
+        setUomName('')
+        setRemark('');
         let statusCd = 'A';
         let employeeId = Cookies.get('empId');
         let uom = { uomName, remark, statusCd, employeeId };

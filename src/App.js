@@ -32,13 +32,16 @@ import OthersPendingComplaintComponent from './components/ComplaintManagementCom
 import OthersResolveComplaintComponent from './components/ComplaintManagementComponent/OthersResolveComplaintComponent';
 import OthersInProgressComplaintComponent from './components/ComplaintManagementComponent/OthersInProgressComplaintComponent';
 
-import FreezeYearlyViewAllHODCumulativeComponent from "./components/CumulativeKppComponent/FreezeYearlyViewAllHODCumulativeComponent";
 
-import FreezeYearlySingleHODCumulativeComponent from "./components/CumulativeKppComponent/FreezeYearlySingleHODCumulativeComponent";
 
 import AnnouncementTypeComponent from "./components/MasterComponent/AnnouncementTypeComponent";
 import AnnouncementComponent from "./components/AnnouncementComponent/AnnouncementComponent";
 import FinancialYearComponent from "./components/MasterComponent/FinancialYearComponent";
+import FreezeYearlyViewAllEmployeeCumulativeComponent from "./components/CumulativeKppComponent/FreezeYearlyViewAllEmployeeCumulativeComponent";
+import FreezeYearlyViewAllHODCumulativeComponent from "./components/CumulativeKppComponent/FreezeYearlyViewAllHODCumulativeComponent";
+import FreezeYearlySingleEmployeeCumulativeComponent from "./components/CumulativeKppComponent/FreezeYearlySingleEmployeeCumulativeComponent";
+import FreezeYearlySingleHODCumulativeComponent from "./components/CumulativeKppComponent/FreezeYearlySingleHODCumulativeComponent";
+import ChangeEmployeeDeptDesigComponent from "./components/ViewAllEmpTransferToOtherHODComponent/ChangeEmployeeDeptDesigComponent";
 
 function App() {
 
@@ -74,7 +77,7 @@ function App() {
               <ul className="dropdown-menu">
                 <li><Link to="/employee">Employee Master</Link></li>
 
-                <li><Link to="/transferemployeetohod">Transfer Employee to Other HOD</Link></li>
+                <li><Link to="/changeemployeedeptdesig">Change Employee Role | Department | Designation | Reporting Employee Name</Link></li>
               </ul>
             </li>
 
@@ -90,7 +93,7 @@ function App() {
             </li>
 
             <li className="dropdown">
-              <a className="dropdown-toggle" data-toggle="dropdown" href="#">KPP Rating Master
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#">Current Month KPP Rating
                 <span className="caret"></span></a>
               <ul className="dropdown-menu">
                 <li><Link to="/allHodKppStatus">Add Ratings for HOD KPP</Link></li>
@@ -102,13 +105,15 @@ function App() {
 
 
             <li className="dropdown">
-              <a className="dropdown-toggle" data-toggle="dropdown" href="#">Cumulative Master
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#">Cumulative KPP Ratings
                 <span className="caret"></span></a>
               <ul className="dropdown-menu">
-                <li><Link to="/viewHODCumulativeKpp">View HOD Cumulative Ratings</Link></li>
-                <li><Link to="/viewEmployeeCumulativeKpp">View Employee Cumulative Ratings</Link></li>
+                <li><Link to="/viewHODCumulativeKpp">View Monthly HOD Cumulative Ratings</Link></li>
+                <li><Link to="/viewEmployeeCumulativeKpp">View Monthly Employee Cumulative Ratings</Link></li>
+
                 <li><Link to="/freezeYearlyViewHODCumulativeKpp">Freeze Yearly HOD Cumulative Ratings</Link></li>
-                
+                <li><Link to="/freezeYearlyViewEmployeeCumulativeKpp">Freeze Yearly View Employee Cumulative Ratings</Link></li>
+
               </ul>
             </li>
 
@@ -153,7 +158,7 @@ function App() {
       </nav>
       <Routes>
         <Route exact path="/" element={<RoleComponent />}></Route>
-
+        <Route exact path="/assignEmployeeKpp" element={<AssignEmployeeKppComponent />}></Route>
         <Route exact path="/newEmployee" element={<AddNewEmployeeComponent />}></Route>
         <Route exact path="/role" element={<RoleComponent />}></Route>
         <Route exact path="/financialYear" element={<FinancialYearComponent />}></Route>
@@ -168,25 +173,29 @@ function App() {
         <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
         <Route exact path="/employee" element={<MainEmployeeComponent />}></Route>
         <Route exact path="/showEmployeeForKpp" element={<ShowEmployeeForKppComponent />}></Route>
-
+        <Route exact path="/changeDeptDesig" element={<ChangeEmployeeDeptDesigComponent />}></Route>
+        
         <Route exact path="/allHodKppStatus" element={<AllHodKppStatusComponent />}></Route>
         <Route exact path="/addHodKppRating" element={<HODUpdateKppRatingsComponent />}></Route>
 
         <Route exact path="/allEmployeeKppStatus" element={<AllEmployeesKppComponent />}></Route>
         <Route exact path="/addEmployeeKppRating" element={<EmplyeeUpdateKppRatingsComponent />}></Route>
-      
-
-
-        <Route exact path="/assignEmployeeKpp" element={<AssignEmployeeKppComponent />}></Route>
-        <Route exact path="/viewSingleEmployeeRatings" element={<SingleEmployeeCumulativeComponent />}></Route>
-        <Route exact path="/viewSingleHODRatings" element={<SingleHODCumulativeComponent />}></Route>
-        <Route exact path="/transferemployeetohod" element={<ViewAllEmpTransferToOtherHODComponent />}></Route>
         <Route exact path="/viewEmployeeCumulativeKpp" element={<ViewAllEmployeeCumulativeComponent />}></Route>
         <Route exact path="/viewHODCumulativeKpp" element={<ViewAllHODCumulativeComponent />}></Route>
 
-        <Route exact path="/freezeYearlyViewHODCumulativeKpp" element={<FreezeYearlyViewAllHODCumulativeComponent />}></Route>
+        <Route exact path="/freezeYearlyViewEmployeeCumulativeKpp" element={<FreezeYearlyViewAllEmployeeCumulativeComponent />}></Route>
+        <Route exact path="/freezeYearlyViewHODCumulativeKpp" element={<FreezeYearlyViewAllHODCumulativeComponent/>}></Route>
+        
+
+        <Route exact path="/viewSingleEmployeeRatings" element={<SingleEmployeeCumulativeComponent />}></Route>
+        <Route exact path="/viewSingleHODRatings" element={<SingleHODCumulativeComponent />}></Route>
+        <Route exact path="/freezeYearlyViewSingleEmployeeRatings" element={<FreezeYearlySingleEmployeeCumulativeComponent />}></Route>
         <Route exact path="/freezeYearlyViewSingleHODRatings" element={<FreezeYearlySingleHODCumulativeComponent />}></Route>
       
+      
+        <Route exact path="/changeemployeedeptdesig" element={<ViewAllEmpTransferToOtherHODComponent />}></Route>
+       
+
         <Route exact path="/othersPendingComplaint" element={<OthersPendingComplaintComponent />}></Route>
         <Route exact path="/othersInProgressComplaint" element={<OthersInProgressComplaintComponent />}></Route>
         <Route exact path="/othersResolveComplaint" element={<OthersResolveComplaintComponent />}></Route>

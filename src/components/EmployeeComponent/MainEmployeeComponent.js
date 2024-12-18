@@ -319,7 +319,7 @@ export default function MainEmployeeComponent() {
         let employeeData = { empId, empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
 
         EmployeeService.updateEmployeeDetails(employeeData).then(res => {
-            EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+            EmployeeService.getEmployeeDetailsByPaging(data).then((res) => {
                 if (res.data.success) {
                     setIsSuccess(true);
                     setEmployees(res.data.responseData.content);
@@ -335,41 +335,41 @@ export default function MainEmployeeComponent() {
         );
     }
 
-//upload excel data for department
-const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = {
-        currentPage,
-        itemsPerPage
-    }
-    const formData = new FormData(event.target);
-    fetch(BASE_URL_API + '/employee/upload-employee', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => {
-            // Handle response
 
-            alert("Employee uploaded successfully")
-            EmployeeService.getEmployeeDetailsByPaging(data).then((res) => {
-                if (res.data.success) {
-                    setIsSuccess(true);
-                    setEmployees(res.data.responseData.content);
-                    setDataPageable(res.data.responseData);
-                }
-                else {
-                    setResponseMessage(res.data.responseMessage)
-                    setIsSuccess(false);
-                }
-            }, [currentPage, itemsPerPage]);
-
+    //upload excel data for department
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        const formData = new FormData(event.target);
+        fetch(BASE_URL_API + '/employee/upload-employee', {
+            method: 'POST',
+            body: formData
         })
-        .catch(error => {
-            // Handle error
-            alert('An error occurred while uploading the file.');
-        });
-};
+            .then(response => {
+                // Handle response
 
+                alert("Employee uploaded successfully")
+                EmployeeService.getEmployeeDetailsByPaging(data).then((res) => {
+                    if (res.data.success) {
+                        setIsSuccess(true);
+                        setEmployees(res.data.responseData.content);
+                        setDataPageable(res.data.responseData);
+                    }
+                    else {
+                        setResponseMessage(res.data.responseMessage)
+                        setIsSuccess(false);
+                    }
+                }, [currentPage, itemsPerPage]);
+
+            })
+            .catch(error => {
+                // Handle error
+                alert('An error occurred while uploading the file.');
+            });
+    };
 
 
 
@@ -439,12 +439,14 @@ const handleSubmit = (event) => {
                             </tbody>
                         </table>
                         : <h4>{responseMessage}</h4>}
+                        { employees?.length>0 && (
                     <PaginationComponent
                         currentPage={currentPage}
                         totalPages={dataPageable.totalPages || 10}
                         onPageChange={handlePageChange}
                         onItemsPerPageChange={handleItemsPerPageChange}
                     />
+                        )}
                 </div>
 
             </div>
@@ -646,36 +648,23 @@ const handleSubmit = (event) => {
                                     </div>
                                 </div>
 
+
                                 <div className="form-group">
-                                    <div className="row">
-                                        <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empDob">Date Of Birth:</label>
-                                        <div className="col-sm-3">
-                                            <input type="date" className="form-control" id="empDob" value={empDob} onChange={(e) => setEmpDob(e.target.value)} />
+                                <div className="row">
+                                    <label className="control-label col-sm-3" htmlFor="deptId">Employee ID:</label>
+                                    <div className="col-sm-3">
 
-                                        </div>
-
-                                        <label className="control-label col-sm-2" htmlFor="empPhoto">Upload Photo:</label>
-
-                                        <div className="col-sm-3">
-                                            <input type="file" className="form-control" id="empPhoto" value={empPhoto} onChange={(e) => setEmpPhoto(e.target.value)} />
-                                        </div>
+                                      {empEId}
                                     </div>
                                 </div>
+                            </div>
 
                                 <div className="form-group">
                                     <div className="row">
                                         <label className="control-label col-sm-3" htmlFor="deptId">Department Name:</label>
                                         <div className="col-sm-3">
 
-                                            <select className="form-control" id="deptId" onChange={(e) => setDeptId(e.target.value)}>
-                                                <option>--Select Department--</option>
-                                                {
-                                                    departments.map(
-                                                        department =>
-                                                            <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
-                                                    )
-                                                };
-                                            </select>
+                                          {deptName}
                                         </div>
                                     </div>
                                 </div>
@@ -685,15 +674,7 @@ const handleSubmit = (event) => {
                                         <label className="control-label col-sm-3" htmlFor="desigId"> Designation Name:</label>
                                         <div className="col-sm-3">
 
-                                            <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
-                                                <option>--Select Department--</option>
-                                                {
-                                                    departments.map(
-                                                        department =>
-                                                            <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
-                                                    )
-                                                };
-                                            </select>
+                                          {desigName}
                                         </div>
                                     </div>
                                 </div>
@@ -742,20 +723,10 @@ const handleSubmit = (event) => {
                                     <div className="row">
                                         <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empGender">Gender:</label>
                                         <div className="col-sm-3">
-                                            <select className="form-control" id="empGender" onChange={(e) => setEmpGender(e.target.value)} >
-                                                <option value={'Male'}>Male</option>
-                                                <option value={'Female'}>Female</option>
-                                            </select>
+                                            {empGender}
                                         </div>
 
-                                        <label className="control-label col-sm-2" htmlFor="kppObjective" >Blood Group:</label>
-
-                                        <div className="col-sm-3">
-                                            <select className="form-control" id="empBloodgroup" onChange={(e) => setEmpBloodgroup(e.target.value)}>
-                                                <option value={"A+"}>A+ve</option>
-                                                <option value={"B+"}>B+ve</option>
-                                            </select>
-                                        </div>
+                                
                                     </div>
                                 </div>
 

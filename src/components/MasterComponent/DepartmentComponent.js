@@ -180,7 +180,8 @@ export default function DepartmentComponent() {
             itemsPerPage
         }
         let statusCd = 'A';
-        let department = { deptId, deptName, deptMailId, remark, statusCd };
+        let employeeId = Cookies.get('empId')
+        let department = { deptId, deptName, deptMailId, remark, statusCd,employeeId };
 
         DepartmentService.updateDepartmentDetails(department).then(res => {
             DepartmentService.getDepartmentDetailsByPaging(data).then((res) => {
@@ -201,40 +202,41 @@ export default function DepartmentComponent() {
         );
         setUpdateDeptAlert(false);
     }
-//upload excel data for department
-const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = {
-        currentPage,
-        itemsPerPage
-    }
-    const formData = new FormData(event.target);
-    fetch(BASE_URL_API + '/department/upload-department', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => {
-            // Handle response
-            alert("Department uploaded successfully")
-          
-            DepartmentService.getDepartmentDetailsByPaging(data).then((res) => {
-                if (res.data.success) {
-                    setIsSuccess(true);
-                    setDepartments(res.data.responseData.content);
-                    setDataPageable(res.data.responseData);
-                }
-                else {
-                    setResponseMessage(res.data.responseMessage)
-                    setIsSuccess(false);
-                }
 
-            }, [currentPage, itemsPerPage]);
+    //upload excel data for department
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
+        const formData = new FormData(event.target);
+        fetch(BASE_URL_API + '/department/upload-department', {
+            method: 'POST',
+            body: formData
         })
-        .catch(error => {
-            // Handle error
-            setMessage('An error occurred while uploading the file.');
-        });
-};
+            .then(response => {
+                // Handle response
+                alert("Department uploaded successfully")
+              
+                DepartmentService.getDepartmentDetailsByPaging(data).then((res) => {
+                    if (res.data.success) {
+                        setIsSuccess(true);
+                        setDepartments(res.data.responseData.content);
+                        setDataPageable(res.data.responseData);
+                    }
+                    else {
+                        setResponseMessage(res.data.responseMessage)
+                        setIsSuccess(false);
+                    }
+    
+                }, [currentPage, itemsPerPage]);
+            })
+            .catch(error => {
+                // Handle error
+                setMessage('An error occurred while uploading the file.');
+            });
+    };
 
     return (
         <React.Fragment>

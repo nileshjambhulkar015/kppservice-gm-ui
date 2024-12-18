@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DepartmentService from "../../services/MasterService/DepartmentService";
+import Cookies from 'js-cookie';
 
 import SiteService from "../../services/MasterService/SiteService";
 import RegionService from "../../services/MasterService/RegionService";
@@ -11,13 +11,8 @@ export default function SiteComponent() {
     const [siteId, setSiteId] = useState('');
     const [siteName, setSiteName] = useState('');
     const [remark, setRemark] = useState('');
-
-    const [siteSeaech, setSiteSearch] = useState('');
-
     const [sites, setSites] = useState([])
-
     const [regions, setRegions] = useState([])
-
     const [saveSiteAlert, setSaveSiteAlert] = useState(false);
     const [deleteSiteAlert, setDeleteSiteAlert] = useState(false);
     const [updatSiteAlert, setUpdateSiteAlert] = useState(false);
@@ -61,7 +56,8 @@ export default function SiteComponent() {
     const saveSite = (e) => {
         e.preventDefault()
         let statusCd = 'A';
-        let site = { regionId, siteName, remark, statusCd };
+          let employeeId = Cookies.get('empId')
+        let site = { regionId, siteName, remark, statusCd,employeeId };
 
         SiteService.saveSiteDetails(site).then(res => {
             SiteService.getSiteDetailsByPaging().then((res) => {
@@ -126,7 +122,8 @@ export default function SiteComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let site = { siteId, regionId, siteName, remark, statusCd };
+           let employeeId = Cookies.get('empId')
+        let site = { siteId, regionId, siteName, remark, statusCd,employeeId };
 
         SiteService.updateSiteDetails(site).then(res => {
             SiteService.getSiteDetailsByPaging().then((res) => {

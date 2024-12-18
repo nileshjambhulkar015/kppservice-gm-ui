@@ -100,14 +100,14 @@ export default function ViewAllEmpTransferToOtherHODComponent() {
         Cookies.set('empKppDeptId', deptId);
         Cookies.set('empKppDesigId', desigId);
         Cookies.set('empReportingIdForKpp', reportingEmpId);
-        navigate(`/assignEmployeeKpp`, { replace: true });
+        navigate(`/changeDeptDesig`, { replace: true });
     }
 
 
 
     return (
         <div className="row">
-            <h3 className="text-center">Transfer Employee to  Other</h3>
+            <h3 className="text-center">Change Employee Role | Department | Designation | Reporting Employee Name</h3>
             <div className="col-sm-1"></div>
             <div className="col-sm-10">
                 <div className="row">
@@ -131,6 +131,7 @@ export default function ViewAllEmpTransferToOtherHODComponent() {
                                 <th className="text-center">Sr No</th>
                                 <th className="text-center">Employee Name</th>
                                 <th className="text-center">Employee Id</th>
+                                <th className="text-center">Role Name</th>
                                 <th className="text-center">Department Name</th>
                                 <th className="text-center">Designation Name</th>
                                 <th className="text-center">Mobile No</th>
@@ -146,6 +147,7 @@ export default function ViewAllEmpTransferToOtherHODComponent() {
                                             <td className="text-center">{index + 1}</td>
                                             <td className="text-justify">{employee.empFirstName + ' ' + employee.empMiddleName + ' ' + employee.empLastName}</td>
                                             <td className="text-center">{employee.empEId}</td>
+                                            <td className="text-center">{employee.roleName}</td>
                                             <td className="text-center">{employee.deptName}</td>
                                             <td className="text-center">{employee.desigName}</td>
                                             <td className="text-center">{employee.empMobileNo}</td>

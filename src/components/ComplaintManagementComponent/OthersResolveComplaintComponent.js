@@ -276,14 +276,14 @@ export default function OthersResolveComplaintComponent() {
                                 </tbody>
                             </table>
                             : <h4>{responseMessage}</h4>}
-                        {complaints?.length > 0 && (
-                            <PaginationComponent
-                                currentPage={currentPage}
-                                totalPages={dataPageable.totalPages || 10}
-                                onPageChange={handlePageChange}
-                                onItemsPerPageChange={handleItemsPerPageChange}
-                            />
-                        )}
+                            { complaints?.length>0 && (
+                        <PaginationComponent
+                            currentPage={currentPage}
+                            totalPages={dataPageable.totalPages || 10}
+                            onPageChange={handlePageChange}
+                            onItemsPerPageChange={handleItemsPerPageChange}
+                        />
+    )}
                     </div>
                 </div>
             </div>

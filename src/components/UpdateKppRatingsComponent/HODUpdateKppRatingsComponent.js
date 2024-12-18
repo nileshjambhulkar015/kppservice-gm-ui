@@ -8,16 +8,16 @@ import Cookies from 'js-cookie';
 import EmployeeKppsService from '../../services/EmployeeKppsService'
 import AllHodKppService from '../../services/AllHodKppService';
 import { BASE_URL_API } from '../../services/URLConstants';
+import FinancialYearService from '../../services/MasterService/FinancialYearService';
 const HODUpdateKppRatingsComponent = () => {
     const navigate = useNavigate();
 
     const [ekppMonth, setEkppMonth] = useState('');
     const [empName, setEmpName] = useState('');
     const [empId, setEmpId] = useState('');
-    const [empEId, setEmpEId] = useState('');
     const [deptName, setDeptName] = useState('');
     const [desigName, setDesigName] = useState('');
-    const [empRemark, setEmpRemark] = useState('');
+
     const [gmRemark, setGmRemark] = useState('');
     const [gmKppStatus, setGmKppStatus] = useState('Approved');
 
@@ -81,16 +81,19 @@ const HODUpdateKppRatingsComponent = () => {
         return (sum / totalKpps).toFixed(1);
     }
     useEffect(() => {
+
+        FinancialYearService.ddAllFinancialYear().then((res) => {         
+            Cookies.set('finYear', res.data?.[0].finYear);
+        });
+        
         EmployeeKppsService.getHodKPPDetailsForGmApproval().then((res) => {
-            setEkppMonth(YYYY_MM_DD_Formater(res.data.ekppMonth))
+            setEkppMonth(res.data.ekppMonth)
             setEmpId(res.data.empId);
-            setEmpEId(res.data.empEId);
             setEmpName(res.data.empName);
             setDeptName(res.data.deptName);
             setDesigName(res.data.desigName);
 
             setKppMasterResponses(res.data);
-            setEmpRemark(res.data.empRemark)
             setGmRemark(res.data.gmRemark)
             setKppDetailsResponses(res.data.kppStatusDetails)
         });
@@ -180,13 +183,6 @@ const HODUpdateKppRatingsComponent = () => {
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="control-label col-sm-1"  >Employee Id :</label>
-                                    <div className="col-sm-2">
-                                        {empEId}
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
                                     <label className="control-label col-sm-1"  >Department :</label>
                                     <div className="col-sm-2">
                                         {deptName}
@@ -233,11 +229,11 @@ const HODUpdateKppRatingsComponent = () => {
                                         <tr className="text-center">
                                             <th className="text-center">OVERALL WEIGHTAGE IN % </th>
                                             <th className="text-center">ACHIEVED WEIGHTAGE IN % </th>
-                                            <th className="text-center">Rating 5</th>
-                                            <th className="text-center">Rating 4</th>
-                                            <th className="text-center">Rating 3</th>
-                                            <th className="text-center">Rating 2</th>
                                             <th className="text-center">Rating 1</th>
+                                            <th className="text-center">Rating 2</th>
+                                            <th className="text-center">Rating 3</th>
+                                            <th className="text-center">Rating 4</th>
+                                            <th className="text-center">Rating 5</th>
                                         </tr>
 
                                     </thead>
@@ -321,17 +317,9 @@ const HODUpdateKppRatingsComponent = () => {
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <label className="control-label col-sm-4" htmlFor="empRemark">HOD Remark:</label>
-                                    <div className="col-sm-6">
-                                    {empRemark}
-                                        
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="empRemark">Enter Remark:</label>
                                     <div className="col-sm-6">
-                                        <textarea rows="5" className="form-control" id="gmRemark" name="gmRemark" defaultValue={gmRemark} placeholder="Enter Remark here" onChange={(e) => setGmRemark(e.target.value)} />
+                                        <textarea row="5" className="form-control" id="gmRemark" name="gmRemark" defaultValue={gmRemark} placeholder="Enter Remark here" onChange={(e) => setGmRemark(e.target.value)} />
                                     </div>
                                 </div>
 

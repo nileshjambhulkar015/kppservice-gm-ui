@@ -22,7 +22,8 @@ export default function ShowEmployeeForKppComponent() {
     const [siteName, setSiteName] = useState('');
     const [companyId, setCompanyId] = useState('');
     const [companyName, setComapnyName] = useState('');
-
+    const [gmEmpId, setGmEmpId] = useState('');
+    
     const [compnays, setCompanys] = useState([])
     const [roleId, setRoleId] = useState('');
     const [roleName, setRoleName] = useState('');
@@ -72,6 +73,7 @@ export default function ShowEmployeeForKppComponent() {
             if (res.data.success) {
                 setIsSuccess(true);
                 setEmployees(res.data.responseData.content);
+                console.log("data : ", res.data.responseData.content)
                 setDataPageable(res.data.responseData);
 
             }
@@ -92,6 +94,7 @@ export default function ShowEmployeeForKppComponent() {
             if (res.data.success) {
                 setIsSuccess(true);
                 setEmployees(res.data.responseData.content);
+                console.log("data : ", res.data.responseData.content)
                 setDataPageable(res.data.responseData);
 
             }
@@ -150,7 +153,7 @@ export default function ShowEmployeeForKppComponent() {
     }
 
 
-    const navigateToAssignEmployee = (empId, empEId, roleId, deptId, desigId, reportingEmpId) => {
+    const navigateToAssignEmployee = (empId, empEId, roleId, deptId, desigId, reportingEmpId,gmEmpId) => {
 
         Cookies.set('empIdForKpp', empId);
         Cookies.set('empEIdForKpp', empEId);
@@ -158,6 +161,7 @@ export default function ShowEmployeeForKppComponent() {
         Cookies.set('empKppDeptId', deptId);
         Cookies.set('empKppDesigId', desigId);
         Cookies.set('empReportingIdForKpp', reportingEmpId);
+        Cookies.set('gmEmpId', gmEmpId);
         navigate(`/assignEmployeeKpp`, { replace: true });
     }
 
@@ -297,7 +301,7 @@ export default function ShowEmployeeForKppComponent() {
                                             <td className="text-center">{employee.totalOverallWeightage}</td>
 
                                             <td className="text-center"> <button type="submit" className="btn btn-info" onClick={() =>
-                                                navigateToAssignEmployee(employee.empId, employee.empEId, employee.roleId, employee.deptId, employee.desigId, employee.reportingEmpId)
+                                                navigateToAssignEmployee(employee.empId, employee.empEId, employee.roleId, employee.deptId, employee.desigId, employee.reportingEmpId,employee.gmEmpId)
                                             }>Assign</button></td>
                                         </tr>
                                 )
@@ -305,12 +309,14 @@ export default function ShowEmployeeForKppComponent() {
                         </tbody>
 
                     </table> : <h4>{responseMessage}</h4>}
+                    {(employees?.length>0 &&
                 <PaginationComponent
                     currentPage={currentPage}
                     totalPages={dataPageable.totalPages || 10}
                     onPageChange={handlePageChange}
                     onItemsPerPageChange={handleItemsPerPageChange}
                 />
+            )}
             </div>
 
 

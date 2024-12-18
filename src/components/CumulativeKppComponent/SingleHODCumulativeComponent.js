@@ -5,11 +5,10 @@ import Cookies from 'js-cookie';
 import { BASE_URL_API } from "../../services/URLConstants";
 import EmployeeService from "../../services/EmployeeService";
 import PaginationComponent from "../PaginationComponent/PaginationComponent";
-import FinancialYearService from "../../services/MasterService/FinancialYearService";
 export default function SingleHODCumulativeComponent() {
 
     const navigate = useNavigate();
-    const [finYear, setFinYear] = useState('');
+
     const [fromDate, setFromDate] = useState('')
     const [toDate, setToDate] = useState('')
     const [totalMonths, setTotalMonths] = useState()
@@ -20,11 +19,7 @@ export default function SingleHODCumulativeComponent() {
     const [cummulativeRatings, setCummulativeRatings] = useState()
     const [avgCummulativeRatings, setAvgCummulativeRatings] = useState()
     const [isSuccess, setIsSuccess] = useState(true)
-    const [hodCumulatives, setHodCumulatives] = useState([])
-
-    const [empKeyStrength, setEmpKeyStrength] = useState('');
-    const [empAreaOfImprovement, setEmpAreaOfImprovement] = useState('');
-    const [empTrainginDevelopmentNeeds, setEmpTrainginDevelopmentNeeds] = useState('');
+    const [employees, setEmployees] = useState([])
 
     const [empId, setEmpId] = useState('');
     const [empEId, setEmpEId] = useState('');
@@ -38,7 +33,7 @@ export default function SingleHODCumulativeComponent() {
 
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(12);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     const [dataPageable, setDataPageable] = useState([])
 
     const handlePageChange = (page) => {
@@ -57,7 +52,6 @@ export default function SingleHODCumulativeComponent() {
         document.getElementById("toDate").value = "";
     }
     const loadCumulativeData = () => {
-
         const data = {
             currentPage,
             itemsPerPage
@@ -65,14 +59,6 @@ export default function SingleHODCumulativeComponent() {
         CumulativeService.getSingleHODKppReportDetailsByPaging(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
-
-
-                setEmpId(res.data.responseData.empId)
-                setEmpEId(res.data.responseData.empEId)
-                setEmpName(res.data.responseData.empName)
-                setDeptName(res.data.responseData.deptName)
-                setDesigName(res.data.responseData.desigName)
-
                 setSumOfEmployeeRatings(res.data.responseData.sumOfEmployeeRatings)
                 setSumOfHodRatings(res.data.responseData.sumOfHodRatings)
                 setSumOfGMRatings(res.data.responseData.sumOfGMRatings)
@@ -80,7 +66,7 @@ export default function SingleHODCumulativeComponent() {
                 setTotalMonths(res.data.responseData.totalMonths)
                 setAvgCummulativeRatings(res.data.responseData.avgCummulativeRatings)
 
-                setHodCumulatives(res.data.responseData.employeeKppStatusResponses.content);
+                setEmployees(res.data.responseData.employeeKppStatusResponses.content);
             }
             else {
                 alert("Kpp is not approved for month");
@@ -88,35 +74,29 @@ export default function SingleHODCumulativeComponent() {
                 setIsSuccess(false);
             }
 
-        }).catch((err) => {
+        }, [currentPage, itemsPerPage]).catch((err) => {
             alert(err.response.data.details)
-        }, [currentPage, itemsPerPage]);
+        });
 
 
         //for employee basic details
-        /* EmployeeService.searchEmployeeById(Cookies.get('viewSingleHODIdForKppRatings')).then((res) => {
-             setEmpId(res.data.empId)
-             setEmpEId(res.data.empEId)
-             setEmpName(res.data.empFirstName + ' ' + res.data.empMiddleName + ' ' + res.data.empLastName)
-             setRoleName(res.data.roleName)
-             setDeptName(res.data.deptName)
-             setDesigName(res.data.desigName)
-         });*/
+        EmployeeService.searchEmployeeById(Cookies.get('viewSingleHODIdForKppRatings')).then((res) => {
+            setEmpId(res.data.empId)
+            setEmpEId(res.data.empEId)
+            setEmpName(res.data.empFirstName + ' ' + res.data.empMiddleName + ' ' + res.data.empLastName)
+            setRoleName(res.data.roleName)
+            setDeptName(res.data.deptName)
+            setDesigName(res.data.desigName)
+        });
 
     }
 
     useEffect(() => {
-
         const newDate = new Date();           
         // Format to YYYY-MM-DD
         const formattedDate = newDate.toISOString().split('T')[0];            
         setFromDate(formattedDate);
         setToDate(formattedDate);
-
-        FinancialYearService.getFinancialYearById(1).then((res) => {
-            setFinYear(res.data.finYear)
-        });
-
 
         const data = {
             currentPage,
@@ -125,19 +105,6 @@ export default function SingleHODCumulativeComponent() {
         CumulativeService.getSingleHODKppReportDetailsByPaging(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
-
-
-                setEmpId(res.data.responseData.empId)
-                setEmpEId(res.data.responseData.empEId)
-                setEmpName(res.data.responseData.empName)
-                setDeptName(res.data.responseData.deptName)
-                setDesigName(res.data.responseData.desigName)
-
-                setFinYear(res.data.responseData.finYear)
-                setEmpKeyStrength(res.data.responseData.empKeyStrength)
-                setEmpAreaOfImprovement(res.data.responseData.empAreaOfImprovement)
-                setEmpTrainginDevelopmentNeeds(res.data.responseData.empTrainginDevelopmentNeeds)
-
                 setSumOfEmployeeRatings(res.data.responseData.sumOfEmployeeRatings)
                 setSumOfHodRatings(res.data.responseData.sumOfHodRatings)
                 setSumOfGMRatings(res.data.responseData.sumOfGMRatings)
@@ -145,7 +112,7 @@ export default function SingleHODCumulativeComponent() {
                 setTotalMonths(res.data.responseData.totalMonths)
                 setAvgCummulativeRatings(res.data.responseData.avgCummulativeRatings)
 
-                setHodCumulatives(res.data.responseData.employeeKppStatusResponses.content);
+                setEmployees(res.data.responseData.employeeKppStatusResponses.content);
             }
             else {
                 //alert("Kpp is not approved for month");
@@ -159,38 +126,16 @@ export default function SingleHODCumulativeComponent() {
 
 
         //for employee basic details
-        /* EmployeeService.searchEmployeeById(Cookies.get('viewSingleHODIdForKppRatings')).then((res) => {
-             setEmpId(res.data.empId)
-             setEmpEId(res.data.empEId)
-             setEmpName(res.data.empFirstName + ' ' + res.data.empMiddleName + ' ' + res.data.empLastName)
-             setRoleName(res.data.roleName)
-             setDeptName(res.data.deptName)
-             setDesigName(res.data.desigName)
-         });*/
+        EmployeeService.searchEmployeeById(Cookies.get('viewSingleHODIdForKppRatings')).then((res) => {
+            setEmpId(res.data.empId)
+            setEmpEId(res.data.empEId)
+            setEmpName(res.data.empFirstName + ' ' + res.data.empMiddleName + ' ' + res.data.empLastName)
+            setRoleName(res.data.roleName)
+            setDeptName(res.data.deptName)
+            setDesigName(res.data.desigName)
+        });
 
     }, [currentPage, itemsPerPage]);
-
-    const updateOverallEmployeeKppReportRemark = (e) => {
-        e.preventDefault()
-        const data = {
-            currentPage,
-            itemsPerPage
-        }
-        let statusCd = 'A';
-        let empId = Cookies.get('viewSingleHODIdForKppRatings')
-       
-        let employeeId = Cookies.get('empId')
-        let freezeEmployeeKppReport = { finYear, empId,empKeyStrength, empAreaOfImprovement,empTrainginDevelopmentNeeds, statusCd, employeeId };
-
-        CumulativeService.updateOverallEmployeeKppReportRemark(freezeEmployeeKppReport).then(res => {
-
-          alert("success done")
-
-        }
-        );
-        // window.location.reload(); 
-    }
-
 
     const getKPPDetailsByDate = (e) => {
         const data = {
@@ -208,7 +153,7 @@ export default function SingleHODCumulativeComponent() {
                 setCummulativeRatings(res.data.responseData.cummulativeRatings)
                 setAvgCummulativeRatings(res.data.responseData.avgCummulativeRatings)
                 setTotalMonths(res.data.responseData.totalMonths)
-                setHodCumulatives(res.data.responseData.employeeKppStatusResponses.content);
+                setEmployees(res.data.responseData.employeeKppStatusResponses.content);
             } else {
                 setResponseMessage(res.data.responseMessage)
                 setIsSuccess(false);
@@ -254,6 +199,13 @@ export default function SingleHODCumulativeComponent() {
                         </div>
 
                         <div className="form-group">
+                            <label className="control-label col-sm-2"  >Role :</label>
+                            <div className="col-sm-5">
+                                {roleName}
+                            </div>
+                        </div>
+
+                        <div className="form-group">
                             <label className="control-label col-sm-2"  >Department :</label>
                             <div className="col-sm-5">
                                 {deptName}
@@ -266,19 +218,11 @@ export default function SingleHODCumulativeComponent() {
                                 {desigName}
                             </div>
                         </div>
-
-                        <div className="form-group">
-                            <label className="control-label col-sm-2"  >Financial Year:</label>
-                            <div className="col-sm-5">
-                                {finYear}
-                            </div>
-                        </div>
-
                     </div>
                 </form>
             </div>
 
-            <h3 className="text-center">View Monthly Cumulative HOD KPP Report for Financial Year {finYear}</h3>
+            <h3 className="text-center">Monthly HOD KPP Report</h3>
             <div className="form-group">
                 <form className="form-horizontal" encType="multipart/form-data">
                     <label className="control-label col-sm-1" htmlFor="deptNameSearch"> From Date:</label>
@@ -317,24 +261,24 @@ export default function SingleHODCumulativeComponent() {
                         </thead>
                         <tbody>
                             {
-                                hodCumulatives.map(
-                                    (hodCumulative, index) =>   //index is inbuilt variable of map started with 0
-                                        <tr key={hodCumulative.empId}>
+                                employees.map(
+                                    (employee, index) =>   //index is inbuilt variable of map started with 0
+                                        <tr key={employee.empId}>
                                             <td className="text-center">{index + 1}</td>
-                                            <td className="text-justify">{YYYY_MM_DD_Formater(hodCumulative.ekppMonth)}</td>
-                                            <td className="text-center">{hodCumulative.empOverallAchive}</td>
+                                            <td className="text-justify">{employee.ekppMonth}</td>
+                                            <td className="text-center">{employee.empOverallAchive}</td>
 
-                                            <td className="text-center">{hodCumulative.gmOverallAchieve}</td>
-                                            <td className="text-center">{hodCumulative.sumOfRatings}</td>
+                                            <td className="text-center">{employee.gmOverallAchieve}</td>
+                                            <td className="text-center">{employee.sumOfRatings}</td>
 
                                             <td className="text-center">
                                                 <div className="col-sm-3">
-                                                    <a href={BASE_URL_API + `/report-evidence?empId=${hodCumulative.empId}&evMonth=${YYYY_MM_DD_Formater(hodCumulative.ekppMonth)}`}>
+                                                    <a href={BASE_URL_API + `/report-evidence?empId=${employee.empId}&evMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
                                                         View</a>
                                                 </div>
                                             </td>
                                             <td className="text-center">
-                                                <a href={BASE_URL_API + `/report/completed-hod-kpp-status?empId=${hodCumulative.empId}&ekppMonth=${YYYY_MM_DD_Formater(hodCumulative.ekppMonth)}`}>
+                                                <a href={BASE_URL_API + `/report/completed-hod-kpp-status?empId=${employee.empId}&ekppMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
                                                     <button type="submit" className="btn btn-info">Download</button>
                                                 </a>
                                             </td>
@@ -369,52 +313,19 @@ export default function SingleHODCumulativeComponent() {
                         </tbody>
 
                     </table>
-                    : <h4>{responseMessage}</h4>}
-            
+                    : <h1>{responseMessage}</h1>}
+                <PaginationComponent
+                    currentPage={currentPage}
+                    totalPages={dataPageable.totalPages || 10}
+                    onPageChange={handlePageChange}
+                    onItemsPerPageChange={handleItemsPerPageChange}
+                />
             </div>
 
-            
-            <div className="row col-sm-12">
-                <form className="form-horizontal">
-                    <div className="form-group">
-                        <div className="row">
-                            <label className="control-label col-sm-2" htmlFor="reamrk"> Enter Key Strengths:</label>
-                            <div className="col-sm-5">
-                                
-                                <textarea rows="5" cols="500" className="form-control" id="empKeyStrength" name="empKeyStrength" defaultValue={empKeyStrength} placeholder="Enter  Key Strengths here" onChange={(e) => setEmpKeyStrength(e.target.value)} />
-                            </div>
-                        </div>
-                    </div>
 
-                    
-                    <div className="form-group">
-                        <div className="row">
-                            <label className="control-label col-sm-2" htmlFor="reamrk">Enter Area of Improvement:</label>
-                            <div className="col-sm-5">
-                            <textarea rows="5"  cols="500" className="form-control" id="empAreaOfImprovement" name="empAreaOfImprovement" defaultValue={empAreaOfImprovement} placeholder="Enter Area of Improvement here" onChange={(e) => setEmpAreaOfImprovement(e.target.value)} />
-                               
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className="form-group">
-                        <div className="row">
-                            <label className="control-label col-sm-2" htmlFor="reamrk">Enter Training & Development Needs :</label>
-                            <div className="col-sm-5">
-                            <textarea rows="5"  cols="500" className="form-control" id="empTrainginDevelopmentNeeds" name="empTrainginDevelopmentNeeds" defaultValue={empTrainginDevelopmentNeeds} placeholder="Enter Training & Development Needs here" onChange={(e) => setEmpTrainginDevelopmentNeeds(e.target.value)} />
-    
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className="form-group">
-                    <div className="row">
-                        <button type="submit" className="btn btn-success col-sm-offset-6" onClick={(e) => updateOverallEmployeeKppReportRemark(e)}> Submit</button>
-                       
-                    </div>
-                </div>
-                </form>
-            </div>
+
         </div>
 
     );

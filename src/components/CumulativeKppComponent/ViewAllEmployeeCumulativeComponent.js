@@ -54,6 +54,11 @@ export default function ViewAllEmployeeCumulativeComponent() {
     }
 
     useEffect(() => {
+        const newDate = new Date();           
+        // Format to YYYY-MM-DD
+        const formattedDate = newDate.toISOString().split('T')[0];            
+        setFromDate(formattedDate);
+        setToDate(formattedDate);
         const data = {
             currentPage,
             itemsPerPage
@@ -82,7 +87,7 @@ export default function ViewAllEmployeeCumulativeComponent() {
             fromDate,
             toDate
         }
-        CumulativeService.getOverallEmployeeCumulativeByDates(data).then((res) => {
+        CumulativeService.getOverallEmployeeCumulativeByDates_ADMIN(data).then((res) => {
             if (res.data.success) {
                 setIsSuccess(true);
                 setEmployees(res.data.responseData.content);
@@ -113,7 +118,7 @@ export default function ViewAllEmployeeCumulativeComponent() {
 
     return (
         <div className="row">
-            <h3 className="text-center">View Monthly Employee Cumulative KPP</h3>
+            <h3 className="text-center">View Employee Cumulative KPP</h3>
             <div className="form-group">
                 <form className="form-horizontal" encType="multipart/form-data">
                     <label className="control-label col-sm-1" htmlFor="deptNameSearch"> From Date:</label>
@@ -180,7 +185,7 @@ export default function ViewAllEmployeeCumulativeComponent() {
 
                     </table>
                     : <h4>{responseMessage}</h4>}
-                    {employees?.length > 0 && (
+                    { employees?.length>0 && (
                 <PaginationComponent
                     currentPage={currentPage}
                     totalPages={dataPageable.totalPages || 10}

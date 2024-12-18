@@ -105,13 +105,6 @@ export default function AddNewEmployeeComponent() {
     }
 
 
-    const searchEmployeeFirstName = (e) => {
-        EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
-            setEmployees(res.data.responseData.content?.filter((item) => item.roleId !== 3 && item.roleId !== 4));
-
-        });
-    }
-
     useEffect(() => {
 
         ///

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CompanyMasterService from "../../services/MasterService/CompanyMasterService";
 import SiteService from "../../services/MasterService/SiteService";
 import AlertboxComponent from "../AlertboxComponent/AlertboxComponent";
+import Cookies from 'js-cookie';
 export default function CompanyMasterComponent() {
     const [regionId, setRegionId] = useState('');
     const [regionName, setRegionName] = useState('');
@@ -89,21 +90,23 @@ export default function CompanyMasterComponent() {
 
     const saveComapnyDetails = (e) => {
         e.preventDefault()
+        
         let statusCd = 'A';
-        let company = { regionId, siteId, companyName, companyAddress, companyMbNo, companyFinYear, remark, statusCd };
+          let employeeId = Cookies.get('empId')
+        let company = { regionId, siteId, companyName, companyAddress, companyMbNo, companyFinYear, remark, statusCd,employeeId };
 
         CompanyMasterService.saveCompanyDetails(company).then(res => {
             CompanyMasterService.getCompanyDetailsByPaging().then((res) => {
                 setCompanys(res.data.responseData.content);
-
+                setCompanyName('');
+                setCompanyAddress('')
+                setCompanyFinYear('')
+                setCompanyMbNo('')
             });
 
         }
         );
-        setCompanyName('');
-        setCompanyAddress('')
-        setCompanyFinYear('')
-        setCompanyMbNo('')
+      
         setSaveCompanyAlert(false)
     }
 
@@ -132,35 +135,24 @@ export default function CompanyMasterComponent() {
     const updateComapnyDetails = (e) => {
         e.preventDefault()
 
-        CompanyMasterService.getCompanyById(e).then(res => {
-            let company = res.data;
-            let companyId = company.companyId;
-            let regionId = company.regionId;
-            let siteId = company.siteId;
-
-
-            let companyName = company.companyName;
-            let companyAddress = company.companyAddress;
-            let companyMbNo = company.companyMbNo;
-            let companyFinYear = company.companyFinYear;
-            let remark = company.remark;
-
+       
 
             let statusCd = 'A';
-            let updateCompany = { companyId, regionId, siteId, companyName, companyAddress, companyMbNo, companyFinYear, remark, statusCd };
+              let employeeId = Cookies.get('empId')
+            let updateCompany = { companyId, regionId, siteId, companyName, companyAddress, companyMbNo, companyFinYear, remark, statusCd,employeeId };
 
             CompanyMasterService.updateCompanyDetails(updateCompany).then(res => {
                 CompanyMasterService.getCompanyDetailsByPaging().then((res) => {
                     setCompanys(res.data.responseData.content);
+                    setCompanyName('');
+                    setCompanyAddress('')
+                    setCompanyFinYear('')
+                    setCompanyMbNo('')
                 });
             }
             );
-        }
-        );
-        setCompanyName('');
-        setCompanyAddress('')
-        setCompanyFinYear('')
-        setCompanyMbNo('')
+
+       
         setSaveCompanyAlert(false)
 
     }

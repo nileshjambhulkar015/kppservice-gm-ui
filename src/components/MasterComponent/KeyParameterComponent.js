@@ -4,7 +4,7 @@ import UoMService from "../../services/MasterService/UoMService";
 import { BASE_URL_API } from "../../services/URLConstants";
 import AlertboxComponent from "../AlertboxComponent/AlertboxComponent";
 import PaginationComponent from "../PaginationComponent/PaginationComponent";
-
+import Cookies from 'js-cookie';
 export default function KeyParameterComponent() {
     const [kppId, setKppId] = useState('');
     const [kppObjectiveNo, setKppObjectiveNo] = useState('');
@@ -137,7 +137,8 @@ export default function KeyParameterComponent() {
         e.preventDefault()
 
         let statusCd = 'A';
-        let kpp = { kppObjectiveNo, kppObjective, kppPerformanceIndi, kppTargetPeriod, uomId, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
+        let employeeId = Cookies.get('empId')
+        let kpp = { kppObjectiveNo, kppObjective, kppPerformanceIndi, kppTargetPeriod, uomId, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd, employeeId };
         const data = {
             currentPage,
             itemsPerPage
@@ -217,7 +218,8 @@ export default function KeyParameterComponent() {
             itemsPerPage
         }
         let statusCd = 'A';
-        let updateKpp = { kppId, kppObjectiveNo, kppObjective, kppPerformanceIndi, kppTargetPeriod, uomId, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd };
+        let employeeId = Cookies.get('empId')
+        let updateKpp = { kppId, kppObjectiveNo, kppObjective, kppPerformanceIndi, kppTargetPeriod, uomId, kppRating1, kppRating2, kppRating3, kppRating4, kppRating5, remark, statusCd, employeeId };
 
         KeyParameterService.updateKppDetails(updateKpp).then(res => {
             KeyParameterService.getKPPDetailsByPaging(data).then((res) => {
@@ -225,6 +227,16 @@ export default function KeyParameterComponent() {
                     setIsSuccess(true);
                     setKpps(res.data.responseData.content);
                     setDataPageable(res.data.responseData);
+                    setKppObjectiveNo('')
+                    setKppObjective('')
+                    setKppPerformanceIndi('')
+                    setKppTargetPeriod('')
+                    setUomName('')
+                    setKppRating1('')
+                    setKppRating2('')
+                    setKppRating3('')
+                    setKppRating4('')
+                    setKppRating5('')
                 }
                 else {
                     setResponseMessage(res.data.responseMessage)
@@ -238,7 +250,6 @@ export default function KeyParameterComponent() {
 
     }
 
-    
     //upload excel data for KPP
     const handleSubmit = (event) => {
         event.preventDefault();

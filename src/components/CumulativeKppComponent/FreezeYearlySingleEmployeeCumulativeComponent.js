@@ -5,9 +5,9 @@ import Cookies from 'js-cookie';
 import { BASE_URL_API } from "../../services/URLConstants";
 import EmployeeService from "../../services/EmployeeService";
 import PaginationComponent from "../PaginationComponent/PaginationComponent";
-import FreezeCumulativeService from "../../services/FreezeCumulativeService";
 import FinancialYearService from "../../services/MasterService/FinancialYearService";
-export default function FreezeYearlySingleHODCumulativeComponent() {
+import FreezeCumulativeService from "../../services/FreezeCumulativeService";
+export default function FreezeYearlySingleEmployeeCumulativeComponent() {
 
     const navigate = useNavigate();
 
@@ -17,10 +17,15 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
     const [sumOfEmployeeRatings, setSumOfEmployeeRatings] = useState()
     const [sumOfHodRatings, setSumOfHodRatings] = useState()
     const [sumOfGMRatings, setSumOfGMRatings] = useState()
-    const [responseMessage, setResponseMessage] = useState('')
+    const [isSuccess, setIsSuccess] = useState(true)
     const [cummulativeRatings, setCummulativeRatings] = useState()
     const [avgCummulativeRatings, setAvgCummulativeRatings] = useState()
-    const [isSuccess, setIsSuccess] = useState(true)
+
+
+    const [empKeyStrength, setEmpKeyStrength] = useState('');
+    const [empAreaOfImprovement, setEmpAreaOfImprovement] = useState('');
+    const [empTrainginDevelopmentNeeds, setEmpTrainginDevelopmentNeeds] = useState('');
+
     const [employees, setEmployees] = useState([])
 
     const [empId, setEmpId] = useState('');
@@ -32,16 +37,12 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
-
-    const [empKeyStrength, setEmpKeyStrength] = useState('');
-    const [empAreaOfImprovement, setEmpAreaOfImprovement] = useState('');
-    const [empTrainginDevelopmentNeeds, setEmpTrainginDevelopmentNeeds] = useState('');
     const [finYear, setFinYear] = useState('');
-
+    const [responseMessage, setResponseMessage] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [dataPageable, setDataPageable] = useState([])
-
+  
     const handlePageChange = (page) => {
         setCurrentPage(page);
         // Handle data fetching or any other logic here
@@ -53,47 +54,6 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
         setCurrentPage(1); // Reset to first page when items per page changes
     };
 
-    
-    const loadCumulativeData = () => {
-        const data = {
-            currentPage,
-            itemsPerPage
-        }
-        CumulativeService.getSingleHODKppReportDetailsByPaging(data).then((res) => {
-            if (res.data.success) {
-                setIsSuccess(true);
-                setSumOfEmployeeRatings(res.data.responseData.sumOfEmployeeRatings)
-                setSumOfHodRatings(res.data.responseData.sumOfHodRatings)
-                setSumOfGMRatings(res.data.responseData.sumOfGMRatings)
-                setCummulativeRatings(res.data.responseData.cummulativeRatings)
-                setTotalMonths(res.data.responseData.totalMonths)
-                setAvgCummulativeRatings(res.data.responseData.avgCummulativeRatings)
-
-                setEmployees(res.data.responseData.employeeKppStatusResponses.content);
-            }
-            else {
-                alert("Kpp is not approved for month");
-                setResponseMessage(res.data.responseMessage)
-                setIsSuccess(false);
-            }
-
-        }, [currentPage, itemsPerPage]).catch((err) => {
-            alert(err.response.data.details)
-        });
-
-
-        //for employee basic details
-        EmployeeService.searchEmployeeById(Cookies.get('viewSingleHODIdForKppRatings')).then((res) => {
-            setEmpId(res.data.empId)
-            setEmpEId(res.data.empEId)
-            setEmpName(res.data.empFirstName + ' ' + res.data.empMiddleName + ' ' + res.data.empLastName)
-            setRoleName(res.data.roleName)
-            setDeptName(res.data.deptName)
-            setDesigName(res.data.desigName)
-        });
-
-    }
-
     const saveFreezeEmployeeKppReport = (e) => {
         e.preventDefault()
         const data = {
@@ -101,7 +61,7 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
             itemsPerPage
         }
         let statusCd = 'A';
-        let empId = Cookies.get('viewSingleHODIdForKppRatings')
+        let empId = Cookies.get('viewSingleEmpIdForKppRatings')
        
         let employeeId = Cookies.get('empId')
         let freezeEmployeeKppReport = { finYear, empId,empKeyStrength, empAreaOfImprovement,empTrainginDevelopmentNeeds, statusCd, employeeId };
@@ -116,12 +76,10 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
     }
 
 
-    useEffect(() => {
-        const data = {
-            currentPage,
-            itemsPerPage
-        }
-        CumulativeService.getSingleHODKppReportDetailsByPaging(data).then((res) => {
+    const loadCumulativeData = () => {
+        CumulativeService.getSingleEmployeeKppReportDetailsByPaging().then((res) => {
+
+
             if (res.data.success) {
                 setIsSuccess(true);
                 setSumOfEmployeeRatings(res.data.responseData.sumOfEmployeeRatings)
@@ -143,9 +101,7 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
             alert(err.response.data.details)
         });
 
-
-        //for employee basic details
-        EmployeeService.searchEmployeeById(Cookies.get('viewSingleHODIdForKppRatings')).then((res) => {
+        EmployeeService.searchEmployeeById(Cookies.get('viewSingleEmpIdForKppRatings')).then((res) => {
             setEmpId(res.data.empId)
             setEmpEId(res.data.empEId)
             setEmpName(res.data.empFirstName + ' ' + res.data.empMiddleName + ' ' + res.data.empLastName)
@@ -154,13 +110,17 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
             setDesigName(res.data.desigName)
         });
 
+    }
+
+    useEffect(() => {
+        loadCumulativeData();
+
         FinancialYearService.getFinancialYearById(1).then((res)=>{
             setFinYear(res.data.finYear)
         });
+    }, []);
 
-    }, [currentPage, itemsPerPage]);
-
-   
+    
 
     const YYYY_MM_DD_Formater = (date, format = 'YYYY-MM-DD') => {
         const t = new Date(date)
@@ -170,14 +130,13 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
         return format.replace('YYYY', y).replace('MM', m).replace('DD', d)
     }
 
-    const navigateToViewHODRating = () => {
+    const navigateToViewEmployeeRating = () => {
 
-        Cookies.remove('viewSingleHODIdForKppRatings');
-        navigate(`/freezeYearlyViewHODCumulativeKpp`, { replace: true })
+        Cookies.remove('viewSingleEmpIdForKppRatings');
+        navigate(`/freezeYearlyViewEmployeeCumulativeKpp`, { replace: true })
     }
 
     return (
-
         <div className="row">
             <div className="row" >
                 <form className="form-horizontal">
@@ -225,15 +184,16 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
                         </div>
                     </div>
 
+
                     </div>
                 </form>
             </div>
 
-            <h3 className="text-center">View Yearly HOD KPP Report</h3>
+
+            <h3 className="text-center">View Yearly Emplyee KPP Report</h3>
             <div className="form-group">
               
-              
-                <button type="submit" className="col-sm-offset-8 btn btn-primary" onClick={(e) => navigateToViewHODRating()}>Back</button>
+                <button type="submit" className="col-sm-offset-8 btn btn-primary" onClick={(e) => navigateToViewEmployeeRating()}>Back</button>
             </div>
 
 
@@ -244,6 +204,7 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
                             <tr>
                                 <th className="text-center">Sr No</th>
                                 <th className="text-center">KPP Month</th>
+                                <th className="text-center">Employee Ratings</th>
                                 <th className="text-center">HOD Ratings</th>
                                 <th className="text-center">GM Ratings Name</th>
                                 <th className="text-center">Total Ratings</th>
@@ -259,10 +220,9 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
                                             <td className="text-center">{index + 1}</td>
                                             <td className="text-justify">{YYYY_MM_DD_Formater(employee.ekppMonth)}</td>
                                             <td className="text-center">{employee.empOverallAchive}</td>
-
+                                            <td className="text-center">{employee.hodOverallAchieve}</td>
                                             <td className="text-center">{employee.gmOverallAchieve}</td>
                                             <td className="text-center">{employee.sumOfRatings}</td>
-
                                             <td className="text-center">
                                                 <div className="col-sm-3">
                                                     <a href={BASE_URL_API + `/report-evidence?empId=${employee.empId}&evMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
@@ -270,7 +230,7 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
                                                 </div>
                                             </td>
                                             <td className="text-center">
-                                                <a href={BASE_URL_API + `/report/completed-hod-kpp-status?empId=${employee.empId}&ekppMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
+                                                <a href={BASE_URL_API + `/report/completed-employee-kpp-status?empId=${employee.empId}&ekppMonth=${YYYY_MM_DD_Formater(employee.ekppMonth)}`}>
                                                     <button type="submit" className="btn btn-info">Download</button>
                                                 </a>
                                             </td>
@@ -283,7 +243,7 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
                                 <th className="text-right">Total</th>
                                 <td className="text-center"></td>
                                 <td className="text-center">{sumOfEmployeeRatings}</td>
-
+                                <td className="text-center">{sumOfHodRatings}</td>
                                 <td className="text-center">{sumOfGMRatings}</td>
                                 <td className="text-center"></td>
                                 <td className="text-center"></td>
@@ -310,10 +270,8 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
                     currentPage={currentPage}
                     totalPages={dataPageable.totalPages || 10}
                     onPageChange={handlePageChange}
-                    onItemsPerPageChange={handleItemsPerPageChange}
-                />
+                    onItemsPerPageChange={handleItemsPerPageChange} />
             </div>
-
             <div className="row col-sm-12">
                 <form className="form-horizontal">
                     <div className="form-group">
@@ -331,7 +289,7 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
                         <div className="row">
                             <label className="control-label col-sm-2" htmlFor="reamrk">Enter Area of Improvement:</label>
                             <div className="col-sm-5">
-                            <textarea rows="5"  cols="500" className="form-control" id="empAreaOfImprovement" name="empAreaOfImprovement" defaultValue={empAreaOfImprovement} placeholder="Enter Area of Improvement here" onChange={(e) => setEmpAreaOfImprovement(e.target.value)} />
+                            <textarea row="5" className="form-control" id="empAreaOfImprovement" name="empAreaOfImprovement" defaultValue={empAreaOfImprovement} placeholder="Enter Area of Improvement here" onChange={(e) => setEmpAreaOfImprovement(e.target.value)} />
                                
                             </div>
                         </div>
@@ -341,7 +299,7 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
                         <div className="row">
                             <label className="control-label col-sm-2" htmlFor="reamrk">Enter Training & Development Needs :</label>
                             <div className="col-sm-5">
-                            <textarea rows="5"  cols="500" className="form-control" id="empTrainginDevelopmentNeeds" name="empTrainginDevelopmentNeeds" defaultValue={empTrainginDevelopmentNeeds} placeholder="Enter Training & Development Needs here" onChange={(e) => setEmpTrainginDevelopmentNeeds(e.target.value)} />
+                            <textarea row="5" className="form-control" id="empTrainginDevelopmentNeeds" name="empTrainginDevelopmentNeeds" defaultValue={empTrainginDevelopmentNeeds} placeholder="Enter Training & Development Needs here" onChange={(e) => setEmpTrainginDevelopmentNeeds(e.target.value)} />
     
                             </div>
                         </div>
@@ -355,7 +313,6 @@ export default function FreezeYearlySingleHODCumulativeComponent() {
                 </div>
                 </form>
             </div>
-
 
 
 

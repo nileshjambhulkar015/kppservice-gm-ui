@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Cookies from 'js-cookie';
 import DesignationService from "../../services/MasterService/DesignationService";
 import DepartmentService from "../../services/MasterService/DepartmentService";
 import { BASE_URL_API } from "../../services/URLConstants";
@@ -103,8 +104,11 @@ export default function DesignationComponent() {
 
     const saveDesignationDetails = (e) => {
         e.preventDefault()
+        setDesigName('')
+        setRemark('')
         let statusCd = 'A';
-        let designation = { deptId, desigName, remark, statusCd };
+         let employeeId = Cookies.get('empId')
+        let designation = { deptId, desigName, remark, statusCd,employeeId };
         const data = {
             currentPage,
             itemsPerPage
@@ -151,11 +155,16 @@ export default function DesignationComponent() {
     const updateDesignationDetails = (e) => {
 
         e.preventDefault()
+        let employeeId = Cookies.get('empId')
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         let statusCd = 'A';
-        let updateDesignation = { desigId, deptId, desigName, remark, statusCd };
+        let updateDesignation = { desigId, deptId, desigName, remark, statusCd,employeeId };
 
         DesignationService.updateDesignationDetails(updateDesignation).then(res => {
-            DesignationService.getDesignationDetailsByPaging().then((res) => {
+            DesignationService.getDesignationDetailsByPaging(data).then((res) => {
                 if (res.data.success) {
                     setIsSuccess(true);
                     setDesignations(res.data.responseData.content);
@@ -175,10 +184,14 @@ export default function DesignationComponent() {
 
     const deleteDesignationById = (e) => {
 
+        const data = {
+            currentPage,
+            itemsPerPage
+        }
         if (window.confirm("Do you want to delete this Designation Name ?")) {
 
             DesignationService.deleteDesignationById(e).then(res => {
-                DesignationService.getDesignationDetailsByPaging().then((res) => {
+                DesignationService.getDesignationDetailsByPaging(data).then((res) => {
                     if (res.data.success) {
                         setIsSuccess(true);
                         setDesignations(res.data.responseData.content);
@@ -202,7 +215,6 @@ export default function DesignationComponent() {
     }
 
 
-   
     //upload excel data for designation
     const handleSubmit = (event) => {
 
@@ -238,7 +250,8 @@ export default function DesignationComponent() {
                 alert('An error occurred while uploading the file.');
             });
     };
-    
+
+
     return (
         <React.Fragment>
             <div>

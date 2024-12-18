@@ -120,7 +120,7 @@ export default function AssignEmployeeKppComponent() {
     const searchKPPObjectiveNoPaging = (e) => {
         setKppObjectiveNo(e.target.value)
         let kppObjectiveNo = e.target.value;
-
+  
         const data = {
             currentPage,
             itemsPerPage,
@@ -129,7 +129,7 @@ export default function AssignEmployeeKppComponent() {
         KeyParameterService.searchKPPObjectiveNoPaging(data).then((res) => {
 
             if (res.data.success) {
-                
+               
                 setKppIsSuccess(true);
                 setKpps(res.data.responseData.content);
                 setDataPageable(res.data.responseData);
@@ -170,6 +170,7 @@ export default function AssignEmployeeKppComponent() {
         Cookies.remove('empKppDeptId');
         Cookies.remove('empKppDesigId');
         Cookies.remove('empReportingIdForKpp');
+        Cookies.remove('gmEmpId')
 
         navigate(`/showEmployeeForKpp`, { replace: true })
     }
@@ -193,12 +194,13 @@ export default function AssignEmployeeKppComponent() {
             let deptId = Cookies.get('empKppDeptId');
             let desigId = Cookies.get('empKppDesigId');
             let reportingEmpId = Cookies.get('empReportingIdForKpp');
+            let gmEmpId= Cookies.get('gmEmpId');
             let employeeId = Cookies.get('empId');
 
             //TODO: read value from dynamic textbox
             let kppOverallTarget = overallTarget;
             let kppOverallWeightage = overallWeightage;
-            let kpp = { kppId, kppOverallTarget, kppOverallWeightage, empId, empEId, roleId, deptId, desigId, reportingEmpId, statusCd, employeeId };
+            let kpp = { kppId, kppOverallTarget, kppOverallWeightage, empId, empEId, roleId, deptId, desigId, reportingEmpId,gmEmpId, statusCd, employeeId };
 
 
             EmployeeKppsService.assignEmployeeKppDetails(kpp).then(res => {

@@ -117,10 +117,10 @@ class CumulativeService {
     }
 
     // view previous months kpp  bt from date and to date
-    getSingleEmployeeKppReportByDates(data) {
+    getSingleEmployeeKppReportByDates(fromDate, toDate) {
         if (null != Cookies.get('empId')) {
 
-            return axios.get(BASE_URL_API + `/cumulative/employee-kpp-cumulative?fromDate=${data.fromDate}&toDate=${data.toDate}&empId=${Cookies.get('viewSingleEmpIdForKppRatings')}&page=${data.currentPage - 1}&size=${data.itemsPerPage}`)
+            return axios.get(BASE_URL_API + `/cumulative/employee-kpp-cumulative?fromDate=${fromDate}&toDate=${toDate}&empId=${Cookies.get('viewSingleEmpIdForKppRatings')}&page=0&size=1200`)
         } else {
             alert("You need to login first")
             window.location.replace(LOGIN_UI_BASE_URL);
@@ -163,17 +163,6 @@ class CumulativeService {
         }
     }
 
-
-    updateOverallEmployeeKppReportRemark(cumulativeUpdateRequest) {
-        if (null != Cookies.get('empId')) {
-          
-            return axios.put(BASE_URL_API + "/cumulative/add-employee-remark", cumulativeUpdateRequest)
-        } else {
-            alert("You need to login first")
-            window.location.replace(LOGIN_UI_BASE_URL);
-        }
-
-    }
 
 }
 

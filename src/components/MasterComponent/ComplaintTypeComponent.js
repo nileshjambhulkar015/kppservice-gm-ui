@@ -192,7 +192,8 @@ export default function ComplaintTypeComponent() {
         }
         e.preventDefault()
         let statusCd = 'A';
-        let complaintType = { compTypeId, compTypeName, remark, statusCd };
+           let employeeId = Cookies.get('empId')
+        let complaintType = { compTypeId, compTypeName, remark, statusCd,employeeId };
 
         ComplaintTypeService.updateComplaintTypeDetails(complaintType).then(res => {
             ComplaintTypeService.getComplaintTypeDetailsByPaging(data).then((res) => {
@@ -280,14 +281,14 @@ export default function ComplaintTypeComponent() {
                                     </tbody>
                                 </table>
                                 : <h4>{responseMessage}</h4>}
-                            {complaintTypes?.length > 0 && (
-                                <PaginationComponent
-                                    currentPage={currentPage}
-                                    totalPages={dataPageable.totalPages || 10}
-                                    onPageChange={handlePageChange}
-                                    onItemsPerPageChange={handleItemsPerPageChange}
-                                />
-                            )}
+                                { complaintTypes?.length>0 && (
+                            <PaginationComponent
+                                currentPage={currentPage}
+                                totalPages={dataPageable.totalPages || 10}
+                                onPageChange={handlePageChange}
+                                onItemsPerPageChange={handleItemsPerPageChange}
+                            />
+                        )}
                         </div>
 
                     </div>
